@@ -1,0 +1,372 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tracer Field Technical Dashboard V2</title><style>
+:root{--bg:#081018;--panel:#0e1a25;--line:#244254;--cyan:#35d2ff;--green:#55e69d;--amber:#ffc857;--red:#ff7b7b;--text:#e8f2f7;--muted:#91a8b6;--inp:#071018}
+body.hc{--bg:#000;--panel:#000;--line:#fff;--cyan:#fff;--green:#7dff7d;--amber:#ffe14d;--text:#fff;--muted:#ddd;--inp:#000}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#071019,#0a1620 55%,#061018);color:var(--text);font:15px system-ui,Segoe UI,Arial,sans-serif}body.hc{background:#000}
+.wrap{max-width:1250px;margin:auto;padding:18px}.top{border:1px solid var(--line);background:#0a151f;padding:20px;border-radius:14px}body.hc .top{background:#000}
+.tag{color:var(--cyan);letter-spacing:.18em;font-size:12px}.title{margin:5px 0;font-size:clamp(24px,4vw,42px)}.motto{color:var(--green);font-weight:700}.sub{color:var(--muted)}
+.search{display:flex;gap:8px;margin-top:18px}.search input{flex:1;background:var(--inp);border:1px solid #315264;color:white;padding:13px;border-radius:8px;font-size:16px}
+.btn,button{background:#113047;color:#fff;border:1px solid #2f6481;padding:11px 14px;border-radius:8px;cursor:pointer;text-decoration:none;font:inherit;min-height:42px}
+body.hc .btn,body.hc button{background:#000;border-color:#fff}
+.btn:hover,button:hover{border-color:var(--cyan)}button.on{border-color:var(--green);color:var(--green)}
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px;align-items:center}.filters button{padding:7px 10px;font-size:12px;min-height:34px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:12px}.card{grid-column:span 4;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}.wide{grid-column:span 6}.full{grid-column:1/-1}
+.card h2{font-size:16px;margin:0 0 10px;color:var(--cyan);letter-spacing:.06em}.card h3{font-size:14px;margin:14px 0 6px;color:var(--amber)}
+.items{display:flex;flex-direction:column;gap:6px}.items button{text-align:left;background:transparent;border-color:#1d3a4b;padding:9px 12px;color:#c9d8e0}.items button:hover{background:#113047}
+.items button small{color:var(--muted);float:right;margin-left:8px}
+.links{display:flex;flex-wrap:wrap;gap:8px}.calc{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
+.calc input,.fld input,.fld select{width:100%;padding:9px;background:var(--inp);color:#fff;border:1px solid #315264;border-radius:6px;font-size:16px}
+.result{color:var(--green);font-weight:700;margin-top:9px;line-height:1.5}.warn{color:var(--amber)}.bad{color:var(--red)}
+.note{width:100%;min-height:150px;background:var(--inp);color:white;border:1px solid #315264;border-radius:8px;padding:10px;font-size:15px}
+.small{font-size:12px;color:var(--muted)}.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:10px}.fld label{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}
+.tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}.tabs button{padding:8px 12px;font-size:13px;min-height:38px}
+.q{font-size:17px;margin:10px 0}.opts{display:flex;flex-direction:column;gap:8px}.opts button{text-align:left}
+.res{border:1px solid var(--green);border-radius:10px;padding:12px;margin-top:8px}.res b{color:var(--green)}.res ul{margin:6px 0 6px 18px;padding:0}
+.chk label{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #1d3a4b}.chk input{width:22px;height:22px;flex:none}
+.safety{border-left:3px solid var(--amber);padding:6px 10px;margin:10px 0;color:var(--amber);font-size:13px}
+@media(max-width:850px){.card,.wide{grid-column:1/-1}.calc{grid-template-columns:1fr}.search{flex-direction:column}}
+</style></head><body><div class="wrap">
+
+<section class="top"><div class="tag">TRACER // FIELD TECHNICAL DASHBOARD // V2</div><h1 class="title">Service Technician Command Center</h1><div class="motto">MEASURE → ISOLATE → VERIFY → REPAIR → PROVE</div><p class="sub">Start with evidence. Separate hydraulic, electrical, mechanical and control-system causes before changing parts or parameters.</p>
+<form id="searchForm" class="search"><input id="q" aria-label="Technical web search" placeholder="Search pumps, VFDs, controls, hydraulics, two-wire, GIS…  (press / to focus)"><button>SEARCH WEB</button></form>
+<div class="filters"><button type="button" data-suffix="pump service manual troubleshooting">PUMPS</button><button type="button" data-suffix="VFD pump PID troubleshooting manual">VFD</button><button type="button" data-suffix="central control irrigation technical troubleshooting">CENTRAL CONTROL</button><button type="button" data-suffix="two wire decoder irrigation troubleshooting">TWO-WIRE</button><button type="button" data-suffix="motor electrical troubleshooting application note">ELECTRICAL</button><button type="button" data-suffix="GIS field mapping irrigation">GIS</button><button type="button" id="hc" style="margin-left:auto">HIGH CONTRAST</button></div>
+<div class="filters" id="mfr"><span class="small">Manufacturer:</span></div>
+<div class="filters" id="recent"></div></section>
+
+<div class="grid">
+<section class="card full" id="prof"><h2>STEP 0 // WHAT AM I STANDING IN FRONT OF?</h2>
+<div class="fields">
+<div class="fld"><label for="pf_make">Pump station / pump make</label><select id="pf_make"></select></div>
+<div class="fld"><label for="pf_ctrl">Central control / controller</label><select id="pf_ctrl"></select></div>
+<div class="fld"><label for="pf_vfdb">VFD brand</label><select id="pf_vfdb"></select></div>
+<div class="fld"><label for="pf_vfd">VFD model (from drive label)</label><input id="pf_vfd" type="text" placeholder="e.g. ACQ580, FR-F800, FC 202, ATV630"></div>
+<div class="fld"><label for="pf_model">Station model / serial / manual revision</label><input id="pf_model" type="text" placeholder="from nameplate"></div></div>
+<p class="small">VFD tip: read the brand and model off the drive label. If two brands look alike (for example a rebadged unit), go by the manufacturer name on the label.</p><div class="links" style="margin-top:10px"><button type="button" id="pf_save">SAVE PROFILE</button><button type="button" id="pf_doc">LOG DOCUMENT USED</button><button type="button" id="pf_clear">CLEAR PROFILE</button></div>
+<h3>Official literature for this equipment</h3><div class="links" id="lit_main"></div>
+<p class="small" id="pf_note">Pick your equipment first. Paths stay generic on method and send you to your manufacturer’s manual for fault codes, parameters and specs. Some manufacturer material needs a dealer or service-provider login. Links last checked 2026-11-03.</p></section>
+
+<section class="card"><h2>PUMPS // HYDRAULICS</h2><div class="items" id="c1"></div></section>
+<section class="card"><h2>VFD // CONTROLS</h2><div class="items" id="c2"></div></section>
+<section class="card"><h2>CENTRAL CONTROL</h2><div class="items" id="c3"></div></section>
+
+<section class="card full" id="benchCard"><h2>FIELD BENCH</h2><div class="tabs" id="tabs"></div><div id="bench"></div></section>
+
+<section class="card wide"><h2>GIS // FIELD MAPPING</h2><div class="links"><a class="btn" href="https://app.atlas.co/" target="_blank" rel="noopener">OPEN ATLAS GIS</a><a class="btn" href="https://explore.garmin.com/" target="_blank" rel="noopener">OPEN GARMIN EXPLORE</a><button type="button" data-tool="coords">COORDINATE CONVERTER</button></div><p class="small">Workflow: field pin capture → coordinates → Atlas asset map. Use for equipment, valves, decoders, splices, mainline features and locations without reliable landmarks.</p></section>
+
+<section class="card wide"><h2>QUICK FIELD CALCULATOR</h2><div class="calc"><label>PSI<input id="psi" type="number" step="any" placeholder="e.g. 65"></label><label>Feet of head<input id="ft" type="number" step="any" placeholder="e.g. 150"></label><button id="clear" type="button">CLEAR</button></div><div id="calcOut" class="result" aria-live="polite">1 psi ≈ 2.31 ft of water head</div></section>
+
+<section class="card wide"><h2>QUICK DIAGNOSTIC PATHS</h2><div class="links" id="diagBtns"></div><p id="diagOut" class="small" aria-live="polite">Choose a symptom. If no equipment is set, you’ll be asked first (you can skip). Each path ends with measurements to take and your manufacturer’s literature.</p></section>
+
+<section class="card wide"><h2>TECHNICAL SEARCH TARGETS</h2><div class="links"><button type="button" data-target="manufacturer service manual PDF">SERVICE MANUALS</button><button type="button" data-target="manufacturer application note technical bulletin PDF">APPLICATION NOTES</button><button type="button" data-target="wiring diagram service manual PDF">WIRING DIAGRAMS</button><button type="button" data-target="pump curve PDF">PUMP CURVES</button><button type="button" data-target="manufacturer troubleshooting guide PDF">TROUBLESHOOTING</button></div><p id="tgtOut" class="small">Type a model, manufacturer or symptom in the search box, then tap a target. Manufacturer chips add that brand to your search.</p></section>
+
+<section class="card full"><h2>TRAINING BENCH</h2><div class="links" id="train"></div><p class="small">Each button runs a targeted search for that manufacturer's training and service material.</p></section>
+
+<section class="card full"><h2>FIELD NOTES</h2><textarea class="note" id="notes" placeholder="Site, asset, readings, fault codes, what changed, tests performed, result…"></textarea>
+<div class="links" style="margin-top:8px"><button id="save" type="button">SAVE NOTES ON THIS DEVICE</button><button id="jobcard" type="button">INSERT JOB CARD</button><button id="copy" type="button">COPY</button><button id="export" type="button">EXPORT .TXT</button><button id="import" type="button">IMPORT .TXT</button><button id="erase" type="button">CLEAR NOTES</button><input id="file" type="file" accept=".txt,text/plain" hidden></div><p id="noteStatus" class="small" aria-live="polite"></p>
+<p class="small">Notes live only in this browser on this device. Use Export to keep a backup.</p></section>
+</div></div>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const q=$('#q');
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- search ---------- */
+let brand='';
+const go=s=>{s=s.trim();if(!s)return;window.open('https://www.google.com/search?q='+encodeURIComponent(s),'_blank','noopener');
+ const r=store.get('tracerRecent',[]).filter(x=>x!==s);r.unshift(s);store.set('tracerRecent',r.slice(0,6));drawRecent()};
+function drawRecent(){const r=store.get('tracerRecent',[]);const el=$('#recent');el.innerHTML=r.length?'<span class="small">Recent:</span>':'';
+ r.forEach(t=>{const b=document.createElement('button');b.type='button';b.textContent=t.length>38?t.slice(0,36)+'…':t;b.title=t;b.onclick=()=>{q.value=t;go(t)};el.appendChild(b)})}
+const withBrand=s=>((brand?brand+' ':'')+s).trim();
+$('#searchForm').addEventListener('submit',e=>{e.preventDefault();go(withBrand(q.value))});
+$$('[data-suffix]').forEach(b=>b.addEventListener('click',()=>go(withBrand(q.value+' '+b.dataset.suffix))));
+$$('[data-target]').forEach(b=>b.addEventListener('click',()=>{if(!q.value.trim()&&!brand){$('#tgtOut').textContent='Type a model or symptom first (or pick a manufacturer chip), then tap again.';q.focus();return}$('#tgtOut').textContent='Searching: '+withBrand(q.value+' '+b.dataset.target);go(withBrand(q.value+' '+b.dataset.target))}));
+['Toro','Hunter','Rain Bird','Baseline','WeatherTRAK','Flowtronex','Watertronics','Pentair','Berkeley','ABB','Mitsubishi'].forEach(n=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.onclick=()=>{brand=brand===n?'':n;$$('#mfr button').forEach(x=>x.classList.toggle('on',x.textContent===brand))};$('#mfr').appendChild(b)});
+document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();q.focus()}});
+$('#hc').onclick=()=>{document.body.classList.toggle('hc');store.set('tracerHC',document.body.classList.contains('hc'))};
+if(store.get('tracerHC',false))document.body.classList.add('hc');
+
+/* ---------- info cards: every item is a button ---------- */
+const cards={
+c1:[['Duty point, curve & BEP','search','pump duty point operating point best efficiency point BEP pump curve explained'],['TDH / static / friction','tool','tdh'],['NPSHa vs NPSHr','tool','npsh'],['Cavitation & suction conditions','flow','cav'],['Seals, sleeves, bearings & alignment','search','centrifugal pump mechanical seal shaft sleeve bearing alignment service manual'],['Vertical turbine & centrifugal systems','search','vertical turbine pump irrigation troubleshooting service manual']],
+c2:[['Input/output voltage & current','flow','trip'],['Hz, RPM & motor data','tool','hz'],['Pressure transducer scaling','tool','xdcr'],['PID hunting & response','flow','hunt'],['Accel / decel / min speed','flow','trip'],['Drive vs motor vs hydraulic fault','flow','wont']],
+c3:[['Platform notes (Toro, Hunter, Rain Bird, Baseline, WeatherTRAK)','tool','plat'],['Learned vs measured flow','flow','lflow'],['Hydraulic tree / capacity','tool','pipe'],['Flow sensor / K-factor check','tool','flowcal'],['Decoder / two-wire diagnostics','flow','tw'],['Two-wire voltage drop','tool','twvd'],['Controller offline / comms','flow','comm'],['Pump start / master valve','flow','pstart'],['Sequence & runtime evidence','search','central control irrigation runtime history flow alarm troubleshooting']]};
+const tag={search:'search ↗',tool:'calculator',flow:'path'};
+Object.entries(cards).forEach(([id,arr])=>arr.forEach(([t,k,v])=>{const b=document.createElement('button');b.type='button';b.innerHTML=esc(t)+'<small>'+tag[k]+'</small>';
+ b.onclick=()=>{if(k==='search')go(withBrand(v));else if(k==='tool')openTool(v,true);else openFlow(v,true)};$('#'+id).appendChild(b)}));
+
+/* ---------- quick psi/ft (original) ---------- */
+const psi=$('#psi'),ft=$('#ft'),out=$('#calcOut');
+psi.addEventListener('input',()=>{const v=parseFloat(psi.value);if(Number.isFinite(v)){ft.value=(v*2.31).toFixed(2);out.textContent=v+' psi ≈ '+ft.value+' ft of head'}});
+ft.addEventListener('input',()=>{const v=parseFloat(ft.value);if(Number.isFinite(v)){psi.value=(v/2.31).toFixed(2);out.textContent=v+' ft ≈ '+psi.value+' psi'}});
+$('#clear').onclick=()=>{psi.value='';ft.value='';out.textContent='1 psi ≈ 2.31 ft of water head'};
+
+/* ---------- calculators ---------- */
+const f1=(x,d=1)=>Number.isFinite(x)?x.toFixed(d):'—';
+const tools={
+tdh:{name:'TDH',fields:[['zs','Static suction head, ft (+flooded / −lift)',0],['zd','Discharge point height above pump, ft',100],['hf','Total friction + minor losses, ft',20],['p','Required pressure at end point, psi',65]],
+ calc:v=>{const tdh=(v.zd-v.zs)+v.hf+v.p*2.31;return `TDH ≈ <b>${f1(tdh)} ft</b> (${f1(tdh/2.31)} psi equivalent)<br><span class="small">Static ${f1(v.zd-v.zs)} ft + friction ${f1(v.hf)} ft + pressure ${f1(v.p*2.31)} ft. Fresh water, SG 1.0. Plot this flow/TDH point on the pump curve.</span>`}},
+npsh:{name:'NPSHa',fields:[['el','Site elevation, ft',700],['tf','Water temperature, °F',68],['hs','Static suction head, ft (+flooded / −lift)',-8],['hf','Suction friction + fittings, ft',2],['r','NPSHr from pump curve at this flow, ft (optional)','']],
+ calc:v=>{const pa=14.696*Math.pow(1-6.8754e-6*v.el,5.2559),tc=(v.tf-32)/1.8,pv=Math.pow(10,8.07131-1730.63/(233.426+tc))*0.0193368;
+  const ha=pa*2.31,hv=pv*2.31,na=ha+v.hs-hv-v.hf;let s=`Atmospheric ${f1(ha)} ft − vapor ${f1(hv,2)} ft ${v.hs>=0?'+':'−'} static ${f1(Math.abs(v.hs))} ft − friction ${f1(v.hf)} ft<br>NPSHa ≈ <b>${f1(na)} ft</b>`;
+  if(Number.isFinite(v.r)&&v.r>0){const m=na-v.r;s+=`<br>Margin over NPSHr: <b class="${m<3?'bad':m<5?'warn':''}">${f1(m)} ft</b> `+(m<=0?'— cavitation expected':m<3?'— thin margin':m<5?'— marginal; many references want more':'— adequate by common practice')}
+  if(tc<1||tc>100)s+='<br><span class="warn">Temperature outside 33–212°F: vapor pressure formula not valid.</span>';
+  return s+'<br><span class="small">Uses standard-atmosphere pressure for elevation (not today’s barometer). Confirm margin requirements with the pump manufacturer.</span>'}},
+pipe:{name:'Pipe velocity / friction',fields:[['gpm','Flow, gpm',100],['d','Inside diameter, in',4.0],['c','Hazen-Williams C (PVC≈150, steel≈100–120)',150],['len','Pipe length, ft',500]],
+ calc:v=>{const vel=0.4085*v.gpm/(v.d*v.d),h=0.2083*Math.pow(100/v.c,1.852)*Math.pow(v.gpm,1.852)/Math.pow(v.d,4.8655),tot=h*v.len/100;
+  return `Velocity <b class="${vel>7?'warn':''}">${f1(vel,2)} ft/s</b>${vel>5?' (above common 5 ft/s guidance; check surge)':''}<br>Friction <b>${f1(h,2)} ft per 100 ft</b> = <b>${f1(tot)} ft</b> over ${v.len} ft (${f1(tot/2.31)} psi)<br><span class="small">Hazen-Williams for water; use actual inside diameter, not nominal size. Add fittings separately.</span>`}},
+affinity:{name:'Affinity laws',fields:[['n1','Speed 1 (Hz or RPM)',60],['n2','Speed 2 (same units)',48],['q1','Flow 1, gpm',200],['h1','Head 1, ft',150],['p1','Power 1, hp',10]],
+ calc:v=>{const r=v.n2/v.n1;return `Speed ratio <b>${f1(r,3)}</b><br>Flow ≈ <b>${f1(v.q1*r)} gpm</b> · Head ≈ <b>${f1(v.h1*r*r)} ft</b> · Power ≈ <b>${f1(v.p1*r*r*r,2)} hp</b><br><span class="small">Valid for the same pump and system curve shape; static head in the system shifts the real operating point. Verify on the curve.</span>`}},
+hz:{name:'VFD Hz / RPM',fields:[['hz','Frequency, Hz',60],['poles','Motor poles (2, 4, 6…)',2],['slip','Slip, % (nameplate-based, optional)',2.5]],
+ calc:v=>{const sync=120*v.hz/v.poles,act=sync*(1-v.slip/100);return `Synchronous <b>${f1(sync,0)} RPM</b> · approx. running <b>${f1(act,0)} RPM</b> at ${v.slip}% slip<br><span class="small">Check actual speed with a tach against nameplate RPM; slip varies with load.</span>`}},
+xdcr:{name:'Transducer scaling',fields:[['lo','Sensor range low, psi',0],['hi','Sensor range full scale, psi',100],['ma','Measured signal, mA (4–20)',12],['gauge','Reference gauge, psi (optional)','']],
+ calc:v=>{const p=v.lo+(v.ma-4)/16*(v.hi-v.lo);let s=`Signal ${v.ma} mA ⇒ <b>${f1(p)} psi</b>`;if(Number.isFinite(v.gauge)){const e=p-v.gauge;s+=`<br>Difference from gauge: <b class="${Math.abs(e)>2?'warn':''}">${f1(e)} psi</b> `+(Math.abs(e)>2?'— check range settings, zero/span, wiring, gauge accuracy':'')}
+  if(v.ma<3.8||v.ma>20.5)s+='<br><span class="bad">Signal outside 4–20 mA: open loop, short or sensor fault.</span>';return s}},
+flowcal:{name:'Flow sensor check',fields:[['kf','K-factor, pulses per gallon (see meter manual)',10],['n','Pulses counted',500],['t','Time counted, seconds',60],['ref','Reference flow, gpm (optional)','']],
+ calc:v=>{const gpm=(v.n/v.kf)/v.t*60;let s2=`Measured flow <b>${f1(gpm,1)} gpm</b> (${f1(v.n/v.t,2)} pulses/s)`;if(Number.isFinite(v.ref)&&v.ref>0){const e=(gpm-v.ref)/v.ref*100;s2+=`<br>Versus reference ${f1(v.ref,1)} gpm: <b class="${Math.abs(e)>5?'warn':''}">${f1(e,1)}%</b>`+(Math.abs(e)>5?' — check K-factor/units, installation and the reference itself':'')}
+  return s2+'<br><span class="small">Some meters give gallons per pulse instead of pulses per gallon; use the form in your meter manual. Count pulses at the controller input to test the scaling.</span>'}},
+twvd:{name:'Two-wire voltage drop',fields:[['awg','Wire gauge, AWG (10, 12, 14, 16 or 18)',14],['len','One-way run length to the far decoder, ft',2000],['ma','Total load current on the run, mA',300],['vs','Line voltage at controller, V (optional)','']],
+ calc:v=>{const R={10:0.9989,12:1.588,14:2.525,16:4.016,18:6.385}[v.awg];if(!R)return'Use AWG 10, 12, 14, 16 or 18.';const rl=R*(2*v.len/1000),d=v.ma/1000*rl;let s2=`Loop resistance <b>${f1(rl,1)} Ω</b> · worst-case drop <b>${f1(d,2)} V</b>`;
+  if(Number.isFinite(v.vs)&&v.vs>0)s2+=`<br>Voltage left at the far end ≈ <b>${f1(v.vs-d,1)} V</b>`;
+  return s2+'<br><span class="small">Copper at about 20°C, current at the far end (worst case). Warm cable has higher resistance. Compare with the decoder system’s minimum voltage and maximum run limits in your manufacturer’s manual; it is a rough screening estimate.</span>'}},
+coords:{name:'Coordinates',fields:[['lat','Latitude (decimal degrees)',33.0],['lon','Longitude (decimal degrees)',-97.0]],
+ calc:v=>{const f=(x,pos,neg)=>{const a=Math.abs(x),d=Math.floor(a),m=(a-d)*60,mi=Math.floor(m),s=(m-mi)*60;return{dd:x.toFixed(6),ddm:`${d}° ${m.toFixed(4)}′ ${x<0?neg:pos}`,dms:`${d}° ${mi}′ ${s.toFixed(2)}″ ${x<0?neg:pos}`}},a=f(v.lat,'N','S'),b=f(v.lon,'E','W');
+  const dd=a.dd+', '+b.dd;return `Decimal: <b>${dd}</b><br>Deg–decimal min: ${a.ddm}, ${b.ddm}<br>DMS: ${a.dms}, ${b.dms}<br><button type="button" id="cpc" style="margin-top:8px">COPY DECIMAL</button><span class="small"> Paste decimal degrees into Atlas.</span>`}}
+};
+const tabsDef=[['tdh','TDH'],['npsh','NPSHa'],['pipe','Pipe / friction'],['affinity','Affinity'],['hz','Hz / RPM'],['xdcr','Transducer'],['flowcal','Flow sensor'],['twvd','2-wire drop'],['coords','Coordinates'],['plat','Platforms'],['check','Checklists'],['flow','Diagnostic path']];
+let cur='';
+function setTabs(){$('#tabs').innerHTML='';tabsDef.forEach(([k,n])=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.classList.toggle('on',k===cur);b.onclick=()=>k==='check'?openCheck():k==='flow'?openFlow('wont',true):k==='plat'?openPlat(true):openTool(k,true);$('#tabs').appendChild(b)})}
+function scrollBench(s){if(s)$('#benchCard').scrollIntoView({behavior:'smooth',block:'start'})}
+function openTool(k,s){if(k==='plat'){openPlat(s);return}cur=k;setTabs();const t=tools[k];const saved=store.get('tracerTool_'+k,{});
+ $('#bench').innerHTML='<h3>'+esc(t.name)+'</h3><div class="fields">'+t.fields.map(([id,l,d])=>`<div class="fld"><label for="f_${id}">${esc(l)}</label><input id="f_${id}" type="number" step="any" inputmode="decimal" value="${saved[id]!==undefined?saved[id]:d}"></div>`).join('')+'</div><div class="result" id="toolOut" aria-live="polite"></div><div class="links" style="margin-top:8px"><button type="button" id="toNotes">ADD RESULT TO NOTES</button></div>';
+ const run=()=>{const v={},sv={};t.fields.forEach(([id])=>{const el=$('#f_'+id);v[id]=el.value===''?NaN:parseFloat(el.value);sv[id]=el.value});store.set('tracerTool_'+k,sv);
+  if(Object.entries(v).some(([id,x])=>!Number.isFinite(x)&&!['r','gauge','ref','vs'].includes(id))){$('#toolOut').innerHTML='Enter all values.';return}
+  $('#toolOut').innerHTML=t.calc(v);const c=$('#cpc');if(c)c.onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(v.lat.toFixed(6)+', '+v.lon.toFixed(6));c.textContent='COPIED'}};
+ $$('#bench input').forEach(i=>i.addEventListener('input',run));run();
+ $('#toNotes').onclick=()=>{appendNote('['+t.name+'] '+$('#toolOut').innerText.replace(/\s*\n\s*/g,' | ').replace(/COPY DECIMAL.*$/,'').trim());};scrollBench(s)}
+
+/* ---------- checklists ---------- */
+const lists={'Pump startup / commissioning':['Lockout/tagout released, area clear','Motor nameplate data matches drive parameters','Rotation verified (bump test)','Suction valves open; pump primed / vented','Suction and discharge gauge readings recorded','Voltage L-L (all three) and amps per phase recorded','Operating flow, pressure and Hz recorded and compared to curve','No unusual noise, vibration, leaks or seal weeping','Setpoint, ramps and alarms checked and documented'],
+'Motor megger log':['Power off, locked out, verified dead with meter','Motor leads disconnected from drive/starter','Phase-to-ground readings recorded (all three)','Test voltage and duration recorded','Winding temperature / conditions noted','Compare against manufacturer value and previous readings','Reconnect, torque terminals, record result in notes'],
+'Pump teardown':['Lockout/tagout, isolate and drain','Photograph assembly and mark orientation','Measure/record impeller clearances and shaft runout','Inspect seal faces, sleeve, bearings, wear rings','Record part numbers and wear findings','Reassemble to manufacturer torque and clearance specs','Run test: pressure, flow, amps, leaks, temperature']};
+function openCheck(){cur='check';setTabs();const st=store.get('tracerChecks',{});$('#bench').innerHTML=Object.entries(lists).map(([n,items],i)=>`<h3>${esc(n)}</h3><div class="chk">${items.map((t,j)=>`<label><input type="checkbox" data-k="${i}_${j}" ${st[i+'_'+j]?'checked':''}><span>${esc(t)}</span></label>`).join('')}</div><button type="button" data-reset="${i}" style="margin-top:6px">RESET THIS LIST</button>`).join('')+'<p class="small">Checklists are reminders; follow your employer’s procedures and the manufacturer’s manual.</p>';
+ $$('#bench .chk input').forEach(c=>c.onchange=()=>{st[c.dataset.k]=c.checked;store.set('tracerChecks',st)});
+ $$('[data-reset]').forEach(b=>b.onclick=()=>{if(!confirm('Reset this checklist?'))return;Object.keys(st).filter(k=>k.startsWith(b.dataset.reset+'_')).forEach(k=>delete st[k]);store.set('tracerChecks',st);openCheck()});scrollBench(true)}
+
+/* ---------- equipment profile + manufacturer literature ---------- */
+const gs=t=>({t,q:t});
+const MAKES={
+'Flowtronex / MCI':[{t:'MCI Flowtronex (current)',u:'https://mciflowtronex.com/'},{t:'Legacy Xylem Flowtronex manuals (search)',q:'Xylem Flowtronex Silent Storm instruction manual PDF'}],
+'Watertronics':[{t:'Watertronics literature',u:'https://watertronics.com/resources/literature/'},{t:'Watertronics manuals & reference',u:'https://watertronics.com/resources/manuals-and-reference-documents/'},{t:'Pump Service Network',u:'https://pumpservicenetwork.com/'}],
+'Rain Bird pump station':[{t:'Rain Bird document library',u:'https://www.rainbird.com/documents/professionals'},{t:'Rain Bird pump station manuals (search)',q:'Rain Bird pump station user manual troubleshooting PDF'}],
+'Toro pump station':[{t:'Toro parts & manuals (search by model)',u:'https://www.toro.com/en/customer-support'},{t:'Toro pump station manuals (search)',q:'Toro irrigation pump station manual troubleshooting PDF'}],
+'Pentair / Berkeley pump':[{t:'Pentair Berkeley manuals (search)',q:'Pentair Berkeley pump installation operation manual PDF'}],
+'Other':[]};
+const CTRLS={
+'Toro Lynx (NSN)':[{t:'Toro support & manuals (search by model)',u:'https://www.toro.com/en/customer-support'},{t:'Toro Lynx manuals (search)',q:'Toro Lynx central control operator manual PDF'}],
+'Toro Sentinel':[{t:'Toro Sentinel literature',u:'https://www.toro.com/en/parts/sentinel-literature'}],
+'Toro Eagle Plus':[{t:'Eagle Plus series (Toro)',u:'https://www.toro.com/en/product/Eagle-Plus-Series-Controller'},{t:'Eagle Plus user’s guide (PDF)',u:'https://cdn.thetorocompany.com/api/assetstorage/623_dff00fc2-a56a-4420-9ecb-032363da0522'}],
+'Hunter Pilot':[{t:'Pilot controller systems (Hunter)',u:'https://www.hunterirrigation.com/support/pilot-controller-systems'},{t:'Pilot owner’s manual (PDF)',u:'https://www.hunterirrigation.com/sites/default/files/2026-07/GI-048-OM-Pilot-Controllers-EN-web_0.pdf'}],
+'Hunter Centralus':[{t:'Centralus support (Hunter)',u:'https://www.hunterirrigation.com/support/centralustm'},{t:'Centralus login',u:'https://centralus.hunterindustries.com/'}],
+'Rain Bird IQ4':[{t:'IQ4 support',u:'https://www.rainbird.com/products/iq4/support'},{t:'Rain Bird central control support',u:'https://www.rainbird.com/professionals/products/central-control/support'}],
+'Rain Bird Maxicom':[{t:'Maxicom v4.5 support',u:'https://www.rainbird.com/products/maxicom-v45/support'},{t:'Rain Bird Services downloads (Maxicom manuals)',u:'https://rainbirdservices.com/resources-downloads/'}],
+'Baseline (BaseStation)':[{t:'Baseline support (HydroPoint)',u:'https://www.hydropoint.com/baseline/resources/support/'},{t:'BaseStation 3200 manual (search)',q:'Baseline BaseStation 3200 user manual PDF'}],
+'WeatherTRAK (HydroPoint)':[{t:'WeatherTRAK product documents',u:'https://www.hydropoint.com/weathertrak/resources/product-documents/'},{t:'WeatherTRAK support',u:'https://www.hydropoint.com/weathertrak/resources/support/'}],
+'Other / none':[]};
+const VFDS={
+'ABB (ACQ580 / ACS580)':[{t:'ACQ580 product page (Downloads tab)',u:'https://www.abb.com/global/en/areas/motion/drives/low-voltage-ac-drives/water-wastewater-drives/acq580'},{t:'ACQ580-01 manuals list',u:'https://search.abb.com/library/Download.aspx?DocumentID=9AKK106713A2709&DocumentPartId=1'},{t:'ACQ580-07 manuals list',u:'https://search.abb.com/library/Download.aspx?DocumentID=9AKK106930A3150&DocumentPartId=1'},{t:'ABB US drive document library',u:'https://www.abbnow.com/PublicSite/home/LiteratureResources/Document-Library.htm'}],
+'Mitsubishi Electric (FR-F800 / FR-E800)':[{t:'FR-F800 pump/fan manual (detailed, PDF)',u:'https://dl.mitsubishielectric.com/dl/fa/document/manual/inv/ib0600547eng/ib0600547engg.pdf'},{t:'FR-E800 function manual (PDF)',u:'https://www.mitsubishielectric.com/dl/fa/document/manual/inv/ib0600868eng/ib0600868engt.pdf'},{t:'FR-E800 connection manual (PDF)',u:'https://dl.mitsubishielectric.com/dl/fa/document/manual/inv/ib0600865eng/ib0600865engt.pdf'},{t:'Mitsubishi inverter manuals (search)',q:'Mitsubishi Electric inverter FR-F800 FR-E800 instruction manual PDF'}],
+'Danfoss (VLT AQUA FC 202)':[{t:'VLT AQUA Drive FC 202 documents',u:'https://www.danfoss.com/en-us/products/dds/low-voltage-drives/vlt-drives/vlt-aqua-drive-fc-202/'}],
+'Pentek Intellidrive (Pentair)':[{t:'Pentek Intellidrive product page',u:'https://www.pentair.com/en-us/flow/pentek/pentek-products/pentek-motors-and-drives/pentek-intellidrive-pid-variable-frequency-drive.html'},{t:'Intellidrive installation & operation manual (PDF)',u:'https://www.pentair.com/content/dam/extranet/web/nam/pentek/manuals/pn957-pentek-intellidrive-pid-iom.pdf'},{t:'Intellidrive troubleshooting guide (search)',q:'Pentek Intellidrive troubleshooting guide'}],
+'Schneider Electric (Altivar)':[{t:'ATV630-650 installation manual',u:'https://www.se.com/us/en/download/document/EAV64301/'},{t:'Altivar Process manuals (search)',q:'Schneider Electric Altivar Process ATV630 programming manual PDF'}],
+'Other':[]};
+const VFDDOC={
+'ABB (ACQ580 / ACS580)':'the ACQ580 hardware manual for your variant (-01, -07, etc.) and the ACQ580 pump control program firmware manual; the manuals list on ABB’s site links the current versions',
+'Mitsubishi Electric (FR-F800 / FR-E800)':'the Instruction Manual (Detailed for FR-F800, Function for FR-E800) for parameters and protective functions, and the Connection manual for wiring; confirm which series is on your drive label',
+'Danfoss (VLT AQUA FC 202)':'the Operating Guide (installation, wiring) and Programming Guide (parameters); the product page also has a Troubleshooting tab. If a Pentek unit’s label says Danfoss/VLT, use these',
+'Pentek Intellidrive (Pentair)':'the Intellidrive installation & operation manual (setup, programming, troubleshooting); Pentair describes it as a constant-pressure drive for about 0.5-5 hp, so check the drive label to confirm what you actually have',
+'Schneider Electric (Altivar)':'Installation manual (wiring, checks) and Programming manual for your Altivar model'};
+const prof=()=>Object.assign({make:'',ctrl:'',vfdb:'',vfd:'',model:''},store.get('tracerProfile',{}));
+function fillSel(id,obj,ph){const el=$(id);el.innerHTML='<option value="">'+ph+'</option>'+Object.keys(obj).map(k=>'<option>'+esc(k)+'</option>').join('')}
+function litButtons(el,topic){const p=prof();el.innerHTML='';
+ const add=(t,fn)=>{const b=document.createElement('button');b.type='button';b.textContent=t;b.onclick=fn;el.appendChild(b)};
+ const lib=[...(MAKES[p.make]||[]),...(CTRLS[p.ctrl]||[]),...(VFDS[p.vfdb]||[])];
+ lib.forEach(x=>add(x.u?x.t+' ↗':x.t+' ↗',()=>x.u?window.open(x.u,'_blank','noopener'):go(x.q)));
+ const who=[p.make&&p.make!=='Other'?p.make:'',p.model].filter(Boolean).join(' ');
+ if(who&&topic)add('Search: '+who+' + this topic',()=>go((who+' '+topic+' manual').trim()));
+ const vn=[p.vfdb&&p.vfdb!=='Other'?p.vfdb.replace(/\s*\(.*\)/,''):'',p.vfd].filter(Boolean).join(' ');if(vn)add('Search: '+vn+' fault codes',()=>go(vn+' fault codes troubleshooting manual PDF'));
+ if(!lib.length&&!p.vfd&&!p.vfdb)el.innerHTML='<span class="small">Set your equipment above to get manufacturer links here.</span>'}
+function drawProfile(){fillSel('#pf_vfdb',VFDS,'— choose —');const p=prof();$('#pf_vfdb').value=p.vfdb||'';$('#pf_make').value=p.make||'';$('#pf_ctrl').value=p.ctrl||'';$('#pf_vfd').value=p.vfd||'';$('#pf_model').value=p.model||'';litButtons($('#lit_main'),'')}
+fillSel('#pf_make',MAKES,'— choose —');fillSel('#pf_ctrl',CTRLS,'— choose —');
+$('#pf_save').onclick=()=>{store.set('tracerProfile',{make:$('#pf_make').value,ctrl:$('#pf_ctrl').value,vfdb:$('#pf_vfdb').value,vfd:$('#pf_vfd').value.trim(),model:$('#pf_model').value.trim()});drawProfile();$('#pf_note').textContent='Profile saved on this device.'};
+$('#pf_clear').onclick=()=>{store.set('tracerProfile',{make:'',ctrl:'',vfdb:'',vfd:'',model:''});drawProfile();$('#pf_note').textContent='Profile cleared.'};
+$('#pf_doc').onclick=()=>{const d=prompt('Manual / document you relied on (title, revision or date):');if(!d)return;const p=prof();appendNote('[Document used] '+d+' | Equipment: '+[p.make,p.model,p.vfdb,p.vfd,p.ctrl].filter(Boolean).join(', '))};
+const CTRLDOC={
+'Toro Lynx (NSN)':'the Lynx operator manual for your version; Toro NSN provides technical support for Lynx and SitePro',
+'Toro Sentinel':'the Sentinel Controller Manual, Sentinel Unit Troubleshooting, the two-wire (TDC) guides and the software manuals (such as Activity/Alarm Monitor and ET Based Programming), all listed on Toro’s Sentinel Literature page',
+'Toro Eagle Plus':'the Eagle Plus User’s Guide: the Alarms section (general, flow sensor, rain sensor and two-wire decoder alarms) and the Error Code Reference Chart; remote access is through Toro iCentral',
+'Hunter Pilot':'the Pilot Controllers Owner’s Manual: Central Control Testing, Communication Modules, View Status, View Configuration, View Module Current and Wire Test Mode; more help at hunter.help/Pilot',
+'Hunter Centralus':'the Centralus support pages: Alarms & Logs (start with View Logs), the Flow tab, and account setup and connection options (Wi-Fi, Ethernet or 4G LTE module)',
+'Rain Bird IQ4':'the IQ4 support page videos (pump start relay, flow sensor and FloWatch, raster wire test, station module status lights) and the IQ-NCC installation and user manual for the communication cartridge',
+'Rain Bird Maxicom':'the Maxicom v4.5 support page and the Maxicom CCU manual and Maxicom2 user manual on the Rain Bird Services downloads page',
+'Baseline (BaseStation)':'the Baseline Knowledgebase (installation manuals, how-to videos, firmware updates) and the BaseStation 3200 manual’s Wiring Guidelines, Flow Management & Monitoring and Troubleshooting sections; Baseline support is 866-294-5847',
+'WeatherTRAK (HydroPoint)':'the Controller User Manual (OptiFlow XR, ET Pro3, LC+, conventional and 2-wire), the Quick Reference Card for your controller (alerts and LED diagnostics), the OptiFlow User Guide, and Master Valve and Flow Sensor Deployment Options; HydroPoint support is 1-800-362-8774'};
+const hints=d=>{d=d.toUpperCase();const h=[];
+ if(/ELECTRICAL|SUPPLY|TWO-WIRE|CONTROL|PARAMETERS|SENSOR|SIGNAL|CONFIG|VERIFY/.test(d))h.push('Fault/alarm code table, wiring schematic and parameter/setpoint list for your exact model and firmware');
+ if(/HYDRAULIC|SYSTEM|NPSH|SUCTION|CAVIT|FLUID/.test(d))h.push('Pump curve and NPSHr for your model and impeller; station operating limits and safeties');
+ if(/MECHANICAL/.test(d))h.push('Maintenance/teardown section, clearances, torque values and parts list');
+ const p=prof();if(p.vfdb&&VFDDOC[p.vfdb]&&/ELECTRICAL|SUPPLY|CONTROL|PARAMETERS|SENSOR|TUNING|COMMAND/.test(d))h.push('For your '+p.vfdb+' drive, open: '+VFDDOC[p.vfdb]);
+ if(p.ctrl&&CTRLDOC[p.ctrl]&&/CONTROL|TWO-WIRE|SIGNAL|CONFIG|SCALING|COMMUNICATION|LEARNED|COMMAND/.test(d))h.push('For your '+p.ctrl+' system, open: '+CTRLDOC[p.ctrl]);
+ h.push('Manual revision/date matches your nameplate and serial number');return h};
+let skipProfile=false;
+function gate(k,s){cur='flow';setTabs();const p=prof();
+ $('#bench').innerHTML='<h3>Equipment first</h3><p class="small">Choose what you’re working on so each result can point to the right manufacturer literature. You can skip.</p><div class="fields"><div class="fld"><label for="g_make">Pump station / pump make</label><select id="g_make"></select></div><div class="fld"><label for="g_ctrl">Central control</label><select id="g_ctrl"></select></div><div class="fld"><label for="g_vfdb">VFD brand</label><select id="g_vfdb"></select></div></div><div class="links" style="margin-top:10px"><button type="button" id="g_go">START: '+esc(flows[k].n.toUpperCase())+'</button><button type="button" id="g_skip">SKIP</button></div>';
+ fillSel('#g_make',MAKES,'— choose —');fillSel('#g_ctrl',CTRLS,'— choose —');fillSel('#g_vfdb',VFDS,'— choose —');$('#g_make').value=p.make||'';$('#g_ctrl').value=p.ctrl||'';$('#g_vfdb').value=p.vfdb||'';
+ $('#g_go').onclick=()=>{const q2=prof();store.set('tracerProfile',{make:$('#g_make').value,ctrl:$('#g_ctrl').value,vfdb:$('#g_vfdb').value,vfd:q2.vfd||'',model:q2.model||''});drawProfile();skipProfile=true;openFlow(k,false)};
+ $('#g_skip').onclick=()=>{skipProfile=true;openFlow(k,false)};scrollBench(s)}
+
+/* ---------- diagnostic paths ---------- */
+const S='De-energize, lock out and verify zero energy before touching conductors or doing insulation tests. Follow your employer’s procedures.';
+const R=(domain,text,measure,search,tool)=>({r:1,domain,text,measure,search,tool});
+const flows={
+wont:{n:"Pump won't build pressure",s:'a',nodes:{
+ a:{q:'Is the pump running at full speed, with motor amps near expected for this flow?',o:[['No: low/zero amps or speed below command','e1'],['Yes: speed and amps look normal','b']]},
+ e1:R('ELECTRICAL / CONTROL','Pump is not being driven properly. Separate supply, drive and command problems.',['Drive fault/status codes','Voltage on all three phases at drive input and motor','Commanded Hz vs actual Hz and Hand/Auto/remote source','Rotation direction and motor overload state'],'VFD pump will not reach commanded speed troubleshooting'),
+ b:{q:'With flow and pressure measured, where does the point sit on the pump curve?',o:[['Flow HIGH, pressure low (running out the curve)','h1'],['Flow LOW, pressure low, noisy or vibrating','c1'],['Flow and pressure both low, amps normal/high, quiet','m1']]},
+ h1:R('HYDRAULIC','Demand exceeds what the system restricts: open or broken line, stuck-open valve, failed PRV, too many zones.',['Pressure at pump vs far end of system','Flow vs expected zone demand','Valve positions, PRV settings, mainline leak indicators'],'pump running out of curve low pressure high flow irrigation mainline break','affinity'),
+ c1:R('SUCTION / CAVITATION','Likely air entrainment, restricted suction or insufficient NPSHa.',['Suction gauge (vacuum/pressure)','Strainer/intake condition, water level, suction valve position','Calculated NPSHa vs NPSHr'],'pump low pressure noise cavitation suction air leak troubleshooting','npsh'),
+ m1:R('MECHANICAL','Worn or damaged impeller/wear rings, wrong rotation, clogged impeller or slipping coupling.',['Compare shutoff head to curve (if safe)','Rotation, coupling and shaft turning','Impeller clearance/condition at inspection'],'centrifugal pump worn impeller wear ring low pressure diagnosis')}},
+hunt:{n:'Pressure hunting',s:'a',nodes:{
+ a:{q:'Does the hunting continue with the VFD in fixed/manual speed?',o:[['Yes, it hunts at fixed speed','h'],['No, only in PID/auto control','b']]},
+ h:R('HYDRAULIC / SYSTEM','Demand or system devices are cycling: PRV, check valve, air in line, tank precharge, cycling zones.',['Pressure trace at pump and remote point','Zone sequencing at time of swings','Tank precharge (if present), PRV behavior'],'irrigation pump station pressure fluctuating PRV hunting causes'),
+ b:{q:'Is the transducer signal steady and in agreement with a reference gauge?',o:[['No: noisy, drifting or disagreeing','s1'],['Yes: signal is stable and accurate','t1']]},
+ s1:R('SENSOR / WIRING','Feedback is unreliable. Fix this before touching PID values.',['mA/V at the drive input vs gauge','Shield termination and routing away from motor leads','Supply voltage and scaling (low/high range)'],'VFD pressure transducer noise 4-20mA shielding scaling','xdcr'),
+ t1:R('CONTROL TUNING','Loop is too aggressive or ramps/minimum speed/sleep settings fight the system.',['Record ALL current PID, ramp and min-speed values first','Change one parameter at a time and log the result','Observe at low and high demand'],'VFD booster pump PID tuning hunting acceleration deceleration')}},
+trip:{n:'VFD / motor trip',s:'a',nodes:{
+ a:{q:'What did the drive report?',o:[['Overcurrent / short circuit','oc'],['Ground fault / earth leakage','gf'],['Overload / thermal','ol'],['Over- or under-voltage','uv'],['No fault, but won’t accelerate','ac']]},
+ oc:R('ELECTRICAL / MECHANICAL','Possible winding or cable fault, locked rotor/binding, or too-short acceleration ramp.',['Insulation resistance of motor and cable with leads disconnected from the drive','Phase-to-phase resistance balance','Shaft turns freely by hand; ramp time'],'VFD overcurrent fault pump motor insulation resistance test'),
+ gf:R('ELECTRICAL','Leakage to ground in motor, cable or moisture ingress; surge damage possible.',['Megger phase-to-ground for motor and cable separately','Look for water in junction box or conduit','Check grounding and drive output filter/length'],'VFD ground fault motor cable megger insulation test'),
+ ol:R('HYDRAULIC / MECHANICAL','Motor is loaded beyond nameplate. Often pump running out on the curve, bearing drag or voltage problem.',['Amps vs nameplate FLA/service factor each phase','Flow and TDH vs curve (hydraulic overload?)','Bearing condition, voltage balance'],'VFD motor overload pump running out of curve amps nameplate','affinity'),
+ uv:R('SUPPLY','Incoming power or decel energy issue.',['Line voltage at drive during start and run','Voltage imbalance between phases','Deceleration time (overvoltage on stopping)'],'VFD overvoltage undervoltage fault pump supply voltage'),
+ ac:R('PARAMETERS / PERMISSIVES','Drive is limited by a setting or command source, not necessarily a fault.',['Run/enable permissives and command source (local vs remote)','Current limit, accel time, min/max frequency','Motor data entered correctly; PID setpoint vs feedback'],'VFD will not accelerate pump parameters current limit reference source','hz')}},
+cav:{n:'Suspected cavitation',s:'a',nodes:{
+ a:{q:'Does it get worse at higher flow or when more zones run?',o:[['Yes, worse with high flow','h'],['No, it is steady or random','b']]},
+ h:R('HYDRAULIC','Pump is far right on its curve where NPSHr is higher.',['Flow vs curve and NPSHr at that flow','Throttle discharge slightly (if permitted) to see if noise clears','Suction pressure at that flow'],'pump cavitation high flow NPSHr increases with flow','npsh'),
+ b:{q:'Found a restriction or air entry on the suction side (strainer, valve, intake level, fittings)?',o:[['Yes','fx'],['No, suction looks clean','n1']]},
+ fx:R('SUCTION','Correct it and re-test under load.',['Suction gauge before/after repair','Noise and discharge pressure stability','Amps and flow vs baseline'],'pump suction strainer air leak cavitation symptoms fix'),
+ n1:R('NPSH / FLUID','Calculate NPSHa for real conditions: elevation, temperature, lift and friction.',['Water temperature and level','Measured suction pressure','NPSHr from curve at operating flow'],'NPSH available calculation suction lift temperature elevation','npsh')}},
+flow:{n:'Flow reading disagrees',s:'a',nodes:{
+ a:{q:'Does the controller reading match the meter’s own local display/output?',o:[['No, they differ','w'],['Yes, they match','b']]},
+ w:R('SIGNAL / SCALING','The meter may be fine; units, K-factor/pulse scaling or signal type is off.',['Meter output (pulse/mA) with a meter','Controller scaling units and K-factor','Wiring, shielding and splices'],'flow sensor pulse K factor scaling irrigation controller wrong flow','xdcr'),
+ b:{q:'Is the meter installed to spec (straight runs, full pipe, correct size, clean)?',o:[['No, or unknown','i'],['Yes','c']]},
+ i:R('INSTALLATION','Turbulence, air or oversizing causes errors.',['Upstream/downstream straight pipe lengths','Pipe full at low flow?','Sensor fouling/debris'],'flow meter straight pipe requirements installation errors'),
+ c:R('VERIFY INDEPENDENTLY','Compare with a second source before blaming the meter.',['Flow from pump curve (head, amps)','Tank fill time or portable meter','Pipe velocity from known zone demand'],'verify flow meter accuracy field check clamp-on','pipe')}},
+ctrl:{n:'Controller vs hydraulic',s:'a',nodes:{
+ a:{q:'Does the problem remain when you run the station manually at the valve?',o:[['Yes, still wrong','h'],['No, manual works fine','b']]},
+ h:R('HYDRAULIC','Fault is in the field/hydraulics, not the controller.',['Pressure/flow at the station','Valve/solenoid condition, strainers, pipe size','Compare with learned or expected flow'],'irrigation valve zone low flow hydraulic troubleshooting','pipe'),
+ b:{q:'Is solenoid/decoder voltage and response good at the valve during a command?',o:[['No: low voltage or no response','t'],['Yes: command arrives properly','p']]},
+ t:R('TWO-WIRE / ELECTRICAL','Command isn’t reaching the valve reliably.',['Voltage at decoder and at solenoid during command','Line current/signal quality','Splices, surge protection, ground'],'two wire decoder irrigation low voltage troubleshooting current draw'),
+ p:R('CONTROLLER CONFIG','Look at stale learned flow, hydraulic tree/sequence, flow zones or schedule conflicts.',['Learned flow history vs measured','Sequence/overlap and capacity settings','Alarm timing and thresholds'],'WeatherTRAK OptiFlow learned flow flow alerts troubleshooting')}},
+sfault:{n:'Station safety fault',s:'a',nodes:{
+ a:{q:'Which safety or fault is showing? (Find the cause; do not bypass a safety or raise its setpoint just to clear it.)',o:[['Low discharge pressure','flow:wont'],['High discharge pressure','hp'],['Low inlet pressure / loss of prime / low level','lo'],['Phase fault','ph'],['VFD fault','flow:trip'],['Motor won’t start','flow:nostart']]},
+ hp:R('HYDRAULIC / CONTROL','Pressure is above the safety limit. Confirm the reading is real before chasing the pump.',['Reference gauge vs transducer reading','Regulating/PRV valves, closed downstream valves, zones not running','Setpoint, PID overshoot and decel behavior'],'pump station high discharge pressure fault troubleshooting','xdcr'),
+ lo:R('SUCTION / SOURCE','Water source, intake or sensing problem.',['Source level and intake/screen condition','Suction valves, strainers, air leaks, prime status','Verify the low-level/low-inlet switch or transducer actually matches reality'],'pump station low inlet pressure loss of prime low level fault troubleshooting','npsh'),
+ ph:R('SUPPLY','Incoming power or phase monitoring problem.',['Voltage on each phase at the service disconnect and at the panel','Fuses/breakers, utility outage or single-phasing','Phase monitor settings and wiring'],'pump station phase fault phase loss relay troubleshooting')}},
+nostart:{n:'Motor won’t start',s:'a',nodes:{
+ a:{q:'Is control power present, and is the station in the right mode with no active fault or safety?',o:[['No: dead panel, fault or safety active','c1'],['Yes: ready and calling to run','b']]},
+ c1:R('CONTROL / PERMISSIVES','Something in the start chain is open.',['Control power and control transformer fuses','E-stop, door and safety interlocks, reset status','Alarm/fault history on the panel display'],'pump station will not start control power safety interlock reset'),
+ b:{q:'Does the drive or starter respond (contactor pulls in or drive shows run)?',o:[['No response','c2'],['Yes, it energizes','c']]},
+ c2:R('COMMAND CHAIN','Run command is not reaching the drive/starter.',['Run command voltage at the drive/starter input','Local/remote/auto mode selection','Permissive relays and PLC output status'],'VFD pump will not run start command local remote permissive'),
+ c:{q:'What does motor current do while commanded to run?',o:[['No current','o1'],['High current, shaft not turning','m1']]},
+ o1:R('ELECTRICAL','Output path is open: contactor, overload, disconnected lead, or winding.',['Output voltage at drive/starter','Overload relay state','Winding continuity and insulation resistance with leads isolated (locked out)'],'3 phase motor no current open winding troubleshooting megger'),
+ m1:R('MECHANICAL','Locked rotor or severe binding.',['Shaft turns by hand (locked out)','Bearings, impeller binding, debris or ice','Coupling/shaft condition'],'centrifugal pump motor locked rotor shaft seized troubleshooting')}},
+vib:{n:'Seal leak / noise / vibration',s:'a',nodes:{
+ a:{q:'What are you seeing?',o:[['Leak at the mechanical seal','sl'],['Bearing noise or heat','br'],['Vibration or rumbling','b']]},
+ sl:R('MECHANICAL','Seals fail from dry running, cavitation, misalignment, shaft runout or contamination. Find why before replacing.',['Leak source: seal vs casing/gland','Shaft runout and alignment','Evidence of dry running or cavitation upstream'],'centrifugal pump mechanical seal failure causes shaft runout alignment'),
+ br:R('MECHANICAL','Check lubrication, alignment, load and contamination.',['Bearing temperature and lubrication','Alignment and belt tension (if belt drive)','Radial/axial load from piping strain'],'centrifugal pump bearing failure causes misalignment lubrication'),
+ b:{q:'Does vibration change with flow or speed?',o:[['Worse at high or low flow','h'],['Worse at a certain Hz/speed','r'],['Constant at all conditions','al']]},
+ h:R('HYDRAULIC','Operating far from best efficiency point or cavitating.',['Flow vs pump curve and BEP','Suction conditions and noise character'],'pump vibration away from best efficiency point recirculation cavitation','npsh'),
+ r:R('RESONANCE','A structural or piping resonance at a specific speed.',['Note the Hz where it peaks','Use VFD skip/jump frequency per your manual','Check supports, bases and pipe clamps'],'VFD skip frequency pump resonance vibration','hz'),
+ al:R('MECHANICAL','Typical: soft foot, misalignment, imbalance, pipe strain or worn bearings.',['Soft foot and base bolts','Coupling alignment','Impeller condition and pipe strain'],'centrifugal pump vibration alignment soft foot imbalance pipe strain')}},
+fa:{n:'High / low flow alarm',s:'a',nodes:{
+ a:{q:'Is the alarm confirmed by an independent source (second meter, pump curve, visual)?',o:[['No / not sure','flow:flow'],['Yes, flow really is high','hi'],['Yes, flow really is low','lw']]},
+ hi:R('HYDRAULIC','Real excess flow: break, valve stuck open, damaged heads or overlapping zones.',['Pressure drop vs normal at same station','Which zones are on when it starts','Valve positions, mainline and lateral leak signs'],'irrigation high flow alarm mainline break stuck valve troubleshooting'),
+ lw:R('HYDRAULIC / VALVE','Restriction or valves not opening.',['Strainers, filters, partially closed valves','Pump output at this speed vs curve','Valve/solenoid command and voltage'],'irrigation low flow alarm clogged strainer valve not opening troubleshooting','pipe')}},
+lflow:{n:'Learned vs measured flow',s:'a',nodes:{
+ a:{q:'Has anything changed hydraulically since the flow was learned (nozzles, heads, repairs, valve or zone changes, pump or pressure changes)?',o:[['Yes, something changed','st'],['No / not sure','b']]},
+ st:R('CONTROL CONFIG','Learned values may be stale for the new hydraulics. Fix any real problem first, then re-learn per the controller manual.',['What changed and when','Pressure at the station now vs before','Learned flow history vs current measured flow'],'central control learned flow out of date after changes relearn flow'),
+ b:{q:'Does an independent flow reading (portable meter, tank fill, pump curve) agree with the flow sensor?',o:[['Yes, the sensor is right','hy'],['No, they differ','flow:flow']]},
+ hy:R('HYDRAULIC','Real flow differs from learned: leak, partial blockage, worn valve, overlapping stations, or a pressure shift.',['Station pressure vs normal at the same flow','Which stations run together at alarm time','Valve and strainer condition; signs of a leak'],'irrigation measured flow higher lower than learned flow causes','pipe')}},
+tw:{n:'Two-wire / decoder problem',s:'a',nodes:{
+ a:{q:'How much of the system is affected?',o:[['One decoder/station','one'],['A branch or section','br'],['The whole line','all']]},
+ one:R('DECODER / LOCAL','Likely the decoder, solenoid or its splice at that valve.',['Voltage at the decoder and solenoid resistance (power off)','Splice condition (water ingress)','Swap test with a known-good decoder'],'two wire decoder single station not working solenoid resistance splice'),
+ br:R('WIRING','Break, bad splice or short on that branch.',['Line current with the branch connected vs isolated','Continuity and insulation to ground on the branch (locked out)','Splices between the last working and first failed decoder'],'two wire irrigation branch fault locating splice break short','twvd'),
+ all:R('ELECTRICAL / CONTROLLER','Controller output, short on the line, ground leakage, or surge damage.',['Line voltage at the controller output and at the far end','Line current draw vs normal','Insulation to ground, surge protection and ground rod condition'],'two wire decoder line short ground fault surge troubleshooting current draw','twvd')}},
+comm:{n:'Controller offline / comms',s:'a',nodes:{
+ a:{q:'Does the controller have power and run its program locally?',o:[['No: dead or not running','pw'],['Yes, it runs but isn’t reporting','b']]},
+ pw:R('POWER','Check power before communications.',['Voltage at the controller input and breaker','Transformer/fuse and battery','Display and status LEDs'],'irrigation controller no power transformer fuse troubleshooting'),
+ b:{q:'Is the signal strength/antenna indicator healthy and the service/account active?',o:[['No: weak or no signal','sg'],['Signal looks fine','ac']]},
+ sg:R('SIGNAL','Antenna or coverage problem.',['Signal strength indicator at the controller','Antenna placement, cable and connectors','Metal enclosure or obstruction effects'],'irrigation controller cellular antenna weak signal troubleshooting'),
+ ac:R('ACCOUNT / SOFTWARE','Service, activation or firmware issue.',['Account, activation and subscription status','Firmware version and update availability','Contact manufacturer support with controller ID and the time it last reported'],'central control controller offline not communicating activation subscription firmware')}},
+pstart:{n:'Pump start / master valve not operating',s:'a',nodes:{
+ a:{q:'Does the controller show the pump-start or master-valve output as ON when it should?',o:[['No, output not turning on','cf'],['Yes, it shows ON','b']]},
+ cf:R('CONTROLLER CONFIG','Output is not being called.',['Pump-start/master-valve assignment on the running stations','Watering window, pauses, rain or sensor holds, active alarms','Output status in the controller diagnostics'],'irrigation controller pump start master valve output not activating'),
+ b:{q:'Is voltage present at the relay coil or master-valve solenoid terminals while ON?',o:[['No voltage','wr'],['Voltage present','c']]},
+ wr:R('ELECTRICAL','Output path is broken between controller and relay/valve.',['Voltage at the controller output terminals','Fuses, wiring and splices to the relay/valve','Output module health per your manual'],'irrigation pump start relay no voltage controller output troubleshooting'),
+ c:{q:'Does the relay/contactor or valve respond when energized?',o:[['No: relay or valve does not act','rl'],['Yes, and the pump station still doesn’t start','flow:nostart']]},
+ rl:R('COMPONENT','Coil, relay, contactor or master valve failure.',['Coil resistance and mechanical movement','Relay contacts continuity (locked out)','Replace with known-good and retest'],'pump start relay coil failure irrigation master valve solenoid test')}}
+
+};
+$('#diagBtns').innerHTML='';Object.entries(flows).forEach(([k,f])=>{const b=document.createElement('button');b.type='button';b.textContent=f.n;b.onclick=()=>openFlow(k,true);$('#diagBtns').appendChild(b)});
+function openFlow(k,s){if(!prof().make&&!prof().vfdb&&!skipProfile){gate(k,s);return}cur='flow';setTabs();const f=flows[k];const path=[];$('#diagOut').textContent='Path open: '+f.n;
+ const draw=id=>{const n=f.nodes[id];let h='<h3>'+esc(f.n)+'</h3><div class="safety">'+S+'</div>';
+  if(path.length)h+='<div class="small">'+path.map(esc).join(' → ')+'</div>';
+  if(n.r){h+=`<div class="res"><b>Most likely area: ${esc(n.domain)}</b><br>${esc(n.text)}<br><br>Measure / check:<ul>${n.measure.map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Confirm in your manual:<ul>${hints(n.domain).map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Make the smallest justified change, then prove it under operating conditions.</div><div class="links" id="lit" style="margin-top:10px"></div><div class="links" style="margin-top:10px"><button type="button" id="fs">SEARCH THIS</button>${n.tool?'<button type="button" id="ft2">OPEN CALCULATOR</button>':''}<button type="button" id="fn">LOG TO NOTES</button><button type="button" id="fr">START OVER</button></div>`}
+  else h+=`<div class="q">${esc(n.q)}</div><div class="opts">${n.o.map((o,i)=>`<button type="button" data-i="${i}">${esc(o[0])}</button>`).join('')}</div>${path.length?'<div class="links" style="margin-top:10px"><button type="button" id="fr">START OVER</button></div>':''}`;
+  $('#bench').innerHTML=h;
+  if(n.r){litButtons($('#lit'),n.search.split(' ').slice(0,5).join(' '));$('#fs').onclick=()=>go(withBrand(n.search));if(n.tool)$('#ft2').onclick=()=>openTool(n.tool,true);$('#fn').onclick=()=>appendNote(`[Diagnostic: ${f.n}] Path: ${path.join(' → ')} → ${n.domain}. Next: ${n.measure.join('; ')}`)}
+  $$('#bench .opts button').forEach(b=>b.onclick=()=>{const o=n.o[b.dataset.i];if(o[1].startsWith('flow:')){openFlow(o[1].slice(5),true);return}path.push(o[0]);draw(o[1])});
+  const r=$('#fr');if(r)r.onclick=()=>{path.length=0;draw(f.s)}};draw(f.s);scrollBench(s)}
+
+/* ---------- central control platform notes ---------- */
+const PLAT={
+'Toro Lynx (NSN)':{kind:'Central control (Toro NSN)',facts:['Toro NSN provides technical support for Lynx and SitePro central control, per Toro’s professional irrigation support page.'],look:['Operator manual for your Lynx version','Alarm and flow history in the software','Satellite communication status']},
+'Toro Sentinel':{kind:'Central control + satellite controllers',facts:['Central control can manage up to 999 satellite controllers; communication options include radio, Ethernet, telephone and cellular (Toro product guide).','Program data is stored at both the satellite and the central computer, so irrigation continues if the central computer goes offline.','Sentinel controller front LEDs: Alarm (red) flashes for any alarm and is steady for warnings; Hold (amber) means program or station days off (controller manual).','Toro’s Sentinel Literature page lists a Sentinel Unit Troubleshooting document and two-wire (TDC) guides.'],look:['Alarm menu: satellite, communication, electrical and flow alarms','Expected vs actual flow on the controller display','Two-wire TDC guides if the site uses decoders']},
+'Toro Eagle Plus':{kind:'Controller (remote access via Toro iCentral)',facts:['Conventional version: 8 to 48 stations in 8-station modules. Two-wire version: up to 200 stations on up to 100 decoders (Toro product specification).','The user guide lists two-wire tests: Single Station Test, Find Decoders Test and All Stations Test.','The user guide has an Alarms section (general, flow sensor, rain sensor/weather station, two-wire decoder) and an Error Code Reference Chart.'],look:['Alarm review and error code chart','Flow limits and learned flow settings','Decoder tests if two-wire']},
+'Hunter Pilot':{kind:'Golf control system (Field Controllers, Decoder Hubs, central computer)',facts:['Field Controllers are conventional (up to 80 stations); Decoder Hubs control up to 999 stations; a Field Interface links the central computer to the field by hardwire, UHF or license-free radio (Pilot system design guide).','The owner’s manual covers Central Control Testing, Communication Modules, View Status, View Configuration, Two-Way Module Inventory, View Module Current and Wire Test Mode.'],look:['Communication test for the installed module type','View Module Current and Wire Test Mode for field wiring','hunter.help/Pilot for tips']},
+'Hunter Centralus':{kind:'Cloud platform for ACC2, ICC2 and Pro-C controllers',facts:['Controllers connect by Wi-Fi, Ethernet or a 4G LTE module.','The LTE module’s SIM is pre-registered and works only in Hunter controllers; ACC2 cellular modules need a facepack replacement and data backup first (Centralus support page).','Support pages cover Alarms & Logs (start with View Logs) and the Flow tab.'],look:['View Logs on the controller and in Centralus','Connection method and signal','Flow tab and flow settings']},
+'Rain Bird IQ4':{kind:'Central control (IQ4) with IQ-NCC cartridges in ESP-LX controllers',facts:['IQ-NCC cartridges (Ethernet, cellular, RS-232) turn ESP-LX controllers into IQ satellites, set as Direct, Server or Client satellites (IQ-NCC manual).','The IQ4 support page has videos for pump start relay setup, flow sensors and FloWatch, raster wire test and station module status lights.','Rain Bird’s central control support page also lists IQ NCC 4G cartridges, IQ TBOS and SiteControl.'],look:['Cartridge type and connection status','Flow sensor and FloWatch settings','Raster wire test for valve wiring']},
+'Rain Bird Maxicom':{kind:'Legacy central control (Maxicom, field CCUs)',facts:['Maxicom v4.5 is listed under Rain Bird central control support.','Rain Bird Services’ download page lists the Maxicom CCU manual, the Maxicom2 user manual and the Freedom manual for Maxicom.'],look:['Software version and CCU communication path on site','Flow zones and flow alarm settings','CCU manual for the field controller']},
+'Baseline (BaseStation)':{kind:'Two-wire controller with BaseManager central control',facts:['Baseline support is run through HydroPoint: Knowledgebase (installation manuals, how-to videos, firmware updates), cell service activation and BaseManager.','The BaseStation 3200 manual has sections on Wiring Guidelines, Flow Management & Monitoring, Manual Operations and Troubleshooting.','Copies of the manual on third-party sites are older (2012), so use the Knowledgebase for current versions.','Baseline support: 866-294-5847.'],look:['Wiring guidelines and surge protection for two-wire','Flow bicoder and master valve/pump start bicoder setup','Firmware version vs Knowledgebase']},
+'WeatherTRAK (HydroPoint)':{kind:'Smart controllers with WeatherTRAK Central',facts:['The controller user manual covers OptiFlow XR, ET Pro3 and LC+ (conventional and 2-wire).','Quick reference cards describe alert management and six LED diagnostic lights on the controller chassis.','HydroPoint support: 1-800-362-8774.'],look:['Alerts page and alert category codes','Chassis LED diagnostics','Flow sensor and master valve deployment options']}};
+function openPlat(s,sel){cur='plat';setTabs();const p0=prof();sel=sel||p0.ctrl||'';
+ let h='<h3>Platform notes</h3><div class="links" id="plbtns"></div>';
+ if(sel&&PLAT[sel]){const d=PLAT[sel];h+=`<h3>${esc(sel)}</h3><div class="small">${esc(d.kind)}</div><ul>${d.facts.map(f=>'<li>'+esc(f)+'</li>').join('')}</ul><div class="res"><b>Look at first</b><ul>${d.look.map(f=>'<li>'+esc(f)+'</li>').join('')}</ul></div><div class="links" id="pllinks" style="margin-top:10px"></div><div class="links" style="margin-top:10px"><button type="button" id="plset">USE AS MY CONTROLLER</button><button type="button" id="plpath">START A CENTRAL CONTROL PATH</button></div>`}
+ else h+='<p class="small">Choose a platform. Notes come from manufacturer documents; confirm details against your version.</p>';
+ $('#bench').innerHTML=h;
+ Object.keys(PLAT).forEach(k=>{const b=document.createElement('button');b.type='button';b.textContent=k;b.classList.toggle('on',k===sel);b.onclick=()=>openPlat(false,k);$('#plbtns').appendChild(b)});
+ if(sel&&PLAT[sel]){(CTRLS[sel]||[]).forEach(x=>{const b=document.createElement('button');b.type='button';b.textContent=x.t+' ↗';b.onclick=()=>x.u?window.open(x.u,'_blank','noopener'):go(x.q);$('#pllinks').appendChild(b)});
+  $('#plset').onclick=()=>{const q2=prof();store.set('tracerProfile',Object.assign(q2,{ctrl:sel}));drawProfile();say('Controller saved to your profile.')};
+  $('#plpath').onclick=()=>openFlow('lflow',true)}
+ scrollBench(s)}
+
+/* ---------- training ---------- */
+[['Toro pump training','Toro irrigation pump station training service manual'],['Rain Bird ASP training','Rain Bird ASP pump station training service manual'],['Precision Pump Systems','Precision Pump Systems Flowtronex pump station training'],['Flowtronex / PPS','Flowtronex PPS pump station troubleshooting manual'],['Pentair pumps','Pentair pump service manual training']].forEach(([n,s])=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.onclick=()=>go(s);$('#train').appendChild(b)});
+
+/* ---------- notes ---------- */
+const notes=$('#notes'),stat=$('#noteStatus');
+try{notes.value=localStorage.getItem('tracerFieldNotes')||''}catch(e){}
+const say=t=>{stat.textContent=t};
+function appendNote(t){notes.value=(notes.value?notes.value.replace(/\s+$/,'')+'\n\n':'')+t;say('Added to notes. Press Save to keep it.');notes.scrollIntoView({behavior:'smooth',block:'center'})}
+$('#save').onclick=()=>{try{localStorage.setItem('tracerFieldNotes',notes.value);say('Notes saved locally in this browser.')}catch(e){say('Browser storage is unavailable.')}};
+$('#jobcard').onclick=()=>appendNote('JOB CARD  '+new Date().toLocaleString()+'\nSite / asset:\nSymptom:\nSuction psi:      Discharge psi:\nFlow:             Hz / RPM:\nVolts L-L:        Amps L1/L2/L3:\nFault codes:\nTests performed:\nChange made:\nResult under load:\n');
+$('#copy').onclick=()=>{navigator.clipboard?navigator.clipboard.writeText(notes.value).then(()=>say('Copied.'),()=>say('Copy blocked by browser.')):say('Copy not supported.')};
+$('#export').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([notes.value],{type:'text/plain'}));a.download='tracer-notes-'+new Date().toISOString().slice(0,10)+'.txt';a.click();URL.revokeObjectURL(a.href);say('Exported.')};
+$('#import').onclick=()=>$('#file').click();
+$('#file').onchange=e=>{const fl=e.target.files[0];if(!fl)return;const r=new FileReader();r.onload=()=>{notes.value=notes.value?notes.value+'\n\n'+r.result:r.result;say('Imported. Press Save to keep it.')};r.readAsText(fl);e.target.value=''};
+$('#erase').onclick=()=>{if(!notes.value||!confirm('Clear all notes? Export first if you want a backup.'))return;notes.value='';try{localStorage.removeItem('tracerFieldNotes')}catch(e){}say('Notes cleared.')};
+
+drawRecent();setTabs();drawProfile();
+})();
+</script></body></html>
