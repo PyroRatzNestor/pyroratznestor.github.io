@@ -29,7 +29,7 @@ body.hc .btn,body.hc button{background:#000;border-color:#fff}
 
 <section class="top"><div class="tag">TRACER // FIELD TECHNICAL DASHBOARD // V4</div><h1 class="title">Service Technician Command Center</h1><div class="motto">MEASURE → ISOLATE → VERIFY → REPAIR → PROVE</div><p class="sub">Start with evidence. Separate hydraulic, electrical, mechanical and control-system causes before changing parts or parameters.</p>
 <form id="searchForm" class="search"><input id="q" aria-label="Technical web search" placeholder="Search pumps, VFDs, controls, hydraulics, two-wire, GIS…  (press / to focus)"><button>SEARCH WEB</button></form>
-<div class="filters"><button type="button" data-suffix="pump service manual troubleshooting">PUMPS</button><button type="button" data-suffix="VFD pump PID troubleshooting manual">VFD</button><button type="button" data-suffix="central control irrigation technical troubleshooting">CENTRAL CONTROL</button><button type="button" data-suffix="two wire decoder irrigation troubleshooting">TWO-WIRE</button><button type="button" data-suffix="motor electrical troubleshooting application note">ELECTRICAL</button><button type="button" data-suffix="GIS field mapping irrigation">GIS</button><button type="button" id="hc" style="margin-left:auto">HIGH CONTRAST</button></div>
+<div class="filters"><button type="button" data-suffix="pump service manual troubleshooting">PUMPS</button><button type="button" data-suffix="VFD pump PID troubleshooting manual">VFD</button><button type="button" data-suffix="central control irrigation technical troubleshooting">IRRIGATION CONTROL</button><button type="button" data-suffix="two wire decoder irrigation troubleshooting">TWO-WIRE</button><button type="button" data-suffix="motor electrical troubleshooting application note">ELECTRICAL</button><button type="button" data-suffix="GIS field mapping irrigation">GIS</button><button type="button" id="hc" style="margin-left:auto">HIGH CONTRAST</button></div>
 <div class="filters" id="mfr"><span class="small">Manufacturer:</span></div>
 <div class="filters" id="recent"></div></section>
 
@@ -56,7 +56,6 @@ body.hc .btn,body.hc button{background:#000;border-color:#fff}
 <section class="card wide"><h2>QUICK FIELD CALCULATOR</h2><div class="calc"><label>PSI<input id="psi" type="number" step="any" placeholder="e.g. 65"></label><label>Feet of head<input id="ft" type="number" step="any" placeholder="e.g. 150"></label><button id="clear" type="button">CLEAR</button></div><div id="calcOut" class="result" aria-live="polite">1 psi ≈ 2.31 ft of water head</div></section>
 
 
-<section class="card wide"><h2>TECHNICAL SEARCH TARGETS</h2><div class="links"><button type="button" data-target="manufacturer service manual PDF">SERVICE MANUALS</button><button type="button" data-target="manufacturer application note technical bulletin PDF">APPLICATION NOTES</button><button type="button" data-target="wiring diagram service manual PDF">WIRING DIAGRAMS</button><button type="button" data-target="pump curve PDF">PUMP CURVES</button><button type="button" data-target="manufacturer troubleshooting guide PDF">TROUBLESHOOTING</button></div><p id="tgtOut" class="small">Type a model, manufacturer or symptom in the search box, then tap a target. Manufacturer chips add that brand to your search.</p></section>
 
 <section class="card full"><h2>TRAINING BENCH</h2><div class="links" id="train"></div><p class="small">Open a manufacturer training portal. Some portals may require an account or login.</p></section>
 
@@ -81,7 +80,6 @@ function drawRecent(){const r=store.get('tracerRecent',[]);const el=$('#recent')
 const withBrand=s=>((brand?brand+' ':'')+s).trim();
 $('#searchForm').addEventListener('submit',e=>{e.preventDefault();go(withBrand(q.value))});
 $$('[data-suffix]').forEach(b=>b.addEventListener('click',()=>go(withBrand(q.value+' '+b.dataset.suffix))));
-$$('[data-target]').forEach(b=>b.addEventListener('click',()=>{if(!q.value.trim()&&!brand){$('#tgtOut').textContent='Type a model or symptom first (or pick a manufacturer chip), then tap again.';q.focus();return}$('#tgtOut').textContent='Searching: '+withBrand(q.value+' '+b.dataset.target);go(withBrand(q.value+' '+b.dataset.target))}));
 ['Toro','Hunter','Rain Bird','Baseline','WeatherTRAK','Flowtronex','Watertronics','Pentair','Berkeley','ABB','Mitsubishi'].forEach(n=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.onclick=()=>{brand=brand===n?'':n;$$('#mfr button').forEach(x=>x.classList.toggle('on',x.textContent===brand))};$('#mfr').appendChild(b)});
 document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();q.focus()}});
 $('#hc').onclick=()=>{document.body.classList.toggle('hc');store.set('tracerHC',document.body.classList.contains('hc'))};
