@@ -22,6 +22,7 @@ body.hc .btn,body.hc button{background:#000;border-color:#fff}
 .q{font-size:17px;margin:10px 0}.opts{display:flex;flex-direction:column;gap:8px}.opts button{text-align:left}
 .res{border:1px solid var(--green);border-radius:10px;padding:12px;margin-top:8px}.res b{color:var(--green)}.res ul{margin:6px 0 6px 18px;padding:0}
 .chk label{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #1d3a4b}.chk input{width:22px;height:22px;flex:none}
+.tbl{border-collapse:collapse;margin:10px 0;font-weight:400}.tbl th,.tbl td{border:1px solid var(--line);padding:4px 10px;text-align:right;color:var(--text)}.tbl th{color:var(--muted)}
 .safety{border-left:3px solid var(--amber);padding:6px 10px;margin:10px 0;color:var(--amber);font-size:13px}
 @media(max-width:850px){.card,.wide{grid-column:1/-1}.calc{grid-template-columns:1fr}.search{flex-direction:column}}
 </style></head><body><div class="wrap">
@@ -46,7 +47,7 @@ body.hc .btn,body.hc button{background:#000;border-color:#fff}
 
 <section class="card"><h2>PUMPS // HYDRAULICS</h2><div class="items" id="c1"></div></section>
 <section class="card"><h2>VFD // CONTROLS</h2><div class="items" id="c2"></div></section>
-<section class="card"><h2>CENTRAL CONTROL</h2><div class="items" id="c3"></div></section>
+<section class="card"><h2>IRRIGATION CONTROL</h2><div class="items" id="c3"></div></section>
 
 <section class="card full" id="benchCard"><h2>FIELD BENCH</h2><div class="tabs" id="tabs"></div><div id="bench"></div></section>
 
@@ -54,13 +55,8 @@ body.hc .btn,body.hc button{background:#000;border-color:#fff}
 
 <section class="card wide"><h2>QUICK FIELD CALCULATOR</h2><div class="calc"><label>PSI<input id="psi" type="number" step="any" placeholder="e.g. 65"></label><label>Feet of head<input id="ft" type="number" step="any" placeholder="e.g. 150"></label><button id="clear" type="button">CLEAR</button></div><div id="calcOut" class="result" aria-live="polite">1 psi ≈ 2.31 ft of water head</div></section>
 
-<section class="card wide"><h2>QUICK DIAGNOSTIC PATHS</h2><div class="links" id="diagBtns"></div><p id="diagOut" class="small" aria-live="polite">Choose a symptom. If no equipment is set, you’ll be asked first (you can skip). Each path ends with measurements to take and your manufacturer’s literature.</p></section>
 
 <section class="card wide"><h2>TECHNICAL SEARCH TARGETS</h2><div class="links"><button type="button" data-target="manufacturer service manual PDF">SERVICE MANUALS</button><button type="button" data-target="manufacturer application note technical bulletin PDF">APPLICATION NOTES</button><button type="button" data-target="wiring diagram service manual PDF">WIRING DIAGRAMS</button><button type="button" data-target="pump curve PDF">PUMP CURVES</button><button type="button" data-target="manufacturer troubleshooting guide PDF">TROUBLESHOOTING</button></div><p id="tgtOut" class="small">Type a model, manufacturer or symptom in the search box, then tap a target. Manufacturer chips add that brand to your search.</p></section>
-
-<section class="card full"><h2>MY LINKS // ONEDRIVE & FILES</h2>
-<p class="small">Paste a OneDrive share link for each folder or file (in OneDrive: Share → Copy link, set to “Anyone with the link can view”). The buttons then open them in one tap. Links are saved only in this browser. This page is public, so share only things you are comfortable making public. Keep customer files private.</p>
-<div id="ml" class="fields"></div><p id="mlStat" class="small"></p></section>
 
 <section class="card full"><h2>TRAINING BENCH</h2><div class="links" id="train"></div><p class="small">Open a manufacturer training portal. Some portals may require an account or login.</p></section>
 
@@ -93,9 +89,9 @@ if(store.get('tracerHC',false))document.body.classList.add('hc');
 
 /* ---------- info cards: every item is a button ---------- */
 const cards={
-c1:[['Duty point, curve & BEP','search','pump duty point operating point best efficiency point BEP pump curve explained'],['TDH / static / friction','tool','tdh'],['NPSHa vs NPSHr','tool','npsh'],['Cavitation & suction conditions','flow','cav'],['Seals, sleeves, bearings & alignment','search','centrifugal pump mechanical seal shaft sleeve bearing alignment service manual'],['Vertical turbine & centrifugal systems','search','vertical turbine pump irrigation troubleshooting service manual']],
-c2:[['Input/output voltage & current','flow','trip'],['Hz, RPM & motor data','tool','hz'],['Pressure transducer scaling','tool','xdcr'],['PID hunting & response','flow','hunt'],['Accel / decel / min speed','flow','trip'],['Drive vs motor vs hydraulic fault','flow','wont']],
-c3:[['Platform notes (Toro, Hunter, Rain Bird, Baseline, WeatherTRAK)','tool','plat'],['Learned vs measured flow','flow','lflow'],['Hydraulic tree / capacity','tool','pipe'],['Flow sensor / K-factor check','tool','flowcal'],['Decoder / two-wire diagnostics','flow','tw'],['Two-wire voltage drop','tool','twvd'],['Controller offline / comms','flow','comm'],['Pump start / master valve','flow','pstart'],['Sequence & runtime evidence','search','central control irrigation runtime history flow alarm troubleshooting']]};
+c1:[['Duty point, curve & BEP','search','pump duty point operating point best efficiency point BEP pump curve explained'],['TDH / static / friction','tool','tdh'],['NPSHa vs NPSHr','tool','npsh'],['System check: TDH + NPSHa','tool','sys'],['Pump won’t build pressure','flow','wont'],['Cavitation & suction conditions','flow','cav'],['Seal leak / noise / vibration','flow','vib'],['Flow reading disagrees','flow','flow'],['Seals, sleeves, bearings & alignment','search','centrifugal pump mechanical seal shaft sleeve bearing alignment service manual'],['Vertical turbine & centrifugal systems','search','vertical turbine pump irrigation troubleshooting service manual']],
+c2:[['Input/output voltage & current','flow','trip'],['Hz, RPM & motor data','tool','hz'],['Pressure transducer scaling','tool','xdcr'],['PID hunting & response','flow','hunt'],['Accel / decel / min speed','flow','trip'],['Drive vs motor vs hydraulic fault','flow','wont'],['Motor won’t start','flow','nostart'],['Station safety fault','flow','sfault']],
+c3:[['Platform notes (Toro, Hunter, Rain Bird, Baseline, WeatherTRAK)','tool','plat'],['Learned vs measured flow','flow','lflow'],['Controller vs hydraulic','flow','ctrl'],['High / low flow alarm','flow','fa'],['Hydraulic tree / capacity','tool','pipe'],['Flow sensor / K-factor check','tool','flowcal'],['Decoder / two-wire diagnostics','flow','tw'],['Two-wire voltage drop','tool','twvd'],['Controller offline / comms','flow','comm'],['Pump start / master valve','flow','pstart'],['Sequence & runtime evidence','search','central control irrigation runtime history flow alarm troubleshooting']]};
 cards.c1.push(['Manufacturer library (pumps & stations)','view','lib']);cards.c2.push(['3-phase amps / kW','tool','ph3'],['Voltage / current imbalance','tool','imb']);cards.c3.push(['Decoder limits by brand','view','dec'],['Manufacturer library (irrigation)','view','lib']);
 const tag={search:'search ↗',tool:'calculator',flow:'path',view:'open'};
 Object.entries(cards).forEach(([id,arr])=>arr.forEach(([t,k,v])=>{const b=document.createElement('button');b.type='button';b.innerHTML=esc(t)+'<small>'+tag[k]+'</small>';
@@ -118,6 +114,23 @@ npsh:{name:'NPSHa',fields:[['el','Site elevation, ft',700],['tf','Water temperat
   if(Number.isFinite(v.r)&&v.r>0){const m=na-v.r;s+=`<br>Margin over NPSHr: <b class="${m<3?'bad':m<5?'warn':''}">${f1(m)} ft</b> `+(m<=0?'— cavitation expected':m<3?'— thin margin':m<5?'— marginal; many references want more':'— adequate by common practice')}
   if(tc<1||tc>100)s+='<br><span class="warn">Temperature outside 33–212°F: vapor pressure formula not valid.</span>';
   return s+'<br><span class="small">Uses standard-atmosphere pressure for elevation (not today’s barometer). Confirm margin requirements with the pump manufacturer.</span>'}},
+sys:{name:'System check: TDH + NPSHa',fields:[['q','Flow, gpm',600],['pd','Required discharge pressure, psi',70],['rise','Discharge static rise above pump, ft',55],['lift','Suction lift, ft (+ lift / − flooded)',15],['ls','Suction pipe length, ft',80],['ds','Suction pipe inside diameter, in',6.065],['cs','Suction Hazen-Williams C',120],['ld','Discharge pipe length, ft',700],['dd','Discharge pipe inside diameter, in',4.026],['cd','Discharge Hazen-Williams C',120],['hmd','Discharge fittings / minor losses, ft (0 if not counted)',0],['vh','Include net velocity head in TDH (1 = yes, 0 = no)',1],['el','Site elevation, ft',820],['tf','Water temperature, °F',68],['sg','Specific gravity',1],['nr','NPSHr from pump curve at this flow, ft',15],['mg','Target NPSH margin, ft',5],['vls','Suction velocity alert, ft/s',6],['vld','Discharge velocity alert, ft/s',10],['ne','Suction entrance count (K 0.5)',0],['nb','Suction 90° elbow count (K 0.9)',0],['ng','Suction gate valve count (K 0.15)',0],['nc','Suction check valve count (K 2.0)',0],['ns','Suction strainer count (K 2.0)',0],['ko','Other suction fittings, total K',0]],
+ calc:v=>{if(!(v.q>0&&v.ds>0&&v.dd>0&&v.cs>0&&v.cd>0&&v.sg>0&&v.nr>0))return'Flow, diameters, C, specific gravity and NPSHr must be above zero.';
+  const HW=4.52*2.31,hf=(L,C,d)=>HW*L*Math.pow(v.q,1.85)/(Math.pow(C,1.85)*Math.pow(d,4.8655)),vel=d=>0.408709*v.q/(d*d),vhd=x=>x*x/(2*32.174);
+  const vs=vel(v.ds),vd=vel(v.dd),hs=hf(v.ls,v.cs,v.ds),hdis=hf(v.ld,v.cd,v.dd),sk=v.ne*0.5+v.nb*0.9+v.ng*0.15+v.nc*2+v.ns*2+v.ko,hm=sk*vhd(vs),nv=v.vh===1?vhd(vd)-vhd(vs):0;
+  const pH=v.pd*2.31/v.sg,tdh=pH+v.lift+v.rise+hs+hdis+v.hmd+hm+nv;
+  const pa=14.696*Math.pow(1-6.8754e-6*v.el,5.2559),ha=pa*2.31/v.sg;
+  const pvp=t=>{const k=(t-32)*5/9+273.15;return(k<=303?Math.pow(10,5.40221-1838.675/(k-31.737)):Math.pow(10,5.20389-1733.926/(k-39.485)))*14.5037738};
+  const na=t=>ha-v.lift-hs-hm-pvp(t)*2.31/v.sg,st=n=>n<=v.nr?'RISK':n<v.nr+v.mg?'CAUTION':'PASS',cl=s=>s==='RISK'?'bad':s==='CAUTION'?'warn':'';
+  const n0=na(v.tf),s0=st(n0);let s=`<b>Velocity:</b> suction <b class="${vs>v.vls?'warn':''}">${f1(vs,2)} ft/s</b>${vs>v.vls?' (over alert)':''} · discharge <b class="${vd>v.vld?'warn':''}">${f1(vd,2)} ft/s</b>${vd>v.vld?' (over alert)':''}<br>`;
+  s+=`<b>Friction (Hazen-Williams, head):</b> suction ${f1(hs,2)} ft · discharge ${f1(hdis,2)} ft · suction fittings ${f1(hm,2)} ft (ΣK ${f1(sk,2)})<br>`;
+  s+=`<b>TDH ≈ ${f1(tdh)} ft</b> (${f1(tdh*v.sg/2.31)} psi equivalent) = pressure ${f1(pH)} + static ${f1(v.lift+v.rise)} + friction/minor ${f1(hs+hdis+v.hmd+hm,2)} + net velocity ${f1(nv,2)}<br>`;
+  s+=`<b>NPSHa ≈ <span class="${cl(s0)}">${f1(n0)} ft</span></b> = atmospheric ${f1(ha)} (${f1(pa,2)} psia) − lift ${f1(v.lift)} − suction losses ${f1(hs+hm,2)} − vapor ${f1(pvp(v.tf)*2.31/v.sg,2)}<br>`;
+  s+=`Margin over NPSHr: <b class="${cl(s0)}">${f1(n0-v.nr)} ft</b> · ratio ${f1(n0/v.nr,2)} · target ≥ ${f1(v.nr+v.mg)} ft · status <b class="${cl(s0)}">${s0}</b>`;
+  if(sk===0&&v.ne+v.nb+v.ng+v.nc+v.ns===0)s+='<br><span class="warn">No suction fittings counted. Count entrance, elbows, valves and strainer; losses are understated until you do.</span>';
+  const tc=(v.tf-32)/1.8;if(tc<0||tc>60)s+='<br><span class="warn">Temperature outside 32–140°F: vapor pressure constants not valid.</span>';
+  s+='<table class="tbl"><tr><th>°F</th><th>NPSHa ft</th><th>Status</th></tr>'+[40,50,60,68,80,90,100,110,120,130].map(t=>{const n=na(t),x=st(n);return`<tr><td>${t}</td><td>${f1(n)}</td><td class="${cl(x)}">${x}</td></tr>`}).join('')+'</table>';
+  return s+'<span class="small">Estimate. Hazen-Williams in head (4.52 × 2.31 constant, ft), standard-atmosphere pressure at elevation, NIST Antoine vapor pressure, fresh water. Suction lift positive when the pump is above the water; flooded suction is negative. Fitting K values are typical; confirm with the fitting or strainer manufacturer. NPSHr must come from the manufacturer curve at actual flow and speed. Target margin is your own design choice.</span>'}},
 pipe:{name:'Pipe velocity / friction',fields:[['gpm','Flow, gpm',100],['d','Inside diameter, in',4.0],['c','Hazen-Williams C (PVC≈150, steel≈100–120)',150],['len','Pipe length, ft',500]],
  calc:v=>{const vel=0.4085*v.gpm/(v.d*v.d),h=0.2083*Math.pow(100/v.c,1.852)*Math.pow(v.gpm,1.852)/Math.pow(v.d,4.8655),tot=h*v.len/100;
   return `Velocity <b class="${vel>7?'warn':''}">${f1(vel,2)} ft/s</b>${vel>5?' (above common 5 ft/s guidance; check surge)':''}<br>Friction <b>${f1(h,2)} ft per 100 ft</b> = <b>${f1(tot)} ft</b> over ${v.len} ft (${f1(tot/2.31)} psi)<br><span class="small">Hazen-Williams for water; use actual inside diameter, not nominal size. Add fittings separately.</span>`}},
@@ -147,16 +160,16 @@ coords:{name:'Coordinates',fields:[['lat','Latitude (decimal degrees)',33.0],['l
  calc:v=>{const f=(x,pos,neg)=>{const a=Math.abs(x),d=Math.floor(a),m=(a-d)*60,mi=Math.floor(m),s=(m-mi)*60;return{dd:x.toFixed(6),ddm:`${d}° ${m.toFixed(4)}′ ${x<0?neg:pos}`,dms:`${d}° ${mi}′ ${s.toFixed(2)}″ ${x<0?neg:pos}`}},a=f(v.lat,'N','S'),b=f(v.lon,'E','W');
   const dd=a.dd+', '+b.dd;return `Decimal: <b>${dd}</b><br>Deg–decimal min: ${a.ddm}, ${b.ddm}<br>DMS: ${a.dms}, ${b.dms}<br><button type="button" id="cpc" style="margin-top:8px">COPY DECIMAL</button><span class="small"> Paste decimal degrees into Atlas.</span>`}}
 };
-const tabsDef=[['tdh','TDH'],['npsh','NPSHa'],['pipe','Pipe / friction'],['affinity','Affinity'],['hz','Hz / RPM'],['xdcr','Transducer'],['flowcal','Flow sensor'],['twvd','2-wire drop'],['coords','Coordinates'],['plat','Platforms'],['dec','Decoders'],['ph3','3-phase'],['imb','Imbalance'],['lib','Manufacturers'],['check','Checklists'],['flow','Diagnostic path']];
+const tabsDef=[['tdh','TDH'],['npsh','NPSHa'],['sys','System check'],['pipe','Pipe / friction'],['affinity','Affinity'],['hz','Hz / RPM'],['xdcr','Transducer'],['flowcal','Flow sensor'],['twvd','2-wire drop'],['coords','Coordinates'],['plat','Platforms'],['dec','Decoders'],['ph3','3-phase'],['imb','Imbalance'],['lib','Manufacturers'],['check','Checklists'],['flow','Diagnostic path']];
 let cur='';
 function setTabs(){$('#tabs').innerHTML='';tabsDef.forEach(([k,n])=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.classList.toggle('on',k===cur);b.onclick=()=>k==='check'?openCheck():k==='flow'?openFlow('wont',true):k==='plat'?openPlat(true):k==='dec'?openDec(true):k==='lib'?openLib(true):openTool(k,true);$('#tabs').appendChild(b)})}
 function scrollBench(s){if(s)$('#benchCard').scrollIntoView({behavior:'smooth',block:'start'})}
 function openTool(k,s){if(k==='plat'){openPlat(s);return}if(k==='dec'){openDec(s);return}if(k==='lib'){openLib(s);return}cur=k;setTabs();const t=tools[k];const saved=store.get('tracerTool_'+k,{});
- $('#bench').innerHTML='<h3>'+esc(t.name)+'</h3><div class="fields">'+t.fields.map(([id,l,d])=>`<div class="fld"><label for="f_${id}">${esc(l)}</label><input id="f_${id}" type="number" step="any" inputmode="decimal" value="${saved[id]!==undefined?saved[id]:d}"></div>`).join('')+'</div><div class="result" id="toolOut" aria-live="polite"></div><div class="links" style="margin-top:8px"><button type="button" id="toNotes">ADD RESULT TO NOTES</button><button type="button" id="xl" hidden>OPEN MY NPSH CALCULATOR (EXCEL)</button></div>';
+ $('#bench').innerHTML='<h3>'+esc(t.name)+'</h3><div class="fields">'+t.fields.map(([id,l,d])=>`<div class="fld"><label for="f_${id}">${esc(l)}</label><input id="f_${id}" type="number" step="any" inputmode="decimal" value="${saved[id]!==undefined?saved[id]:d}"></div>`).join('')+'</div><div class="result" id="toolOut" aria-live="polite"></div><div class="links" style="margin-top:8px"><button type="button" id="toNotes">ADD RESULT TO NOTES</button></div>';
  const run=()=>{const v={},sv={};t.fields.forEach(([id])=>{const el=$('#f_'+id);v[id]=el.value===''?NaN:parseFloat(el.value);sv[id]=el.value});store.set('tracerTool_'+k,sv);
   if(Object.entries(v).some(([id,x])=>!Number.isFinite(x)&&!['r','gauge','ref','vs'].includes(id))){$('#toolOut').innerHTML='Enter all values.';return}
   $('#toolOut').innerHTML=t.calc(v);const c=$('#cpc');if(c)c.onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(v.lat.toFixed(6)+', '+v.lon.toFixed(6));c.textContent='COPIED'}};
- $$('#bench input').forEach(i=>i.addEventListener('input',run));run();const xl=$('#xl'),xu=mlGet('NPSH Calculator (Excel)');if(xl&&xu&&(k==='npsh'||k==='tdh')){xl.hidden=false;xl.onclick=()=>window.open(xu,'_blank','noopener')}
+ $$('#bench input').forEach(i=>i.addEventListener('input',run));run();
  $('#toNotes').onclick=()=>{appendNote('['+t.name+'] '+$('#toolOut').innerText.replace(/\s*\n\s*/g,' | ').replace(/COPY DECIMAL.*$/,'').trim());};scrollBench(s)}
 
 /* ---------- checklists ---------- */
@@ -332,8 +345,7 @@ pstart:{n:'Pump start / master valve not operating',s:'a',nodes:{
  rl:R('COMPONENT','Coil, relay, contactor or master valve failure.',['Coil resistance and mechanical movement','Relay contacts continuity (locked out)','Replace with known-good and retest'],'pump start relay coil failure irrigation master valve solenoid test')}}
 
 };
-$('#diagBtns').innerHTML='';Object.entries(flows).forEach(([k,f])=>{const b=document.createElement('button');b.type='button';b.textContent=f.n;b.onclick=()=>openFlow(k,true);$('#diagBtns').appendChild(b)});
-function openFlow(k,s){if(!prof().make&&!prof().vfdb&&!skipProfile){gate(k,s);return}cur='flow';setTabs();const f=flows[k];const path=[];$('#diagOut').textContent='Path open: '+f.n;
+function openFlow(k,s){if(!prof().make&&!prof().vfdb&&!skipProfile){gate(k,s);return}cur='flow';setTabs();const f=flows[k];const path=[];
  const draw=id=>{const n=f.nodes[id];let h='<h3>'+esc(f.n)+'</h3><div class="safety">'+S+'</div>';
   if(path.length)h+='<div class="small">'+path.map(esc).join(' → ')+'</div>';
   if(n.r){h+=`<div class="res"><b>Most likely area: ${esc(n.domain)}</b><br>${esc(n.text)}<br><br>Measure / check:<ul>${n.measure.map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Confirm in your manual:<ul>${hints(n.domain).map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Make the smallest justified change, then prove it under operating conditions.</div><div class="links" id="lit" style="margin-top:10px"></div><div class="links" style="margin-top:10px"><button type="button" id="fs">SEARCH THIS</button>${n.tool?'<button type="button" id="ft2">OPEN CALCULATOR</button>':''}<button type="button" id="fn">LOG TO NOTES</button><button type="button" id="fr">START OVER</button></div>`}
@@ -364,17 +376,6 @@ function openPlat(s,sel){cur='plat';setTabs();const p0=prof();sel=sel||p0.ctrl||
   $('#plset').onclick=()=>{const q2=prof();store.set('tracerProfile',Object.assign(q2,{ctrl:sel}));drawProfile();say('Controller saved to your profile.')};
   $('#plpath').onclick=()=>openFlow('lflow',true)}
  scrollBench(s)}
-
-/* ---------- my links (OneDrive) ---------- */
-const MLSLOTS=['Manuals folder','Spec sheets folder','Pump curves folder','Wiring diagrams folder','NPSH Calculator (Excel)','Other'];
-function mlAll(){return store.get('tracerLinks',{})||{}}
-function mlGet(n){return mlAll()[n]||''}
-function drawLinks(){const L=mlAll();const el=$('#ml');el.innerHTML='';
- MLSLOTS.forEach(n=>{const d=document.createElement('div');d.className='fld';d.innerHTML='<label>'+esc(n)+'</label>';
-  const i=document.createElement('input');i.type='url';i.placeholder='https://…';i.value=L[n]||'';
-  i.onchange=()=>{const v=i.value.trim();if(v&&!/^https:\/\//i.test(v)){$('#mlStat').textContent='Links must start with https://';i.value='';return}const A=mlAll();if(v)A[n]=v;else delete A[n];store.set('tracerLinks',A);$('#mlStat').textContent=v?'Saved: '+n:'Cleared: '+n;drawLinks()};
-  const b=document.createElement('button');b.type='button';b.textContent='OPEN';b.style.marginTop='6px';b.disabled=!L[n];b.onclick=()=>window.open(L[n],'_blank','noopener');
-  d.appendChild(i);d.appendChild(b);el.appendChild(d)})}
 
 /* ---------- decoder limits by brand ---------- */
 const DEC={
@@ -437,6 +438,6 @@ $('#import').onclick=()=>$('#file').click();
 $('#file').onchange=e=>{const fl=e.target.files[0];if(!fl)return;const r=new FileReader();r.onload=()=>{notes.value=notes.value?notes.value+'\n\n'+r.result:r.result;say('Imported. Press Save to keep it.')};r.readAsText(fl);e.target.value=''};
 $('#erase').onclick=()=>{if(!notes.value||!confirm('Clear all notes? Export first if you want a backup.'))return;notes.value='';try{localStorage.removeItem('tracerFieldNotes')}catch(e){}say('Notes cleared.')};
 
-drawRecent();setTabs();drawProfile();drawLinks();
+drawRecent();setTabs();drawProfile();
 })();
 </script></body></html>
