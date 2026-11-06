@@ -110,10 +110,10 @@ Integrated references instead use its product tables: printed p. 6 (consumer
 PRS sprays), pp. 8-10 (nozzles), pp. 23-24 (rotors) and pp. 55-59 (drip).
 For these pages, PDF page number = printed page number + 4.
 
-Six source-specific tools are available through the landscape reference or the
+Five source-specific tools are available through the landscape reference or the
 irrigation card: landscape precipitation, total-area application/runtime,
-soil/slope intake guidance, Hunter conventional valve wiring, Hunter PSR relay
-wiring and Hunter HDL individual-run limits. **Golf precipitation and wire tools
+soil/slope intake guidance, Hunter conventional valve wiring and Hunter HDL
+individual-run limits. **Golf precipitation and wire tools
 remain separate and unchanged.** Landscape product references are also searchable
 in Part Finder's **Landscape irrigation** category.
 
@@ -128,7 +128,8 @@ limit.
 Hunter valve wiring uses the p. 215 common/control matrix for the stated
 heavy-duty 24 VAC solenoid; it is not a decoder, DC-latching, other-brand valve
 or motor-feeder table. Two simultaneous solenoids on the same wires halve the
-listed single-solenoid distance. PSR relays have a separate, much shorter table.
+listed single-solenoid distance. PSR relays have a separate, much shorter table;
+the catalog figures remain reference material, not a generic wire calculator.
 The appendix's AWG 1 resistance and AWG 14 area entries appear internally
 inconsistent; these tools do not use those entries.
 
@@ -144,6 +145,15 @@ node --test tests/*.test.cjs
 ```
 
 ## Irrigation control wire distance
+
+The **Generic 24 V irrigation wire sizing** calculator estimates the smallest
+listed equal-gauge copper control/common pair meeting an entered voltage-drop
+budget. Its example uses 24 VAC controller output, 20 VAC minimum at the load
+and 4 V allowable drop; use the actual measured lowest output and the load's
+specified minimum instead of assuming those values. Enter the total current
+sharing both conductors and check inrush and holding separately. The calculation
+is a resistance-only screen, not an ampacity, electrical-code or manufacturer
+approval. It is not for pump power wiring or a manufacturer decoder path limit.
 
 The irrigation card includes separate **Conventional valve wiring** and
 **Two-wire decoder path** calculators. Select copper AWG, enter the actual
@@ -163,5 +173,6 @@ Both use the Hunter Residential/Commercial catalog p. 215 resistance table for
 annealed copper at 68°F. AWG 1 is omitted because its printed resistance conflicts
 with the adjacent metric value. Temperature, splices and AC impedance can add
 loss. These calculators do not size motor feeders or determine code compliance.
-The existing Hunter conventional 24 VAC valve and pump-start relay tables remain
-separate, as do the decoder-specific manufacturer lookups.
+The existing Hunter conventional 24 VAC valve table and decoder-specific
+manufacturer lookups remain separate. The Hunter relay table remains a cited
+reference, not a calculator or assumption in the generic 24 V tool.

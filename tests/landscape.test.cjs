@@ -19,7 +19,7 @@ const load = parts => vm.runInNewContext(`(function(){
     soils: LANDSCAPE_SOILS, cv: LANDSCAPE_HDL_CV, pcr: LANDSCAPE_HDL_PCR};
 })()`, { PARTS: parts, esc: s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) });
 const { tools, parts, refs, gauges, valves, soils, cv, pcr } = load(structuredClone(original));
-const keys = ['landprecip', 'landarea', 'landwire', 'psrwire', 'landslope', 'hdlrun'];
+const keys = ['landprecip', 'landarea', 'landwire', 'landslope', 'hdlrun'];
 const defaults = key => Object.fromEntries(tools[key].fields.map(([id, , value]) => [id, value]));
 const calc = (key, values = {}) => tools[key].calc({ ...defaults(key), ...values });
 const plain = html => html.replace(/<[^>]*>/g, '');
@@ -98,20 +98,11 @@ test('all 49 conventional valve distance cells match Hunter p. 215', () => {
   }
 });
 
-test('PSR models use their own table, including exact boundary checks', () => {
-  const expected = {22:[243,386,616,976,1551,2463],52:[134,214,341,540,859,1365],53:[134,214,341,540,859,1365]};
-  for (const model of [22,52,53]) {
-    gauges.slice(0,6).forEach((awg,i) => {
-      const max = expected[model][i];
-      assert.equal(firstNumber(calc('psrwire', {model,awg})), max);
-      assert.match(calc('psrwire', {model,awg,dist:max}), /<b>Within<\/b>/);
-      assert.match(calc('psrwire', {model,awg,dist:max+0.1}), /<b>EXCEEDS<\/b>/);
-    });
-  }
-  assert.match(calc('psrwire', {awg:6}), /^Choose model/);
-  assert.match(calc('psrwire', {model:23}), /^Choose model/);
-  assert.match(calc('psrwire', {dist:-1}), /^Choose model/);
-  assert.notEqual(firstNumber(calc('landwire')), firstNumber(calc('psrwire')));
+test('PSR catalog facts remain reference-only rather than an irrigation calculator', () => {
+  assert.equal(tools.psrwire, undefined);
+  assert.equal(refs['Pump-start relay wiring'].tool, undefined);
+  assert.match(refs['Pump-start relay wiring'].facts.join(' '), /PSR-22 at 14 AWG is 616 ft/);
+  assert.match(refs['Pump-start relay wiring'].facts.join(' '), /PSR-52 and PSR-53 at 14 AWG are 341 ft/);
 });
 
 test('all 56 soil/cover/slope reference cells match Hunter p. 199', () => {

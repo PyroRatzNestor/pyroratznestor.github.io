@@ -19,6 +19,23 @@ test('copper gauge resistance entries match Hunter p. 215 and omit conflicting A
   assert.equal(resistance[1], undefined);
 });
 
+test('generic irrigation sizing uses a 24 VAC voltage-drop example without relay models', () => {
+  assert.equal(tools.wiresize.name, 'Generic 24 V irrigation wire sizing — resistance method');
+  assert.deepEqual(defaults('wiresize'), {dist:1800, volt:4, amp:0.37});
+  assert.match(calc('wiresize'), /3\.00 Ω\/1,000 ft.*14 AWG/);
+  assert.match(calc('wiresize', {dist:1000, volt:4, amp:0.35}), /5\.71 Ω\/1,000 ft.*16 AWG/);
+  assert.match(calc('wiresize', {dist:1800, volt:4, amp:0.74}), /10 AWG/);
+  assert.match(calc('wiresize'), /24 VAC − 20 VAC = 4 V is an example, not a universal minimum/);
+  assert.match(calc('wiresize'), /shared commons.*segment-by-segment/);
+  assert.match(calc('wiresize'), /Decoder\/two-wire paths have different signals/);
+  assert.doesNotMatch(calc('wiresize'), /PSR-|110 V|220 V/);
+  for (const values of [{dist:0}, {volt:0}, {amp:0}, {dist:Infinity}, {volt:NaN}, {amp:Number.MAX_VALUE}, {dist:1e-300,amp:1e-300}]) {
+    assert.doesNotMatch(calc('wiresize', values), /smallest listed wire meeting voltage drop/);
+  }
+  assert.match(html, /Generic 24 V irrigation wire sizing','tool','wiresize/);
+  assert.doesNotMatch(html, /'tool','psrwire'/);
+});
+
 test('conventional wire calculator matches Hunter golf example and separate common gauges', () => {
   assert.match(calc('convwire'), /Voltage-budget distance: 2145\.0 ft one-way/);
   assert.match(calc('convwire'), /drop 3\.36 V; estimated load voltage 20\.64 V/);
