@@ -51,6 +51,14 @@ across golf, landscape, filtration and pump systems. Their inclusion in a catalo
 reference identifies the source, not a landscape-only restriction; no separate
 landscape friction calculator is used.
 
+The shared calculator includes 87 material/nominal-size presets from Hunter
+pp. 201-208 and 211-213, using the printed inside diameters and C values, plus
+manual ID/C entry. PE charts on pp. 209-210 do not give a direct average-ID
+table and are not converted into guessed presets. Two misleading source entries
+are excluded: p. 205's half-inch entry is explicitly Class 315 rather than
+Class 200; p. 207 labels a 6.031-inch bore as 5-inch nominal. Check actual
+installed dimensions and use custom entry for unlisted sizes.
+
 The **Landscape technical** tab and **Landscape technical reference** shortcut
 cover the uploaded Hunter Residential/Commercial catalog's Technical Information
 pp. 194-217. Printed and PDF page numbers match. The appendix covers trajectory,
@@ -95,3 +103,26 @@ Run both catalog regression suites with:
 ```sh
 node --test tests/*.test.cjs
 ```
+
+## Irrigation control wire distance
+
+The irrigation card includes separate **Conventional valve wiring** and
+**Two-wire decoder path** calculators. Select copper AWG, enter the actual
+controller output, the equipment's minimum voltage, the critical current and the
+one-way run. Conventional wiring permits different control and common gauges,
+AC or DC, and multiple solenoids on the same pair. Check pickup/inrush and
+holding separately. Other loads sharing a common require segment-by-segment
+analysis.
+
+The two-wire calculation is only a resistance-based voltage-budget screen; it
+assumes all path current is at the far end. It cannot establish decoder
+compatibility, signal integrity, or allowable distance for a particular system.
+Use the manufacturer's approved wire, topology, total-wire and path limits,
+device and current limits, surge protection and grounding requirements.
+
+Both use the Hunter Residential/Commercial catalog p. 215 resistance table for
+annealed copper at 68°F. AWG 1 is omitted because its printed resistance conflicts
+with the adjacent metric value. Temperature, splices and AC impedance can add
+loss. These calculators do not size motor feeders or determine code compliance.
+The existing Hunter conventional 24 VAC valve and pump-start relay tables remain
+separate, as do the decoder-specific manufacturer lookups.
