@@ -3,6 +3,20 @@
 Single-page field technical dashboard. Open `index.html`, or serve the repository
 with `python3 -m http.server 8899`.
 
+The Pumps/Hydraulics, VFD/Controls and Irrigation Control troubleshooting cards
+use topic dropdowns. Choose a topic and press **Open selection** to launch the
+same calculator, diagnostic path, reference or web search. Selection alone does
+not navigate, so keyboard users can browse options without opening a topic.
+
+**Quick Field Calculator** is the central dropdown for every calculator,
+including those linked from troubleshooting, decoder and landscape references.
+It retains the original two-way PSI/feet-of-water converter and adds TDH,
+hydraulics, electrical, wiring, precipitation and source-specific lookups.
+Calculators run inside this card with saved inputs and **Add result to notes**;
+the same tools remain available from their contextual troubleshooting links.
+The quick card and Field Bench can show the same calculator without conflicting
+controls. PSI-to-head conversion is not itself a complete TDH calculation.
+
 ## Golf catalog Part Finder
 
 Part Finder's **Golf irrigation** category indexes all product sections of the
