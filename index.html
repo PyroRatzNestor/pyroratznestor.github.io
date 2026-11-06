@@ -302,6 +302,7 @@ const LANDSCAPE_REFS={
   'Rain Bird p. 59 SSF70-50S is a 50-ft coil with 33 emitters, 0.9 GPH at 18-in spacing and 0.70-in outside diameter. Coil packaging length is not a published maximum lateral-run limit.'
  ]},
  'Pipe / fittings / pressure':{tool:'pipe',facts:[
+  'Global hydraulic reference: the shared pipe velocity/friction calculator applies to golf, landscape, filtration and pump systems. Its placement here identifies a catalog source, not an application restriction; use the actual fluid, pipe dimensions, material and operating conditions.',
   'Hunter p. 200: typical water-meter losses. Pp. 201-202: copper K/L at C=140. P. 203: Schedule 40 steel at C=100. Pp. 204-207: PVC classes 160/200/315 and Schedule 40 at C=150.',
   'Hunter pp. 208-210: polyethylene/HDPE references; pp. 211-213: C900/C905 pressure pipe. Match exact material, class/DR and actual inside diameter. Do not read nominal pipe size as hydraulic bore.',
   'Hunter p. 214: fitting loss in psi = equivalent length in ft x pipe loss in psi per 100 ft / 100. Use manufacturer fitting-loss data when available, and do not count the same fittings twice.',
@@ -325,7 +326,7 @@ function openLandscape(s,sel){
  cur='landscape';setTabs();
  sel=sel||store.get('tracerLandscape','Precipitation / scheduling');
  const entry=LANDSCAPE_REFS[sel];
- $('#bench').innerHTML='<h3>Landscape technical reference</h3><div class="links" id="landtabs"></div><p class="small">Hunter Residential/Commercial technical appendix and Rain Bird Consumer Products 2026 performance tables. Separate from golf references.</p>'+
+ $('#bench').innerHTML='<h3>Landscape technical reference</h3><div class="links" id="landtabs"></div><p class="small">Hunter Residential/Commercial technical appendix and Rain Bird Consumer Products 2026 performance tables. Head precipitation and product-specific wiring references stay distinct from golf; piping and friction calculations are shared globally.</p>'+
   (entry?'<h3>'+esc(sel)+'</h3><ul>'+entry.facts.map(f=>'<li>'+esc(f)+'</li>').join('')+'</ul><div id="landcalc"></div><div class="links"><button type="button" id="landnote">ADD REFERENCE TO NOTES</button></div>':'<p class="small">Choose a technical topic.</p>');
  Object.keys(LANDSCAPE_REFS).forEach(k=>{const b=document.createElement('button');b.type='button';b.textContent=k;b.classList.toggle('on',k===sel);b.onclick=()=>{store.set('tracerLandscape',k);openLandscape(false,k)};$('#landtabs').appendChild(b)});
  if(entry){if(entry.tool)mountCalc('#landcalc',entry.tool);$('#landnote').onclick=()=>appendNote('[Landscape reference] '+sel+'\n'+entry.facts.join('\n'))}

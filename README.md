@@ -46,6 +46,11 @@ node --test tests/filtration.test.cjs
 
 ## Landscape technical references
 
+Piping, velocity and friction-loss calculations are global hydraulic tools shared
+across golf, landscape, filtration and pump systems. Their inclusion in a catalog
+reference identifies the source, not a landscape-only restriction; no separate
+landscape friction calculator is used.
+
 The **Landscape technical** tab and **Landscape technical reference** shortcut
 cover the uploaded Hunter Residential/Commercial catalog's Technical Information
 pp. 194-217. Printed and PDF page numbers match. The appendix covers trajectory,

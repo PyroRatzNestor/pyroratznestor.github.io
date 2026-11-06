@@ -197,6 +197,8 @@ test('source-linked landscape records are unique and preserve all workbook recor
 });
 
 test('reference topics cover appendix scope and name the Rain Bird consumer limitation', () => {
+  assert.equal(refs['Pipe / fittings / pressure'].tool, 'pipe');
+  assert.match(refs['Pipe / fittings / pressure'].facts.join(' '), /Global hydraulic reference.*golf, landscape, filtration and pump systems/);
   assert.equal(Object.keys(refs).length,8);
   const text=Object.values(refs).flatMap(r=>r.facts).join('\n');
   for (const term of ['194-217','p. 198','p. 199','p. 196','p. 197','p. 214','p. 215','p. 216','p. 217','no end-of-book technical appendix']) {
