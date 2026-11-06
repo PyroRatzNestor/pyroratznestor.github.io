@@ -3,6 +3,45 @@
 Single-page field technical dashboard. Open `index.html`, or serve the repository
 with `python3 -m http.server 8899`.
 
+## Golf catalog Part Finder
+
+Part Finder's **Golf irrigation** category indexes all product sections of the
+three uploaded golf catalogs, including rotors, named nozzle families, central
+control, field controllers, decoders, sensors, valves, fittings, service tools,
+support offerings and the landscape products included in those golf catalogs.
+Listed model variants and accessory identifiers are searchable and included in
+**Add to Notes**, alongside factual specifications and PDF-page citations.
+Original workbook, landscape and filtration records are retained.
+
+The factual indexes live in `data/golf-hunter.js`, `data/golf-rainbird.js` and
+`data/golf-toro.js`. Keep these files with `index.html`; they load synchronously,
+without a network API or PDF download. The **Golf catalog coverage and source
+limits** disclosure in Part Finder lists each verified edition and the reviewed
+page ranges, distinguishing product, technical and introductory pages.
+
+All 310 PDF pages are accounted for: Hunter Volume 41 (88 pages), Rain Bird
+2026-2027 (110 pages) and Toro Golf Irrigation 2026 (112 pages).
+There are 272 searchable records: 68 Hunter, 147 Rain Bird and 57 Toro.
+Upload filenames containing 2026 do not establish the actual edition.
+This is complete product-section/model-family indexing, **not** a transcription
+of every performance-chart cell, a spare-parts service manual, or generation
+of every theoretical configuration SKU. Same-family named variants can share a
+record; its listed identifiers and facts must be read together.
+
+Nozzle identifiers are not flow rates. Precipitation requires the selected
+nozzle's actual pressure/flow, arc and spacing; source chart assumptions remain
+explicit. Conventional and two-wire controls, supply voltages, inrush versus
+holding loads, pipe dimensions and operating versus body-pressure ratings are
+not interchangeable. Source conflicts are flagged rather than resolved by
+guessing, including Hunter GT-835 ordering/regulation text and Pilot product
+versus appendix solenoid-load statements.
+
+Catalog PDFs, page images and raw OCR are not redistributed. Where no direct
+specification URL is verified, use the manufacturer site or spec search;
+citations refer to the uploaded PDF page positions, not guessed printed pages.
+
+Run all dependency-free regression suites with `node --test tests/*.test.cjs`.
+
 ## Filtration references
 
 The **Filters & valves** shortcut opens the catalog-enriched Part Finder category.

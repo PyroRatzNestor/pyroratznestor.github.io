@@ -33,7 +33,7 @@ body.hc .btn,body.hc button{background:#000;border-color:#fff}
 <form id="searchForm" class="search"><input id="q" aria-label="Technical web search" placeholder="Search pumps, VFDs, controls, hydraulics, two-wire, GIS…  (press / to focus)"><button>SEARCH WEB</button><button type="button" id="qclear">CLEAR</button></form>
 <div class="filters"><button type="button" data-suffix="pump service manual troubleshooting">PUMPS</button><button type="button" data-suffix="VFD pump PID troubleshooting manual">VFD</button><button type="button" data-suffix="central control irrigation technical troubleshooting">IRRIGATION CONTROL</button><button type="button" data-suffix="two wire decoder irrigation troubleshooting">TWO-WIRE</button><button type="button" data-suffix="motor electrical troubleshooting application note">ELECTRICAL</button><button type="button" data-suffix="GIS field mapping irrigation">GIS</button><button type="button" id="hc" style="margin-left:auto">HIGH CONTRAST</button></div>
 <div class="filters" id="mfr"><span class="small">Manufacturer:</span></div>
-<div class="filters" id="recent"></div></section>
+</section>
 
 <div class="grid">
 <section class="card full" id="prof"><h2>STEP 0 // WHAT AM I STANDING IN FRONT OF?</h2>
@@ -66,6 +66,9 @@ body.hc .btn,body.hc button{background:#000;border-color:#fff}
 <p class="small">Notes live only in this browser on this device. Use Export to keep a backup.</p></section>
 </div></div>
 
+<script src="data/golf-hunter.js"></script>
+<script src="data/golf-rainbird.js"></script>
+<script src="data/golf-toro.js"></script>
 <script>
 (()=>{
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
@@ -75,10 +78,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 
 /* ---------- search ---------- */
 let brand='';
-const go=s=>{s=s.trim();if(!s)return;window.open('https://www.google.com/search?q='+encodeURIComponent(s),'_blank','noopener');
- const r=store.get('tracerRecent',[]).filter(x=>x!==s);r.unshift(s);store.set('tracerRecent',r.slice(0,6));drawRecent()};
-function drawRecent(){const r=store.get('tracerRecent',[]);const el=$('#recent');el.innerHTML=r.length?'<span class="small">Recent:</span>':'';
- r.forEach(t=>{const b=document.createElement('button');b.type='button';b.textContent=t.length>38?t.slice(0,36)+'…':t;b.title=t;b.onclick=()=>{q.value=t;go(t)};el.appendChild(b)})}
+const go=s=>{s=s.trim();if(!s)return;window.open('https://www.google.com/search?q='+encodeURIComponent(s),'_blank','noopener')};
 const withBrand=s=>((brand?brand+' ':'')+s).trim();
 $('#qclear').onclick=()=>{q.value='';brand='';$$('#mfr button').forEach(x=>x.classList.remove('on'));q.focus()};
 $('#searchForm').addEventListener('submit',e=>{e.preventDefault();go(withBrand(q.value))});
@@ -602,6 +602,26 @@ PARTS.filter(r=>['Amiad','Netafim','Bermad'].includes(r.m)&&['Filter','Master Va
 const pHost=u=>{try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return''}};
 const pSpecQuery=r=>{const q=[r.m,r.o,'spec sheet pdf'];const h=pHost(r.w);if(h)q.push('site:'+h);return q.join(' ')};
 
+/* ---------- golf catalog references ---------- */
+const GOLF_CATALOGS=[HUNTER_GOLF_CATALOG,RAINBIRD_GOLF_CATALOG,TORO_GOLF_CATALOG];
+const GOLF_CATEGORY='Golf irrigation';
+function enrichGolfParts(){
+ GOLF_CATALOGS.forEach(catalog=>catalog.records.forEach(record=>{
+  const source=catalog.edition+'; '+catalog.file+'; PDF pp. '+record.pdf.join('-');
+  if(PARTS.some(r=>r.m===catalog.brand&&r.o===record.model&&r.t===record.type&&r.c===GOLF_CATEGORY&&r.source===source))return;
+  PARTS.push({m:catalog.brand,o:record.model,t:record.type,c:GOLF_CATEGORY,p:null,w:catalog.url,s:'',aliases:[...record.aliases],facts:[...record.facts],source});
+ }));
+}
+enrichGolfParts();
+function matchesPartQuery(r,query){
+ return [r.o,r.m,r.source||'',...(r.aliases||[]),...(r.facts||[])].join(' ').toLowerCase().includes(query.toLowerCase().replace(/netaphim/g,'netafim'));
+}
+function golfCoverageHTML(){
+ return '<details style="margin-bottom:12px"><summary>Golf catalog coverage and source limits</summary><p class="small">All product sections are indexed as model/family records with searchable listed variants, accessories and technical references. This is not a transcription of every performance-table cell or every possible ordering combination. Confirm the exact nozzle, pressure, voltage and configuration before design or ordering. Citations use PDF page positions; uploaded filenames do not establish edition dates.</p>'+
+ GOLF_CATALOGS.map(catalog=>'<h4>'+esc(catalog.brand)+' · '+esc(catalog.edition)+'</h4><p class="small">'+catalog.pages+' pages reviewed; '+catalog.records.length+' searchable records.</p><ul>'+catalog.coverage.map(section=>'<li>PDF pp. '+section.pdf.join('-')+' · '+esc(section.kind)+': '+esc(section.note)+'</li>').join('')+'</ul>').join('')+'</details>';
+}
+/* ---------- end golf catalog references ---------- */
+
 const tabsDef=[['tdh','TDH'],['npsh','NPSHa'],['sys','System check'],['pipe','Pipe / friction'],['affinity','Affinity'],['hz','Hz / RPM'],['xdcr','Transducer'],['flowcal','Flow sensor'],['drip','Drip precip'],['twvd','2-wire drop'],['coords','Coordinates'],['plat','Platforms'],['dec','Decoders'],['ph3','3-phase'],['imb','Imbalance'],['lib','Manufacturers'],['pfind','Part Finder'],['landscape','Landscape technical'],['check','Checklists'],['flow','Diagnostic path']];
 let cur='';
 function setTabs(){$('#tabs').innerHTML='';tabsDef.forEach(([k,n])=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.classList.toggle('on',k===cur);b.onclick=()=>k==='check'?openCheck():k==='flow'?openFlow('wont',true):k==='plat'?openPlat(true):k==='dec'?openDec(true):k==='lib'?openLib(true):k==='pfind'?openParts(true):openTool(k,true);$('#tabs').appendChild(b)})}
@@ -623,7 +643,7 @@ function openParts(s,preset){cur='pfind';setTabs();
  const mopts=[...new Set(PARTS.map(r=>r.m))].sort((a,b)=>a.localeCompare(b));
  const topts=[...new Set(PARTS.map(r=>r.t).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
  const copts=[...new Set(PARTS.map(r=>r.c).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
- $('#bench').innerHTML='<h3>Part Finder</h3><p class="small">Workbook lookup plus catalog references. Filtration entries include source editions/pages and configuration-specific limits where verified. Family ceilings are not design guarantees; unverified legacy entries and source conflicts are labeled. Direct spec links are shown when available; otherwise use spec search.</p>'+
+ $('#bench').innerHTML='<h3>Part Finder</h3><p class="small">Workbook lookup plus golf, landscape and filtration catalog references. Catalog entries include source editions/pages and configuration-specific limits where verified. Family ceilings are not design guarantees; unverified legacy entries and source conflicts are labeled. Direct spec links are shown when available; otherwise use spec search.</p>'+golfCoverageHTML()+
  '<div class="pfgrid">'+
  '<div class="fld span2"><label for="pf_q">Search model, manufacturer or specification</label><input id="pf_q" type="text" placeholder="e.g. SAF, AlphaDisc, backwash, 3656"></div>'+
  '<div class="fld"><label for="pf_m">Manufacturer</label><select id="pf_m"></select></div>'+
@@ -636,7 +656,7 @@ function openParts(s,preset){cur='pfind';setTabs();
  put('#pf_m',mopts,'All manufacturers',saved.m);put('#pf_t',topts,'All types',saved.t);put('#pf_c',copts,'All categories',saved.c);
  $('#pf_q').value=saved.q||'';$('#pf_has').value=saved.has||'all';$('#pf_lim').value=saved.lim||'75';
  const run=()=>{const st={q:$('#pf_q').value.trim().toLowerCase(),m:$('#pf_m').value,t:$('#pf_t').value,c:$('#pf_c').value,has:$('#pf_has').value,lim:$('#pf_lim').value};store.set('tracerPartFinder',st);
-  let rows=PARTS.filter(r=>(!st.q||[r.o,r.m,r.source||'',...(r.facts||[])].join(' ').toLowerCase().includes(st.q.replace(/netaphim/g,'netafim')))&&(!st.m||r.m===st.m)&&(!st.t||r.t===st.t)&&(!st.c||r.c===st.c)&&
+  let rows=PARTS.filter(r=>(!st.q||matchesPartQuery(r,st.q))&&(!st.m||r.m===st.m)&&(!st.t||r.t===st.t)&&(!st.c||r.c===st.c)&&
    (st.has==='all'||(st.has==='spec'&&!!r.s)||(st.has==='site'&&!!r.w)||(st.has==='nosite'&&!r.w)));
   rows=rows.sort((a,b)=>a.m.localeCompare(b.m)||a.o.localeCompare(b.o)||a.t.localeCompare(b.t));
   const lim=Math.max(25,parseInt(st.lim,10)||75),total=rows.length,show=rows.slice(0,lim);
@@ -645,6 +665,7 @@ function openParts(s,preset){cur='pfind';setTabs();
   if(!show.length)return;
   show.forEach(r=>{const d=document.createElement('div');d.className='res';const bits=[r.t||'Unknown type'];if(r.c)bits.push('Category '+r.c);if(r.p!=null)bits.push('PumpTypeID '+r.p);
    d.innerHTML='<b>'+esc(r.m)+' · '+esc(r.o)+'</b><div class="small" style="margin-top:4px">'+esc(bits.join(' · '))+'</div>';
+   if(r.aliases&&r.aliases.length)d.innerHTML+='<p class="small">Listed models / identifiers: '+esc(r.aliases.join(', '))+'</p>';
    if(r.facts)d.innerHTML+='<ul>'+r.facts.map(f=>'<li>'+esc(f)+'</li>').join('')+'</ul>';
    if(r.source)d.innerHTML+='<p class="small">Source: '+esc(r.source)+'</p>';
    const links=document.createElement('div');links.className='links';links.style.marginTop='8px';
@@ -652,7 +673,7 @@ function openParts(s,preset){cur='pfind';setTabs();
    if(r.s){const b=document.createElement('button');b.type='button';b.textContent='SPEC SHEET ↗';b.onclick=()=>window.open(r.s,'_blank','noopener');links.appendChild(b)}
    if(r.directory){const b=document.createElement('button');b.type='button';b.textContent='DOCUMENT DIRECTORY (UNVERIFIED) ↗';b.onclick=()=>window.open(r.directory,'_blank','noopener');links.appendChild(b)}
    const sbtn=document.createElement('button');sbtn.type='button';sbtn.textContent='SPEC SEARCH ↗';sbtn.onclick=()=>go(withBrand(pSpecQuery(r)));links.appendChild(sbtn);
-   const nbtn=document.createElement('button');nbtn.type='button';nbtn.textContent='ADD TO NOTES';nbtn.onclick=()=>appendNote('[Part Finder] '+r.m+' '+r.o+' | '+bits.join(', ')+' | '+(r.w||'no website in workbook')+' | '+(r.s||'no direct spec link')+(r.facts?'\n'+r.facts.join('\n'):'')+(r.source?'\nSource: '+r.source:'')+(r.directory?'\nDocument directory (unverified): '+r.directory:''));links.appendChild(nbtn);
+   const nbtn=document.createElement('button');nbtn.type='button';nbtn.textContent='ADD TO NOTES';nbtn.onclick=()=>appendNote('[Part Finder] '+r.m+' '+r.o+' | '+bits.join(', ')+' | '+(r.w||'no website in workbook')+' | '+(r.s||'no direct spec link')+(r.aliases&&r.aliases.length?'\nListed models / identifiers: '+r.aliases.join(', '):'')+(r.facts?'\n'+r.facts.join('\n'):'')+(r.source?'\nSource: '+r.source:'')+(r.directory?'\nDocument directory (unverified): '+r.directory:''));links.appendChild(nbtn);
    d.appendChild(links);box.appendChild(d)})};
  ['pf_q','pf_m','pf_t','pf_c','pf_has','pf_lim'].forEach(id=>$('#'+id).addEventListener('input',run));
  $('#pf_reset').onclick=()=>{store.set('tracerPartFinder',{q:'',m:'',t:'',c:'',has:'all',lim:'75'});openParts(false)};
@@ -1071,6 +1092,6 @@ $('#import').onclick=()=>$('#file').click();
 $('#file').onchange=e=>{const fl=e.target.files[0];if(!fl)return;const r=new FileReader();r.onload=()=>{notes.value=notes.value?notes.value+'\n\n'+r.result:r.result;say('Imported. Press Save to keep it.')};r.readAsText(fl);e.target.value=''};
 $('#erase').onclick=()=>{if(!notes.value||!confirm('Clear all notes? Export first if you want a backup.'))return;notes.value='';try{localStorage.removeItem('tracerFieldNotes')}catch(e){}say('Notes cleared.')};
 
-drawRecent();setTabs();drawProfile();
+setTabs();drawProfile();
 })();
 </script></body></html>
