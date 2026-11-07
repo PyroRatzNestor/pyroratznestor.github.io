@@ -93,6 +93,7 @@ c1:[['Duty point, curve & BEP','search','pump duty point operating point best ef
 c2:[['Input/output voltage & current','flow','trip'],['Hz, RPM & motor data','tool','hz'],['Pressure transducer scaling','tool','xdcr'],['PID hunting & response','flow','hunt'],['Accel / decel / min speed','flow','trip'],['Drive vs motor vs hydraulic fault','flow','wont'],['Motor won’t start','flow','nostart'],['Station safety fault','flow','sfault'],['Rain Bird CLP/ACLP alarm map','flow','rbclp']],
 c3:[['Platform notes (Toro, Hunter, Rain Bird, Baseline, WeatherTRAK)','tool','plat'],['Learned vs measured flow','flow','lflow'],['Controller vs hydraulic','flow','ctrl'],['High / low flow alarm','flow','fa'],['Rain Bird flow/pressure alarm map','flow','rbflow'],['Rain Bird filter flush issues','flow','rbflow'],['WeatherTRAK flow alerts (LC / OptiFlow)','flow','wtflow'],['Hydraulic tree / capacity','tool','pipe'],['Flow sensor / K-factor check','tool','flowcal'],['Decoder / two-wire diagnostics','flow','tw'],['Two-wire voltage drop','tool','twvd'],['Controller offline / comms','flow','comm'],['Pump start / master valve','flow','pstart'],['Sequence & runtime evidence','search','central control irrigation runtime history flow alarm troubleshooting']]};
 cards.c1.push(['Manufacturer library (pumps & stations)','view','lib']);cards.c2.push(['3-phase amps / kW','tool','ph3'],['Voltage / current imbalance','tool','imb']);cards.c3.push(['Decoder limits by brand','view','dec'],['Manufacturer library (irrigation)','view','lib'],['Precipitation rate (golf heads)','tool','precip'],['Generic 24 V irrigation wire sizing','tool','wiresize'],['Conventional valve wire distance / voltage','tool','convwire'],['Two-wire decoder path distance / voltage','tool','pathwire'],['Filters & valves (Amiad, Netafim, BERMAD)','view','filters'],['Landscape technical reference','view','landscape'],['Precipitation rate (landscape heads)','tool','landprecip'],['Landscape zone area / runtime','tool','landarea'],['Hunter landscape valve wire distance','tool','landwire'],['Landscape soil / slope intake reference','tool','landslope']);
+cards.c3.push(['Decoder idle current / expected mA','tool','decoderidle']);
 const tag={search:'search ↗',tool:'calculator',flow:'path',view:'open'};
 Object.entries(cards).forEach(([id,arr])=>{
  const host=$('#'+id),form=document.createElement('form');form.className='topic-menu';
@@ -129,12 +130,70 @@ const PIPE_PRESET_OPTIONS=[
 const WIRE_OHMS={20:10.1,19:8.05,18:6.39,17:5.05,16:4.02,15:3.18,14:2.52,13:2.00,12:1.59,11:1.26,10:0.999,9:0.793,8:0.628,7:0.498,6:0.395,5:0.313,4:0.249,3:0.197,2:0.156};
 const WIRE_GAUGE_OPTIONS=[{label:'Annealed copper, 20°C',options:Object.entries(WIRE_OHMS).sort((a,b)=>Number(b[0])-Number(a[0])).map(([awg,r])=>[Number(awg),`${awg} AWG (${r} Ω / 1,000 ft)`])}];
 const WIRE_SUPPLY_OPTIONS=[{label:'Supply type',options:[[0,'AC (RMS)'],[1,'DC']]}];
+const DECODER_IDLE_PROFILES=[
+ {name:'Not used'},
+ {name:'Hunter ICD (ACC / ACC2) - value awaiting confirmation',system:'icd'},
+ {name:'Hunter Pilot two-way modules',system:'pilot',low:1,high:1,note:'Roughly 1 mA per two-way module; approximate diagnostic guidance, not a tolerance.',url:'https://www.hunterirrigation.com/support/pilot-integrated-hub-view-module-current'},
+ {name:'Hunter I-Core DUAL - legacy field systems (not ICD)',system:'dual',low:3,high:4,note:'Approximately 3-4 mA per decoder with no stations running. Retained for legacy field systems; do not apply to ICD or Pilot.',url:'https://www.hunterirrigation.com/support/i-core-dual-troubleshooting'},
+ {name:'Rain Bird FD-101 / FD-102',system:'rb-fd',low:0.5,high:0.5,note:'0.5 mA per physical decoder at rest; no tolerance stated.',url:'https://www.rainbird.com/troubleshooting-guide/12615'},
+ {name:'Rain Bird FD-202 / FD-401 / FD-601',system:'rb-fd',low:1,high:1,note:'1 mA per physical decoder at rest; no tolerance stated. Not an IC/ICM specification.',url:'https://www.rainbird.com/troubleshooting-guide/12615'},
+ {name:'Calsense 2-station / POC / soil-moisture decoders',system:'calsense',low:0.8,high:1,note:'Healthy standby guidance: 0.8-1.0 mA per decoder for the devices covered by this guide.',url:'https://www.calsense.com/wp-content/uploads/2024/05/2-Wire-Troubleshooting-Guide.pdf'},
+ {name:'Toro - other/legacy decoder family, exact model/value required',system:'toro'},
+ {name:'Baseline - exact biCoder/value required',system:'baseline',note:'HydroPoint documents idle two-wire power-down for SubStation. A powered-off idle reading is not a powered diagnostic baseline; verify the exact controller and test state.',url:'https://www.hydropoint.com/products/substation/'},
+ {name:'WeatherTRAK H2O two-wire - exact decoder/value required',system:'weathertrak'},
+ {name:'Custom - enter documented idle current below',system:'custom'},
+ {name:'Tucor LD-050 / LD-100 / LD-200',system:'tucor-ld',low:0.5,high:0.5,note:'Nominal standby current 0.5 mA per LD-050, LD-100 or LD-200. No tolerance stated; do not infer compatibility with rebranded devices.',url:'https://support.tucor.com/support/solutions/articles/4000213642-step-2-establish-your-benchmark-system-layout'},
+ {name:'Tucor LD-400 / LD-600 - source conflict, confirm revision',system:'tucor-ld',note:'Indexed Tucor LD data-sheet guidance gives 0.8 mA; indexed Tucor troubleshooting benchmark guidance gives 1.0 mA. These are conflicting nominal figures, not a published 0.8-1.0 mA tolerance range. Confirm the exact model/revision before using Custom.',url:'https://support.tucor.com/support/solutions/articles/4000213642-step-2-establish-your-benchmark-system-layout'},
+ {name:'Rain Bird golf IC / ICM - value awaiting confirmation',system:'rb-icm',note:'Golf IC System Integrated Control Modules are a separate family from ESP-LXIVM and FD decoders. No IVM or FD idle-current value is substituted.',url:'https://www.rainbird.com/documents/professionals'},
+ {name:'Rain Bird ESP-LXIVM / IVM - exact device/value required',system:'rb-ivm',note:'ESP-LXIVM IVM devices are separate from golf IC/ICM and FD decoders. Confirm the exact IVM-SOL, IVM-OUT or IVM-SEN device and test state.',url:'https://www.rainbird.com/products/esp-lxivm-2-wire-controller-smart-valve-technology/support'},
+ {name:'Toro Lynx Smart Module (LSM) - value awaiting confirmation',system:'toro-lsm'},
+ {name:'Toro LAC - value awaiting confirmation',system:'toro-lac'},
+ {name:'Toro GAC - value awaiting confirmation',system:'toro-gac'},
+ {name:'Weathermatic SmartWire SLDEC - exact model/value required',system:'weathermatic-sldec',note:'SmartWire SLDEC devices are not WeatherTRAK H2O decoders. Confirm the exact model before entering a documented custom current.',url:'https://www.weathermatic.com/details-design-specs/smartwire-sldec-valve-decoder/'}
+];
+const DECODER_IDLE_OPTIONS=[{label:'Separate families; references are provisional',options:DECODER_IDLE_PROFILES.map((p,i)=>[i,p.name])}];
+function decoderIdle(v){
+ const fmt=n=>n!==0&&(Math.abs(n)<0.001||Math.abs(n)>=1e9)?n.toExponential(3):f1(n,3);
+ const rows=[[v.model,v.count],[v.model2,v.count2]];
+ if(rows.some(([id,count])=>!Number.isInteger(id)||!DECODER_IDLE_PROFILES[id]||!Number.isSafeInteger(count)||count<0))return'Choose listed decoder families and nonnegative whole physical-decoder counts within the supported numeric range.';
+ if(v.ref!==undefined&&!Number.isNaN(v.ref)&&(!Number.isFinite(v.ref)||v.ref<0))return'Enter a nonnegative finite measured idle current, or leave it blank.';
+ const used=rows.filter(([,count])=>count>0);
+ if(!used.length)return'Enter at least one physical decoder in the measured path or module.';
+ if(used.some(([id])=>id===0))return'Choose a decoder family for each nonzero count.';
+ const pending=used.find(([id])=>id!==10&&DECODER_IDLE_PROFILES[id].low===undefined);
+ if(pending){const p=DECODER_IDLE_PROFILES[pending[0]];return`${p.name}: no confirmed preset. ${p.note||''} Use Custom only with documented values for the exact controller/decoder and measurement method. No current total calculated; another family is not a substitute.${p.url?` <a href="${p.url}" target="_blank" rel="noopener">Manufacturer reference (direct verification pending)</a>`:''}`}
+ if(new Set(used.map(([id])=>DECODER_IDLE_PROFILES[id].system)).size>1)return'Do not combine different decoder systems. Calculate each compatible path/module separately; use both rows only for models in the same system.';
+ const custom=used.some(([id])=>id===10);
+ if(custom&&(![v.low,v.high].every(Number.isFinite)||!(v.low>0&&v.high>=v.low)))return'Custom idle current requires finite mA per decoder above zero, with upper value at least the lower value. Enter the same value twice for a nominal figure without a published range.';
+ let low=0,high=0,count=0;
+ const detail=used.map(([id,n])=>{const p=DECODER_IDLE_PROFILES[id],lo=custom?v.low:p.low,hi=custom?v.high:p.high;low+=n*lo;high+=n*hi;count+=n;return`${n} x ${p.name}: ${lo===hi?fmt(lo):fmt(lo)+'-'+fmt(hi)} mA each`});
+ if(![low,high].every(Number.isFinite)||low<=0||!Number.isSafeInteger(count))return'Calculated current exceeds the supported numeric range; check counts and mA units.';
+ const range=low!==high;
+ let result=`<b>Decoder-only idle ${range?'range':'nominal estimate'}: ${range?fmt(low)+'-'+fmt(high):'approximately '+fmt(low)} mA</b><br>${detail.join('<br>')}`;
+ if(!range)result+='<br>No tolerance band is supplied; this is not an exact pass/fail threshold.';
+ if(Number.isFinite(v.ref)){
+  if(range)result+=`<br>Measured ${fmt(v.ref)} mA: <b>${v.ref<low?'below':v.ref>high?'above':'within'}</b> the ${custom?'entered':'reference'} decoder-only range.`;
+  else{const delta=v.ref-low;if(!Number.isFinite(delta))return'Measured-current comparison exceeds the supported numeric range.';result+=`<br>Measured ${fmt(v.ref)} mA: ${delta>=0?'+':''}${fmt(delta)} mA versus the nominal subtotal (not a fault verdict).`}
+ }
+ if(custom)result+='<br><span class="warn">User-entered values, not manufacturer-verified presets. Record the exact model, source/revision and measurement conditions in Notes.</span>';
+ else{
+  result+='<br><span class="warn">Provisional source references: located through indexed manufacturer material; direct document verification is pending. Confirm exact model/revision before relying on these values.</span>';
+  result+='<ul>'+[...new Set(used.map(([id])=>id))].map(id=>{const p=DECODER_IDLE_PROFILES[id];return`<li>${p.note} <a href="${p.url}" target="_blank" rel="noopener">Manufacturer reference</a></li>`}).join('')+'</ul>';
+ }
+ return result+'<br><span class="small">Count physical decoder devices, not stations, addresses or solenoids. Include only devices on the path/module actually being measured; avoid counting a loop twice. All stations and decoder-operated master valves must be off, with the path powered in the manufacturer-specified diagnostic state. This is not active-solenoid holding/inrush current or a wire-length/capacity approval. Surge protectors, sensor devices outside the selected profile, controller/output-module overhead and cable leakage/capacitance are not modeled; unlisted loads are not assumed to be zero. A whole-path reading may therefore differ from this decoder-only subtotal. Use the controller diagnostic or a manufacturer-approved meter/method for its waveform and measurement location; do not assume any AC clamp reading is equivalent. Check inventory, operating state, known-good baseline and measurement method before suspecting a fault. A high/low reading alone cannot identify a failed decoder or wiring fault. De-energize and follow manufacturer instructions before isolating wiring.</span>';
+}
 function wireBudget(v,returnResistance,current){
  if(!Object.values(v).every(Number.isFinite)||!WIRE_OHMS[v.awg]||!returnResistance||!(v.source>0&&v.min>0&&v.min<v.source&&current>0&&v.dist>=0))return null;
  const loopPerFoot=(WIRE_OHMS[v.awg]+returnResistance)/1000,drop=v.dist*current*loopPerFoot,max=(v.source-v.min)/(current*loopPerFoot),end=v.source-drop;
  return [drop,max,end].every(Number.isFinite)?{drop,max,end}:null;
 }
 const tools={
+decoderidle:{name:'Decoder idle current - nominal mA / range',fields:[
+ ['model','Decoder family / model group',2,DECODER_IDLE_OPTIONS],['count','Physical decoders in this path/module',100],
+ ['model2','Second model group (same system only)',0,DECODER_IDLE_OPTIONS],['count2','Second group physical decoder count',0],
+ ['low','Custom only: lower / nominal idle mA per decoder',0],['high','Custom only: upper / nominal idle mA per decoder',0],
+ ['ref','Measured idle current at same path/module, mA (optional)','']
+ ],calc:decoderIdle},
 tdh:{name:'TDH',fields:[['zs','Static suction head, ft (+flooded / −lift)',0],['zd','Discharge point height above pump, ft',100],['hf','Total friction + minor losses, ft',20],['p','Required pressure at end point, psi',65]],
  calc:v=>{const tdh=(v.zd-v.zs)+v.hf+v.p*2.31,psiEq=tdh/2.31;let s=`TDH ≈ <b>${f1(tdh)} ft</b> (${f1(psiEq)} psi equivalent)<br><span class="small">Static ${f1(v.zd-v.zs)} ft + friction ${f1(v.hf)} ft + pressure ${f1(v.p*2.31)} ft. Fresh water, SG 1.0. Plot this flow/TDH point on the pump curve.</span>`;if(psiEq>150)s+='<br><span class="warn">Rule-of-thumb from Rain Bird pump-theory training: single-stage pumps are commonly used up to about 150 psi, while higher heads often require multistage design. Confirm with your pump curve and OEM limits.</span>';return s}},
 npsh:{name:'NPSHa',fields:[['el','Site elevation, ft',700],['tf','Water temperature, °F',68],['hs','Static suction head, ft (+flooded / −lift)',-8],['hf','Suction friction + fittings, ft',2],['r','NPSHr from pump curve at this flow, ft (optional)','']],
@@ -874,7 +933,8 @@ lflow:{n:'Learned vs measured flow',s:'a',nodes:{
  b:{q:'Does an independent flow reading (portable meter, tank fill, pump curve) agree with the flow sensor?',o:[['Yes, the sensor is right','hy'],['No, they differ','flow:flow']]},
  hy:R('HYDRAULIC','Real flow differs from learned: leak, partial blockage, worn valve, overlapping stations, or a pressure shift.',['Station pressure vs normal at the same flow','Which stations run together at alarm time','Valve and strainer condition; signs of a leak'],'irrigation measured flow higher lower than learned flow causes','pipe')}},
 tw:{n:'Two-wire / decoder problem',s:'a',nodes:{
- a:{q:'How much of the system is affected?',o:[['One decoder/station','one'],['A branch or section','br'],['The whole line','all']]},
+ a:{q:'How much of the system is affected?',o:[['One decoder/station','one'],['A branch or section','br'],['The whole line','all'],['Check expected idle current from decoder count','idle']]},
+ idle:R('IDLE CURRENT / INVENTORY','Calculate a decoder-only idle subtotal for the exact family. Nominal figures without tolerances are not pass/fail limits.',['Physical decoder count on the measured path/module, not station or solenoid count','No active stations or master valves; path powered in the specified diagnostic state','Exact controller/decoder family and manufacturer-approved measurement method','Unmodeled devices, path effects and known-good baseline; a current difference alone does not identify a fault'],'decoder standby idle current manufacturer troubleshooting','decoderidle'),
  one:R('DECODER / LOCAL','Likely the decoder, solenoid or its splice at that valve.',['Voltage at the decoder and solenoid resistance (power off)','Splice condition (water ingress)','Swap test with a known-good decoder','If WeatherTRAK, verify local WT2W-LSP/flow-decoder grounding is intact (50 Ω max target)'],'two wire decoder single station not working solenoid resistance splice'),
  br:R('WIRING','Break, bad splice or short on that branch.',['Line current with the branch connected vs isolated','Continuity and insulation to ground on the branch (locked out)','Splices between the last working and first failed decoder','If WeatherTRAK star layout is used, verify WT2W-LSP placement: near controller, every 500 ft or 5 decoders, and at branch ends 25 ft or longer'],'two wire irrigation branch fault locating splice break short','twvd'),
  all:R('ELECTRICAL / CONTROLLER','Controller output, short on the line, ground leakage, or surge damage.',['Line voltage at the controller output and at the far end','Line current draw vs normal','Insulation to ground, surge protection and ground rod condition','If WeatherTRAK, confirm grounding targets: controller 10 Ω max and line surge protectors/flow decoders 50 Ω max'],'two wire decoder line short ground fault surge troubleshooting current draw','twvd')}},
@@ -1006,10 +1066,11 @@ function initQuickCalculators(){
  select.addEventListener('change',render);render();
 }
 function openDec(s,sel){cur='dec';setTabs();sel=sel||store.get('tracerDec','');
- let h='<h3>Decoder / two-wire limits by brand</h3><div class="links" id="dcb"></div>';
+ let h='<h3>Decoder / two-wire limits by brand</h3><div class="links"><button type="button" id="dcidle">DECODER IDLE CURRENT / EXPECTED mA</button></div><div class="links" id="dcb"></div>';
  if(sel&&DEC[sel]){const d=DEC[sel];h+=`<h3>${esc(sel)}</h3><ul>${d.facts.map(f=>'<li>'+esc(f)+'</li>').join('')}</ul><div id="dcalc"></div><div class="links" id="dclinks" style="margin-top:10px"></div><p class="small">Figures come from the manufacturer documents named above and may differ by model or revision. Confirm in your own manual before relying on them. Last checked 2026-11-05.</p>`}
  else h+='<p class="small">Choose a brand to see its published two-wire limits and any calculator.</p>';
  $('#bench').innerHTML=h;
+ $('#dcidle').onclick=()=>openTool('decoderidle',false);
  Object.keys(DEC).forEach(k=>{const b=document.createElement('button');b.type='button';b.textContent=k;b.classList.toggle('on',k===sel);b.onclick=()=>{store.set('tracerDec',k);openDec(false,k)};$('#dcb').appendChild(b)});
  if(sel&&DEC[sel]){if(DEC[sel].calc)mountCalc('#dcalc',DEC[sel].calc);DEC[sel].links.forEach(x=>{const b=document.createElement('button');b.type='button';b.textContent=x.t+' ↗';b.onclick=()=>window.open(x.u,'_blank','noopener');$('#dclinks').appendChild(b)})}
  scrollBench(s)}

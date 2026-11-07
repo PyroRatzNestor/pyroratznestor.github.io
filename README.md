@@ -17,6 +17,60 @@ the same tools remain available from their contextual troubleshooting links.
 The quick card and Field Bench can show the same calculator without conflicting
 controls. PSI-to-head conversion is not itself a complete TDH calculation.
 
+## Decoder idle-current calculator
+
+**Decoder idle current - nominal mA / range** is available in Quick Field
+Calculator, the Irrigation Control menu, the two-wire diagnostic path and the
+decoder reference tab. It multiplies physical-device counts by idle mA per
+device. Two rows allow compatible model groups on the same measured path/module
+(for example, mixed Rain Bird FD groups); different systems cannot be combined.
+Saved inputs and Add Result to Notes use the same shared calculator.
+
+Provisional references located through indexed manufacturer material:
+
+| Family | Idle mA per physical device | Source |
+|---|---|---|
+| Hunter Pilot two-way modules | Roughly 1; no tolerance stated | [View Module Current](https://www.hunterirrigation.com/support/pilot-integrated-hub-view-module-current) |
+| Hunter I-Core DUAL, legacy field systems, not ICD | Approximately 3-4 | [DUAL troubleshooting](https://www.hunterirrigation.com/support/i-core-dual-troubleshooting) |
+| Rain Bird FD-101 / FD-102 | 0.5 nominal | [Golf decoder general information](https://www.rainbird.com/troubleshooting-guide/12615) |
+| Rain Bird FD-202 / FD-401 / FD-601 | 1 nominal | Same Rain Bird reference; not IC/ICM |
+| Calsense 2-station / POC / soil-moisture decoders | 0.8-1.0 | [2-Wire Troubleshooting Guide](https://www.calsense.com/wp-content/uploads/2024/05/2-Wire-Troubleshooting-Guide.pdf) |
+| Tucor LD-050 / LD-100 / LD-200 | 0.5 nominal | [Establish Your Benchmark & System Layout](https://support.tucor.com/support/solutions/articles/4000213642-step-2-establish-your-benchmark-system-layout) |
+
+Direct source retrieval failed DNS checks during research. These references
+remain explicitly **provisional** in every preset result until the original
+documents and exact installed model/revision are confirmed. No universal
+percentage tolerance is invented. Hunter ICD (ACC/ACC2), Rain Bird golf IC/ICM,
+Rain Bird ESP-LXIVM/IVM, Toro LSM/LAC/GAC and other/legacy decoders, Baseline,
+WeatherTRAK H2O and Weathermatic SmartWire SLDEC have no numeric presets:
+selecting them blocks the calculation rather than borrowing another family's
+rate. Golf IC/ICM, ESP-LXIVM/IVM and FD are separate Rain Bird families;
+WeatherTRAK H2O and Weathermatic SLDEC are also distinct systems.
+New profiles are appended to preserve saved numeric selections.
+Custom mode accepts documented
+lower/upper values, clearly labeled as user-entered; enter the same value twice
+if only a nominal figure is available.
+
+Tucor LD-400/LD-600 remains blocked: indexed LD data-sheet guidance gives
+0.8 mA, while indexed troubleshooting benchmark guidance gives 1.0 mA. These
+are conflicting nominal references, **not** an established tolerance range.
+Confirm the exact model/revision before entering a custom value. Do not infer
+current or compatibility from an alleged OEM/rebranding relationship without
+an explicit model cross-reference. Baseline's
+[SubStation specifications](https://www.hydropoint.com/products/substation/)
+also describe idle two-wire power-down: a powered-off reading is not a
+powered diagnostic baseline. No biCoder rate or universal Baseline behavior
+is inferred from that controller-specific feature.
+
+An optional measured reading is compared to the unrounded decoder-only subtotal,
+not diagnosed as a fault. Nominal figures never produce a pass/fail tolerance
+band. Keep stations/master valves off and the path powered in its specified
+diagnostic state. Controller readings and meter readings are not automatically
+interchangeable on proprietary waveforms. Surge protectors are deferred; other
+unlisted loads, output-module overhead and cable effects are also not modeled.
+This subtotal is not a guaranteed whole-path normal range, active-solenoid
+current, controller capacity check or wire-distance approval.
+
 ## Golf catalog Part Finder
 
 Part Finder's **Golf irrigation** category indexes all product sections of the
