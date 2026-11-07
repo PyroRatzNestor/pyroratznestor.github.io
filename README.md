@@ -3,6 +3,10 @@
 Single-page field technical dashboard. Open `index.html`, or serve the repository
 with `python3 -m http.server 8899`.
 
+The dashboard uses black and forest-green surfaces with neon-green accents;
+amber and red remain reserved for warnings and errors. **High Contrast** switches
+to black, white and brighter accents and remembers the selection on this device.
+
 The Pumps/Hydraulics, VFD/Controls and Irrigation Control troubleshooting cards
 use topic dropdowns. Choose a topic and press **Open selection** to launch the
 same calculator, diagnostic path, reference or web search. Selection alone does
@@ -16,6 +20,123 @@ Calculators run inside this card with saved inputs and **Add result to notes**;
 the same tools remain available from their contextual troubleshooting links.
 The quick card and Field Bench can show the same calculator without conflicting
 controls. PSI-to-head conversion is not itself a complete TDH calculation.
+
+## Commissioned drive setup & PID troubleshooting
+
+The **VFD / Controls** menu and **Drive setup / PID** Field Bench tab open a
+read-only functional checklist and per-asset worksheet. The existing
+pressure-hunting path links to the same guide. It is not a calculator, a drive
+connection, an automatic tuner or an uploadable parameter file.
+
+Separate profiles cover ABB ACQ580, ABB ACS550-01/U1, Mitsubishi FR-F800-E,
+Mitsubishi FR-D700, Pentair Pentek Intellidrive, Schneider ATV320 and Schneider
+ATV630/ATV600, plus a generic other-model checklist.
+The exact model/variant, firmware, control owner, pump/motor data, commissioning
+vendor/date, manual revision and backup location are recorded per asset.
+Do not substitute ACS580 for ACQ580, FR-E800 for FR-F800-E, another Altivar
+series for ATV600, or transfer PID values between Intellidrive and industrial drives.
+
+Symptom selections cover no wake, no sleep, short cycling, pressure hunting,
+slow recovery, overshoot and repeated fault/restart. Each starts with evidence,
+control ownership and hydraulic/sensor checks, then highlights relevant
+functional sections without hiding the other records. The sections cover
+feedback scaling, reference sources, action direction, P/I/D definitions,
+filtering, speed limits, ramps, sleep/wake/boost and fault/protection logic.
+
+Each function keeps the **commissioned baseline**, **observed current setting**,
+**documented factory default (reference only)**, units/definition,
+parameter/menu and source revision/page separate. Blank means unknown.
+Comparison is text-only; it does not convert units, infer equivalent tuning
+values or diagnose a fault. Factory defaults are never recommended replacements
+for vendor-commissioned settings.
+
+The ABB ACQ580 profile includes a separate, read-only cross-reference for
+selected PID, feedback, sleep/wake, limits and fault functions, based on the
+uploaded **ACQ580 pump control program firmware manual 3AXD50000035867,
+Rev C (2017-06-21), program 2.03.0.0**, with printed page citations. Verify the
+installed program version and active PID set before using it. Other firmware
+revisions may differ.
+The guide flags ambiguities in the source rather than resolving them by guess.
+Manual ranges and defaults are references, not commissioned values or tuning
+recommendations; the cross-reference never populates or changes worksheet fields.
+The separate ACS550-01/U1 profile uses the uploaded **ACS550-01/U1 User's
+Manual 3AFE64804588 (3AUA0000001418), Rev H (2014-07-04)**, which states
+compatibility with firmware **3.14e or later**. Check parameter 3301 and the
+documentation for the installed version, active PID1 set and control path.
+PID1 set 2 is not external/trim PID2; internal sleep and digital-input sleep
+are distinct. Sleep boost is not mapped. ACS550 and ACQ580 parameter numbers
+must not be interchanged.
+
+The Mitsubishi profile includes selected references from the uploaded
+**FR-F800 Instruction Manual, art. 292550 Version B (2015-12-03)** and the
+**FR-A800-E / FR-F800-E Ethernet Function Manual IB(NA)-0600628ENG-B
+(2016-11)**, with source-specific printed page citations. The detailed manual
+is for the FR-F800 series; the Ethernet supplement covers FR-F800-E. The
+2015 detailed edition predates the 2016 supplement and exact compatibility
+with a particular -E drive and firmware is not established; verify the correct
+manual with Mitsubishi and the station vendor. The reference covers PID
+proportional band, sleep/deviation, boost and selected communication-loss
+behavior, not a complete parameter list. Some functions can restart or run a
+motor unexpectedly, including retry and sleep stirring. These references do
+not recommend enabling features or changing site settings.
+
+The separate legacy **FR-D700** profile uses the uploaded **Instruction
+Manual (Basic), IB(NA)-0600438ENG-D (2019-01)** and **Instruction Manual
+(Applied), IB(NA)-0600366ENG-H (2018-06)**. Selected PID, output suspension,
+calibration and retry references cite printed pages from the appropriate manual.
+The Applied manual's PID table identifies reverse process action as Pr.128 =
+20, while its sleep figure labels reverse action as Pr.128 = 10; the guide
+flags this discrepancy for confirmation with Mitsubishi. Parameter names shared
+with FR-F800 do not establish identical behavior. Panel instructions are for
+authorized changes under a safe station procedure, not a recommendation to
+change control modes or parameters, clear settings, or bypass a write lock.
+
+The **Pentek Intellidrive** profile uses the uploaded **Installation and
+Operation Manual PN957 (2020-06-25)**, covering PID10-01, PID20-01, PID30-01
+and PID50-01. It includes selected keypad, pressure sensor, internal/external
+setpoint, PID, sleep/boost, motor and fault references with printed page
+citations. These models expose PID controls on their keypad; derivative time
+and integration time are in milliseconds. Wake Up Differential is pressure
+below setpoint, while Wake Delay is part of the boost process, not the dry-run
+automatic restart delay. The manual's initial-startup text gives three minutes
+for line fill, while its parameter table lists a one-minute default and says
+the Fill Time clock starts at 55 Hz; verify the installed value and software.
+The panel procedure is for authorized changes only; Pump Out is fixed-speed
+operation without pressure control. Check exact model and software, preserve
+the commissioned settings, and do not bypass protections.
+
+The separate **Altivar Machine ATV320** profile cites the uploaded
+**Programming Manual NVE41295.06 (2025-04)**. It describes software V3.5IE46
+and states it can also be used with earlier versions; confirm the installed
+software and available functions. PID integral and derivative are gains, not
+times. Low Speed Timeout and PID wake-up threshold are distinct, and the
+threshold is dependent on feedback scaling rather than an absolute PSI value.
+The integrated jog dial can change the internal PID reference without pressing
+ENT in the reference-speed menu. References and panel instructions do not
+authorize tuning, resetting or changing protections, and must not be copied
+to the separate ATV600 family.
+
+ATV600 and generic profiles' exact mappings remain pending.
+Technician-entered references and values are not independently verified
+manufacturer data.
+
+**Save worksheet on this device** stores named asset records under
+`tracerVfdCommissioning_v1`. Saving an existing record requires confirmation
+before replacing it, including baseline edits. Unsaved drafts survive dashboard
+navigation within the session but not reload/closure; saving is explicit.
+Read/write failures are reported, and unreadable saved data disables saving
+rather than overwriting it. Different assets/profiles have independent records.
+Browser storage is not a parameter backup or a cross-device database.
+
+**Add worksheet to Notes** includes equipment, all function records, comparison
+labels, selected symptom/checks, observations and safety/source caveats.
+Use **Save Notes** and **Export .TXT** separately for persistence and a portable
+text record; this text cannot restore a drive configuration. Record
+time-stamped pressure, setpoint, commanded/actual Hz, flow/demand, any authorized
+change, rollback value and outcome. Keep a separate vendor/drive parameter
+backup before changing settings. Protection and automatic-restart changes need
+vendor/qualified-technician review; do not bypass protections, factory-reset or
+repeatedly restart into a fault.
 
 ## Decoder idle-current calculator
 

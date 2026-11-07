@@ -1,36 +1,38 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tracer Field Technical Dashboard V4</title><style>
-:root{--bg:#081018;--panel:#0e1a25;--line:#244254;--cyan:#35d2ff;--green:#55e69d;--amber:#ffc857;--red:#ff7b7b;--text:#e8f2f7;--muted:#91a8b6;--inp:#071018}
-body.hc{--bg:#000;--panel:#000;--line:#fff;--cyan:#fff;--green:#7dff7d;--amber:#ffe14d;--text:#fff;--muted:#ddd;--inp:#000}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#071019,#0a1620 55%,#061018);color:var(--text);font:15px system-ui,Segoe UI,Arial,sans-serif}body.hc{background:#000}
-.wrap{max-width:1250px;margin:auto;padding:18px}.top{border:1px solid var(--line);background:#0a151f;padding:20px;border-radius:14px}body.hc .top{background:#000}
-.tag{color:var(--cyan);letter-spacing:.18em;font-size:12px}.title{margin:5px 0;font-size:clamp(24px,4vw,42px)}.motto{color:var(--green);font-weight:700}.sub{color:var(--muted)}
-.search{display:flex;gap:8px;margin-top:18px}.search input{flex:1;background:var(--inp);border:1px solid #315264;color:white;padding:13px;border-radius:8px;font-size:16px}
-.btn,button{background:#113047;color:#fff;border:1px solid #2f6481;padding:11px 14px;border-radius:8px;cursor:pointer;text-decoration:none;font:inherit;min-height:42px}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Technician Dashboard</title><style>
+:root{color-scheme:dark;--bg:#050a06;--panel:#101d14;--line:#447659;--cyan:#7dff53;--green:#7dff53;--amber:#ffc857;--red:#ff7b7b;--text:#f0f7f0;--muted:#c2d3c4;--inp:#08110b;--control:#21432b;--control-line:#74a981}
+body.hc{--bg:#000;--panel:#000;--line:#fff;--cyan:#fff;--green:#7dff7d;--amber:#ffe14d;--text:#fff;--muted:#ddd;--inp:#000;--control:#000;--control-line:#fff}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#050a06,#0b1c10 55%,#050a06);color:var(--text);font:15px system-ui,Segoe UI,Arial,sans-serif}body.hc{background:#000}
+.wrap{max-width:1250px;margin:auto;padding:18px}.top{border:1px solid var(--line);background:var(--panel);padding:20px;border-radius:14px}
+.title{margin:5px 0;font-size:clamp(24px,4vw,42px)}.motto{color:var(--green);font-weight:700}.sub{color:var(--muted)}
+.search{display:flex;gap:8px;margin-top:18px}.search input{flex:1;background:var(--inp);border:1px solid var(--control-line);color:white;padding:13px;border-radius:8px;font-size:16px}
+.btn,button{background:var(--control);color:#fff;border:1px solid var(--control-line);padding:11px 14px;border-radius:8px;cursor:pointer;text-decoration:none;font:inherit;min-height:42px}
 body.hc .btn,body.hc button{background:#000;border-color:#fff}
 .btn:hover,button:hover{border-color:var(--cyan)}button.on{border-color:var(--green);color:var(--green)}
+a:not(.btn),a:not(.btn):visited{color:var(--cyan)}:focus-visible{outline:3px solid var(--green);outline-offset:2px}input::placeholder,textarea::placeholder{color:var(--muted);opacity:1}
 .filters{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px;align-items:center}.filters button{padding:7px 10px;font-size:12px;min-height:34px}
 .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:12px}.card{grid-column:span 4;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}.wide{grid-column:span 6}.full{grid-column:1/-1}
 .card h2{font-size:16px;margin:0 0 10px;color:var(--cyan);letter-spacing:.06em}.card h3{font-size:14px;margin:14px 0 6px;color:var(--amber)}
 .topic-menu{display:flex;flex-direction:column;gap:10px}.topic-menu .fld{min-width:0}.topic-menu select{min-height:44px}
 .links{display:flex;flex-wrap:wrap;gap:8px}.calc{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
-.calc input,.fld input,.fld select{width:100%;padding:9px;background:var(--inp);color:#fff;border:1px solid #315264;border-radius:6px;font-size:16px}
+.calc input,.fld input,.fld select{width:100%;padding:9px;background:var(--inp);color:#fff;border:1px solid var(--control-line);border-radius:6px;font-size:16px}
 .result{color:var(--green);font-weight:700;margin-top:9px;line-height:1.5}.warn{color:var(--amber)}.bad{color:var(--red)}
-.note{width:100%;min-height:150px;background:var(--inp);color:white;border:1px solid #315264;border-radius:8px;padding:10px;font-size:15px}
+.note{width:100%;min-height:150px;background:var(--inp);color:white;border:1px solid var(--control-line);border-radius:8px;padding:10px;font-size:15px}
 .small{font-size:12px;color:var(--muted)}.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:10px}.fld label{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}
 .tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}.tabs button{padding:8px 12px;font-size:13px;min-height:38px}
 .q{font-size:17px;margin:10px 0}.opts{display:flex;flex-direction:column;gap:8px}.opts button{text-align:left}
 .res{border:1px solid var(--green);border-radius:10px;padding:12px;margin-top:8px}.res b{color:var(--green)}.res ul{margin:6px 0 6px 18px;padding:0}
-.chk label{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #1d3a4b}.chk input{width:22px;height:22px;flex:none}
+.chk label{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line)}.chk input{width:22px;height:22px;flex:none}
 .tbl{border-collapse:collapse;margin:10px 0;font-weight:400}.tbl th,.tbl td{border:1px solid var(--line);padding:4px 10px;text-align:right;color:var(--text)}.tbl th{color:var(--muted)}
 .safety{border-left:3px solid var(--amber);padding:6px 10px;margin:10px 0;color:var(--amber);font-size:13px}
+.vfd-section{border:1px solid var(--line);border-radius:8px;padding:12px;margin:12px 0;min-width:0}.vfd-section summary{cursor:pointer;color:var(--amber);font-weight:700}.vfd-section .fld{min-width:0}.vfd-section p{overflow-wrap:anywhere}.vfd-guide-status{min-height:1.5em}
 .pfgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;gap:8px}
 @media(max-width:1080px){.pfgrid{grid-template-columns:1fr 1fr 1fr}.pfgrid .span2{grid-column:span 3}}
 @media(max-width:850px){.card,.wide{grid-column:1/-1}.calc{grid-template-columns:1fr}.search{flex-direction:column}.pfgrid{grid-template-columns:1fr}.pfgrid .span2{grid-column:auto}}
 </style></head><body><div class="wrap">
 
-<section class="top"><div class="tag">TRACER // FIELD TECHNICAL DASHBOARD // V4</div><h1 class="title">Service Technician Command Center</h1><div class="motto">MEASURE → ISOLATE → VERIFY → REPAIR → PROVE</div><p class="sub">Start with evidence. Separate hydraulic, electrical, mechanical and control-system causes before changing parts or parameters.</p>
+<section class="top"><h1 class="title">Technician Dashboard</h1><div class="motto">MEASURE → ISOLATE → VERIFY → REPAIR → PROVE</div><p class="sub">Start with evidence. Separate hydraulic, electrical, mechanical and control-system causes before changing parts or parameters.</p>
 <form id="searchForm" class="search"><input id="q" aria-label="Technical web search" placeholder="Search pumps, VFDs, controls, hydraulics, two-wire, GIS…  (press / to focus)"><button>SEARCH WEB</button><button type="button" id="qclear">CLEAR</button></form>
-<div class="filters"><button type="button" data-suffix="pump service manual troubleshooting">PUMPS</button><button type="button" data-suffix="VFD pump PID troubleshooting manual">VFD</button><button type="button" data-suffix="central control irrigation technical troubleshooting">IRRIGATION CONTROL</button><button type="button" data-suffix="two wire decoder irrigation troubleshooting">TWO-WIRE</button><button type="button" data-suffix="motor electrical troubleshooting application note">ELECTRICAL</button><button type="button" data-suffix="GIS field mapping irrigation">GIS</button><button type="button" id="hc" style="margin-left:auto">HIGH CONTRAST</button></div>
+<div class="filters"><button type="button" data-suffix="pump service manual troubleshooting">PUMPS</button><button type="button" data-suffix="VFD pump PID troubleshooting manual">VFD</button><button type="button" data-suffix="central control irrigation technical troubleshooting">IRRIGATION CONTROL</button><button type="button" data-suffix="two wire decoder irrigation troubleshooting">TWO-WIRE</button><button type="button" data-suffix="motor electrical troubleshooting application note">ELECTRICAL</button><button type="button" data-suffix="GIS field mapping irrigation">GIS</button><button type="button" id="hc" aria-pressed="false" style="margin-left:auto">HIGH CONTRAST</button></div>
 <div class="filters" id="mfr"><span class="small">Manufacturer:</span></div>
 </section>
 
@@ -84,8 +86,8 @@ $('#searchForm').addEventListener('submit',e=>{e.preventDefault();go(withBrand(q
 $$('[data-suffix]').forEach(b=>b.addEventListener('click',()=>go(withBrand(q.value+' '+b.dataset.suffix))));
 ['Toro','Hunter','Rain Bird','Baseline','WeatherTRAK','Flowtronex','Watertronics','Pentair','Berkeley','ABB','Mitsubishi'].forEach(n=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.onclick=()=>{brand=brand===n?'':n;$$('#mfr button').forEach(x=>x.classList.toggle('on',x.textContent===brand))};$('#mfr').appendChild(b)});
 document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();q.focus()}});
-$('#hc').onclick=()=>{document.body.classList.toggle('hc');store.set('tracerHC',document.body.classList.contains('hc'))};
-if(store.get('tracerHC',false))document.body.classList.add('hc');
+$('#hc').onclick=()=>{const enabled=document.body.classList.toggle('hc');$('#hc').setAttribute('aria-pressed',String(enabled));store.set('tracerHC',enabled)};
+if(store.get('tracerHC',false)){document.body.classList.add('hc');$('#hc').setAttribute('aria-pressed','true')}
 
 /* ---------- troubleshooting topic menus ---------- */
 const cards={
@@ -94,6 +96,7 @@ c2:[['Input/output voltage & current','flow','trip'],['Hz, RPM & motor data','to
 c3:[['Platform notes (Toro, Hunter, Rain Bird, Baseline, WeatherTRAK)','tool','plat'],['Learned vs measured flow','flow','lflow'],['Controller vs hydraulic','flow','ctrl'],['High / low flow alarm','flow','fa'],['Rain Bird flow/pressure alarm map','flow','rbflow'],['Rain Bird filter flush issues','flow','rbflow'],['WeatherTRAK flow alerts (LC / OptiFlow)','flow','wtflow'],['Hydraulic tree / capacity','tool','pipe'],['Flow sensor / K-factor check','tool','flowcal'],['Decoder / two-wire diagnostics','flow','tw'],['Two-wire voltage drop','tool','twvd'],['Controller offline / comms','flow','comm'],['Pump start / master valve','flow','pstart'],['Sequence & runtime evidence','search','central control irrigation runtime history flow alarm troubleshooting']]};
 cards.c1.push(['Manufacturer library (pumps & stations)','view','lib']);cards.c2.push(['3-phase amps / kW','tool','ph3'],['Voltage / current imbalance','tool','imb']);cards.c3.push(['Decoder limits by brand','view','dec'],['Manufacturer library (irrigation)','view','lib'],['Precipitation rate (golf heads)','tool','precip'],['Generic 24 V irrigation wire sizing','tool','wiresize'],['Conventional valve wire distance / voltage','tool','convwire'],['Two-wire decoder path distance / voltage','tool','pathwire'],['Filters & valves (Amiad, Netafim, BERMAD)','view','filters'],['Landscape technical reference','view','landscape'],['Precipitation rate (landscape heads)','tool','landprecip'],['Landscape zone area / runtime','tool','landarea'],['Hunter landscape valve wire distance','tool','landwire'],['Landscape soil / slope intake reference','tool','landslope']);
 cards.c3.push(['Decoder idle current / expected mA','tool','decoderidle']);
+cards.c2.push(['Commissioned drive setup & PID troubleshooting','view','vfdsetup']);
 const tag={search:'search ↗',tool:'calculator',flow:'path',view:'open'};
 Object.entries(cards).forEach(([id,arr])=>{
  const host=$('#'+id),form=document.createElement('form');form.className='topic-menu';
@@ -675,13 +678,14 @@ function golfCoverageHTML(){
 /* ---------- end golf catalog references ---------- */
 
 const tabsDef=[['tdh','TDH'],['npsh','NPSHa'],['sys','System check'],['pipe','Pipe / friction'],['affinity','Affinity'],['hz','Hz / RPM'],['xdcr','Transducer'],['flowcal','Flow sensor'],['drip','Drip precip'],['twvd','2-wire drop'],['coords','Coordinates'],['plat','Platforms'],['dec','Decoders'],['ph3','3-phase'],['imb','Imbalance'],['lib','Manufacturers'],['pfind','Part Finder'],['landscape','Landscape technical'],['check','Checklists'],['flow','Diagnostic path']];
+tabsDef.push(['vfdsetup','Drive setup / PID']);
 let cur='';
 function setTabs(){$('#tabs').innerHTML='';tabsDef.forEach(([k,n])=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.classList.toggle('on',k===cur);b.onclick=()=>k==='check'?openCheck():k==='flow'?openFlow('wont',true):k==='plat'?openPlat(true):k==='dec'?openDec(true):k==='lib'?openLib(true):k==='pfind'?openParts(true):openTool(k,true);$('#tabs').appendChild(b)})}
 function scrollBench(s){if(s)$('#benchCard').scrollIntoView({behavior:'smooth',block:'start'})}
 function renderToolFields(t,prefix,saved){return t.fields.map(([id,l,d,groups])=>{const value=saved[id]!==undefined?saved[id]:d,control=groups?`<select id="${prefix}${id}">${groups.map(group=>`<optgroup label="${esc(group.label)}">${group.options.map(([v,label])=>`<option value="${esc(v)}" ${String(v)===String(value)?'selected':''}>${esc(label)}</option>`).join('')}</optgroup>`).join('')}</select>`:`<input id="${prefix}${id}" type="number" step="any" inputmode="decimal" value="${value}">`;return`<div class="fld"><label for="${prefix}${id}">${esc(l)}</label>${control}</div>`}).join('')}
 function syncPipePreset(k,prefix){if(k!=='pipe')return;const manual=$$('#'+prefix+'d, #'+prefix+'c'),preset=parseFloat($('#'+prefix+'preset').value)>0;manual.forEach(el=>{el.disabled=preset})}
 function bindToolFields(t,k,prefix,run){t.fields.forEach(([id,,,options])=>{const el=$('#'+prefix+id);if(!el)return;el.addEventListener(options?'change':'input',()=>{syncPipePreset(k,prefix);run()})})}
-function openTool(k,s){if(k==='plat'){openPlat(s);return}if(k==='dec'){openDec(s);return}if(k==='lib'){openLib(s);return}if(k==='landscape'){openLandscape(s);return}if(k==='filters'){openParts(s,{q:'',m:'',t:'',c:FILTER_CATEGORY,has:'all'});return}if(k==='pfind'){openParts(s);return}cur=k;setTabs();const t=tools[k];const saved=store.get('tracerTool_'+k,{});
+function openTool(k,s){if(k==='vfdsetup'){openVfdSetup(s);return}if(k==='plat'){openPlat(s);return}if(k==='dec'){openDec(s);return}if(k==='lib'){openLib(s);return}if(k==='landscape'){openLandscape(s);return}if(k==='filters'){openParts(s,{q:'',m:'',t:'',c:FILTER_CATEGORY,has:'all'});return}if(k==='pfind'){openParts(s);return}cur=k;setTabs();const t=tools[k];const saved=store.get('tracerTool_'+k,{});
  $('#bench').innerHTML='<h3>'+esc(t.name)+'</h3><div class="fields">'+renderToolFields(t,'f_',saved)+'</div><div class="result" id="toolOut" aria-live="polite"></div><div class="links" style="margin-top:8px"><button type="button" id="toNotes">ADD RESULT TO NOTES</button></div>';
  const run=()=>{const v={},sv={};t.fields.forEach(([id])=>{const el=$('#f_'+id);v[id]=el.value===''?NaN:parseFloat(el.value);sv[id]=el.value});store.set('tracerTool_'+k,sv);
   if(Object.entries(v).some(([id,x])=>!Number.isFinite(x)&&!['r','gauge','ref','vs'].includes(id)&&!(k==='pipe'&&v.preset>0&&['d','c'].includes(id)))){$('#toolOut').innerHTML='Enter all values.';return}
@@ -849,7 +853,7 @@ hunt:{n:'Pressure hunting',s:'a',nodes:{
  h:R('HYDRAULIC / SYSTEM','Demand or system devices are cycling: PRV, check valve, air in line, tank precharge, cycling zones.',['Pressure trace at pump and remote point','Zone sequencing at time of swings','Tank precharge (if present), PRV behavior'],'irrigation pump station pressure fluctuating PRV hunting causes'),
  b:{q:'Is the transducer signal steady and in agreement with a reference gauge?',o:[['No: noisy, drifting or disagreeing','s1'],['Yes: signal is stable and accurate','t1']]},
  s1:R('SENSOR / WIRING','Feedback is unreliable. Fix this before touching PID values.',['mA/V at the drive input vs gauge','Shield termination and routing away from motor leads','Supply voltage and scaling (low/high range)'],'VFD pressure transducer noise 4-20mA shielding scaling','xdcr'),
- t1:R('CONTROL TUNING','Loop is too aggressive or ramps/minimum speed/sleep settings fight the system.',['Record ALL current PID, ramp and min-speed values first','Change one parameter at a time and log the result','Observe at low and high demand'],'VFD booster pump PID tuning hunting acceleration deceleration')}},
+ t1:R('CONTROL TUNING','Loop is too aggressive or ramps/minimum speed/sleep settings fight the system.',['Record ALL current PID, ramp and min-speed values first','Change one parameter at a time and log the result','Observe at low and high demand'],'VFD booster pump PID tuning hunting acceleration deceleration','vfdsetup')}},
 trip:{n:'VFD / motor trip',s:'a',nodes:{
  a:{q:'What did the drive report?',o:[['Rain Bird CLP/ACLP named alarm (E16/E17/E18/PCH/AIE or Delta alarm)','flow:rbclp'],['Overcurrent / short circuit','oc'],['Ground fault / earth leakage','gf'],['Overload / thermal','ol'],['Over- or under-voltage','uv'],['No fault, but won’t accelerate','ac']]},
  oc:R('ELECTRICAL / MECHANICAL','Possible winding or cable fault, locked rotor/binding, or too-short acceleration ramp.',['Insulation resistance of motor and cable with leads disconnected from the drive','Phase-to-phase resistance balance','Shaft turns freely by hand; ramp time'],'VFD overcurrent fault pump motor insulation resistance test'),
@@ -1011,12 +1015,326 @@ pt_jet:{n:'Jet pump',pt:1,basis:'Basis: engineering fundamentals and common indu
 function openFlow(k,s){if(!flows[k].pt&&!prof().make&&!prof().vfdb&&!skipProfile){gate(k,s);return}cur='flow';setTabs();const f=flows[k];const path=[];
  const draw=id=>{const n=f.nodes[id];let h='<h3>'+esc(f.n)+'</h3><div class="safety">'+S+'</div>'+(f.x?'<div class="safety">'+esc(f.x)+'</div>':'')+(f.basis?'<div class="small">'+esc(f.basis)+'</div>':'');
   if(path.length)h+='<div class="small">'+path.map(esc).join(' → ')+'</div>';
-  if(n.r){h+=`<div class="res"><b>Most likely area: ${esc(n.domain)}</b><br>${esc(n.text)}<br><br>Measure / check:<ul>${n.measure.map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Confirm in your manual:<ul>${hints(n.domain).map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Make the smallest justified change, then prove it under operating conditions.</div><div class="links" id="lit" style="margin-top:10px"></div><div class="links" style="margin-top:10px"><button type="button" id="fs">SEARCH THIS</button>${n.tool?'<button type="button" id="ft2">OPEN CALCULATOR</button>':''}<button type="button" id="fn">LOG TO NOTES</button><button type="button" id="fr">START OVER</button></div>`}
+  if(n.r){h+=`<div class="res"><b>Most likely area: ${esc(n.domain)}</b><br>${esc(n.text)}<br><br>Measure / check:<ul>${n.measure.map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Confirm in your manual:<ul>${hints(n.domain).map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Make the smallest justified change, then prove it under operating conditions.</div><div class="links" id="lit" style="margin-top:10px"></div><div class="links" style="margin-top:10px"><button type="button" id="fs">SEARCH THIS</button>${n.tool?'<button type="button" id="ft2">'+(n.tool==='vfdsetup'?'OPEN DRIVE SETUP GUIDE':'OPEN CALCULATOR')+'</button>':''}<button type="button" id="fn">LOG TO NOTES</button><button type="button" id="fr">START OVER</button></div>`}
   else h+=`<div class="q">${esc(n.q)}</div><div class="opts">${n.o.map((o,i)=>`<button type="button" data-i="${i}">${esc(o[0])}</button>`).join('')}</div>${path.length?'<div class="links" style="margin-top:10px"><button type="button" id="fr">START OVER</button></div>':''}`;
   $('#bench').innerHTML=h;
   if(n.r){litButtons($('#lit'),n.search.split(' ').slice(0,5).join(' '));$('#fs').onclick=()=>go(withBrand(n.search));if(n.tool)$('#ft2').onclick=()=>openTool(n.tool,true);$('#fn').onclick=()=>appendNote(`[Diagnostic: ${f.n}] Path: ${path.join(' → ')} → ${n.domain}. Next: ${n.measure.join('; ')}`)}
   $$('#bench .opts button').forEach(b=>b.onclick=()=>{const o=n.o[b.dataset.i];if(o[1].startsWith('flow:')){openFlow(o[1].slice(5),true);return}path.push(o[0]);draw(o[1])});
   const r=$('#fr');if(r)r.onclick=()=>{path.length=0;draw(f.s)}};draw(f.s);scrollBench(s)}
+
+/* ---------- commissioned drive setup ---------- */
+const VFD_PROFILES={
+ acq580:{name:'ABB ACQ580',scope:'ACQ580 pump-control firmware only. The parameter guide is verified against program 2.03.0.0; match the drive variant, firmware and active PID set before using it. Other revisions or ACS580/ACS550 mappings are not substitutes.',manual:'ACQ580 pump control program firmware manual 3AXD50000035867 Rev C, 2017-06-21 (uploaded PDF: ABB_ACQ_580_Parameters.pdf)',url:'https://library.abb.com/d/3AXD50000035867'},
+ acs550:{name:'ABB ACS550-01 / U1',scope:'ACS550-01/U1 only. Rev H states compatibility with drive firmware 3.14e or later; verify the installed firmware, exact variant and applicable documentation. ACS550 parameters are not ACQ580 or ACS580 mappings.',manual:'ACS550-01/U1 User’s Manual, 3AFE64804588 (3AUA0000001418), Rev H, 2014-07-04 (uploaded PDF: ABB_ACS_550_Parameters.pdf)'},
+ f800e:{name:'Mitsubishi FR-F800-E',scope:'FR-F800 series references and FR-F800-E Ethernet supplement are separate editions. Confirm exact variant, firmware, compatible detailed manual and station-vendor control ownership. The 2015 FR-F800 manual predates the 2016 Ethernet supplement; applicability to an individual -E drive must be verified. FR-E800 is a different series.',manual:'FR-F800 Instruction Manual, art. 292550 Version B (2015-12-03), uploaded PDF: Mitshubishi_FR800_Parameters.pdf; FR-A800-E / FR-F800-E Ethernet Function Manual IB(NA)-0600628ENG-B (2016-11), uploaded PDF: Mitshubishi_F800E_Parameters.pdf'},
+ d700:{name:'Mitsubishi FR-D700',scope:'Legacy FR-D700 series, separate from FR-F800 and FR-E800. The uploaded manuals cover FR-D720, FR-D740, FR-D720S and FR-D710W within stated ratings. Confirm the full model, control scheme and applicable revision before using any setting.',manual:'FR-D700 Instruction Manual (Basic), IB(NA)-0600438ENG-D (2019-01), uploaded PDF: Mitshubishi_D_700_Parameters.pdf; FR-D700 Instruction Manual (Applied), IB(NA)-0600366ENG-H (2018-06), uploaded PDF: Mitshubishi_D700_Applied.pdf.'},
+ intellidrive:{name:'Pentair Pentek Intellidrive',scope:'PN957 (2020) covers PID10-01, PID20-01, PID30-01 and PID50-01. Confirm exact model, software, motor and applicable manual; other Intellidrive generations are not assumed equivalent. These models expose PID Control settings on the keypad; do not transfer industrial-drive values.',manual:'Pentek Intellidrive Installation and Operation Manual PN957 (2020-06-25), uploaded PDF: Pentair_Intellidrive.pdf',url:'https://www.pentair.com/content/dam/extranet/web/nam/pentek/manuals/pn957-pentek-intellidrive-pid-iom.pdf'},
+ atv600:{name:'Schneider Altivar ATV630 / ATV600',scope:'ATV600 family only, with exact model and firmware recorded. Do not copy mappings from ATV320, ATV61/71, ATV900 or other Altivar families.',manual:'ATV600 Programming Manual EAV64318',url:'https://www.se.com/us/en/download/document/EAV64318/'},
+ atv320:{name:'Schneider Altivar Machine ATV320',scope:'ATV320 only, separate from ATV600 and other Altivar families. NVE41295.06 describes software V3.5IE46; the manual says it can also be used with earlier versions. Verify installed software, parameter availability, exact model and station control before applying any reference.',manual:'Altivar Machine ATV320 Programming Manual NVE41295.06 (2025-04), uploaded PDF: ATV320.pdf'},
+ other:{name:'Other / exact model required',scope:'Generic functional checklist only. Obtain the exact manufacturer and station-vendor documentation; no parameter mappings are supplied.',manual:'Exact model documentation required'}
+};
+const VFD_META=[
+ ['asset','Site / asset identifier'],['model','Exact drive model / variant'],['firmware','Firmware / control-program version'],
+ ['pump','Pump model / duty point'],['motor','Motor nameplate / rating and units'],['vendor','Commissioning vendor / baseline provenance'],
+ ['commissioned','Baseline commissioning date'],['backup','Parameter backup filename / location (not uploaded)'],
+ ['manual','Site manual title / revision'],['owner','Pressure-control owner: drive / PLC / station controller / unknown']
+];
+const VFD_ITEMS=[
+ ['feedback','Feedback input & scaling','Record input assignment, signal type, sensor low/high range, engineering units and signal-loss handling. Compare the displayed pressure to a trusted gauge before tuning.'],
+ ['setpoint','Setpoint & run-command source','Record keypad / analog / communications / external source and local/remote mode. A drive following an external speed command may not own pressure PID.'],
+ ['direction','Control direction','Confirm the intended pressure-control response from the commissioned documentation. Falling pressure normally calls for greater pump output; verify sensor location and application before any test.'],
+ ['proportional','Proportional action','Identify gain versus proportional band and its scaling. Increasing gain generally strengthens response; increasing proportional band generally weakens it. Never transfer raw numbers between brands.'],
+ ['integral','Integral action','Identify integral time versus integral gain and units. Shorter integral time generally strengthens action; increasing integral gain may strengthen it. Confirm the exact algorithm and disable semantics.'],
+ ['derivative','Derivative action','Record whether used or unavailable and the manufacturer definition. Do not enable derivative to mask noisy feedback; no universal D value is supplied.'],
+ ['filter','Feedback filtering','Record filter type/time and location. Filtering can reduce noise but also delay feedback; first investigate wiring, sensor and hydraulic causes.'],
+ ['minimum','Minimum speed / output','Record the commissioned limit and pump/motor minimum operating restrictions. Do not lower it to force sleep or bypass cooling/minimum-flow requirements.'],
+ ['maximum','Maximum speed / output','Record speed/output limits and units. The pump curve, motor rating and vendor approval govern; no higher-speed recommendation is supplied.'],
+ ['ramps','Acceleration / deceleration','Record each ramp and relevant limits separately. Compare command versus actual speed; electrical trips and hydraulic transients are not automatically PID problems.'],
+ ['sleep','Sleep conditions & timers','Record the actual entry criterion (speed, flow, power or vendor logic), delay, minimum-run/rest timers and enable conditions. Low speed does not by itself prove zero demand.'],
+ ['wake','Wake threshold & restart delay','Record whether wake uses absolute pressure, setpoint deviation or another condition, plus units, delay and permissives. Do not confuse an absolute pressure with a differential.'],
+ ['boost','Sleep boost / pressure accumulation','Record whether supported/enabled and its limit/duration. Do not raise pressure to force sleep; component pressure limits and vendor instructions govern.'],
+ ['fault','Fault stop / retry / reset','Record fault-specific stop response, retry count/delay, reset source and restart conditions. Acknowledging a fault is not correcting it. Automatic restart can cause unexpected motion.'],
+ ['interlocks','Protections & external permissives','Record high-pressure, low-suction, dry-run, sensor-loss, motor-protection and external safety logic with its source. Do not bypass protections or treat their thresholds as tuning controls.']
+];
+const ACQ580_SOURCE='ABB ACQ580 pump control program firmware manual, 3AXD50000035867 Rev C (2017-06-21), program 2.03.0.0; printed page numbers. Uploaded PDF: ABB_ACQ_580_Parameters.pdf.';
+const ACQ580_CONTEXT='Applicability: program 2.03.0.0 only; verify installed firmware in System info > Drive or 07.05 (p. 7). PID is available only in external control. 40.06 bit 10 reports active PID set (0=set 1, 1=set 2); 40.57 selects its source. Set 1 uses group 40, set 2 group 41. Read the actual set and vendor logic; no settings are changed here (pp. 213-214, 225, 229-231).';
+const ACQ580_REFERENCES={
+ feedback:[
+  ['12.11 / 12.12; 12.15-12.20; 12.101','AI1 raw/scaled readings, unit, filter, input limits, scaled endpoints and percent reading. 12.11 and 12.12 are read-only; trace the selected source.','pp. 125-127'],
+  ['12.21 / 12.22; 12.25-12.30; 12.102','AI2 raw/scaled readings, unit, filter, input limits, scaled endpoints and percent reading. 12.21 and 12.22 are read-only. The printed 12.30 description/diagram contains conflicting references; verify the applied scaling and revision. Signal hardware selection and chosen PID source matter.','pp. 126-127'],
+  ['40.08-40.10 / 41.08-41.10','Set 1 / set 2 feedback sources and function; 40.02 is the actual feedback after selection and filtering (read-only).','pp. 213-215, 229'],
+  ['40.14-40.15 / 41.14-41.15','General PID control-chain scaling, not transmitter minimum and maximum. Zero enables the automatic scaling described in the manual.','pp. 215-216, 229']
+ ],
+ setpoint:[
+  ['19.11; 20.01, 20.06','External control-location selection and separate EXT1/EXT2 command sources. Verify actual control ownership and run permissions.','pp. 141-144'],
+  ['40.16-40.24 / 41.16-41.24','Setpoint sources, internal setpoint selectors and values. 40.03 is a read-only actual setpoint after selection, function, limiting and ramping; internal values are not automatically active.','pp. 213, 216-219, 229-230']
+ ],
+ direction:[['40.31 / 41.31','Deviation inversion: set 1 normally uses setpoint minus feedback; inverted uses feedback minus setpoint. Confirm the application before evaluating direction or wake logic.','pp. 220, 230']],
+ proportional:[['40.32 / 41.32','Set 1 / set 2 gain. Set 1 range: 0.10-100.00. The Rev C detailed table prints the set 1 default as “1.00 s” although its additional-data table lists no unit; verify the exact revision instead of assuming a unit. Set 2 default is shown as 2.50. Defaults are not tuning recommendations.','pp. 220, 230, 320']],
+ integral:[['40.33 / 41.33','Integration time; set 1 range 0.0-9999.0 s. Rev C defaults: set 1 10.0 s, set 2 3.0 s. In this firmware 0 disables the I component; zero is not simply “fastest integration.”','pp. 221, 230, 320']],
+ derivative:[['40.34 / 41.34; 40.35 / 41.35','Derivation time and derivative filter time; set 1 ranges 0.000-10.000 s and 0.0-10.0 s. The derivative filter is distinct from the feedback filter.','pp. 221-222, 230, 320']],
+ filter:[['40.11 / 41.11; 12.16 / 12.26','PID feedback filter and separate AI1/AI2 input filters. Set 1 PID feedback filter range: 0.000-30.000 s; Rev C default 0.000 s.','pp. 125, 127, 215, 229']],
+ minimum:[['30.11 / 30.13; 40.36 / 41.36','30.11 is minimum speed in speed-control mode; 30.13 is minimum frequency in frequency-control mode. PID output minimum is a separate limit; check operating mode and motor/pump restrictions.','pp. 175-176, 222, 230']],
+ maximum:[['30.12 / 30.14; 40.37 / 41.37','30.12 is maximum speed in speed-control mode; 30.14 is maximum frequency in frequency-control mode. PID output maximum is separate. Vendor and motor/pump limits still govern.','pp. 175-176, 222, 230']],
+ ramps:[['23.12-23.13; group 28','23.12/23.13 are speed-reference ramp times 1 relative to 46.01 speed scaling, not 30.12 maximum speed. For frequency-reference ramping consult group 28; verify which ramp is selected.','pp. 162-163 and group 28']],
+ sleep:[['40.43-40.44 / 41.43-41.44','Sleep level compares the PID output (40.01) to a limit, with sleep delay. Set 1 level 0 disables set 1 sleep. Rev C set 1 range: 0.0-200000.0 for level and 0.0-3600.0 s for delay; defaults 0.0 and 60.0 s. Not an absolute pressure threshold.','pp. 223, 230, 320']],
+ wake:[['40.47-40.48 / 41.47-41.48','Wake-up deviation and delay: deviation is between setpoint and feedback, not absolute pressure; 40.31/41.31 direction matters. Set 1 delay range 0.00-60.00 s; Rev C defaults 0.00 PID customer units and 0.50 s.','pp. 224, 231, 320']],
+ boost:[['40.45-40.46 / 41.45-41.46','Sleep boost time and setpoint boost step; PID customer units for the step. Rev C set 1 defaults: 0.0 s and 0.0 PID customer units.','pp. 223, 230-231']],
+ fault:[['31.11-31.16','Fault reset source, auto-reset selection, selectable fault, trial count, total trial window and delay. ABB warns automatic reset can restart the drive; do not activate or increase retries without an approved safety review.','pp. 178-179']],
+ interlocks:[['31.01-31.10; 31.12-31.13','External event sources/types and fault-specific auto-reset selections are separate from PID tuning. Identify station-vendor and hardwired safety logic; do not bypass protections.','pp. 176-179']]
+};
+const ACS550_SOURCE='ABB ACS550-01/U1 User’s Manual, 3AFE64804588 (3AUA0000001418) Rev H (2014-07-04); printed page numbers. Uploaded PDF: ABB_ACS_550_Parameters.pdf.';
+const ACS550_CONTEXT='Rev H covers ACS550-01/U1 firmware 3.14e or later; verify installed firmware with 3301 and check documentation for the actual revision (pp. 11, 155). Process PID1 set 1 is group 40, set 2 group 41; 4027 selects the set or its selection logic. Group 42 is a separate external/trim PID2, not PID1 set 2. Trace the active control location and vendor logic; PID1 output is selected as REF2 by 1106 = 19 where applicable (pp. 117-119, 169-170, 176-178).';
+const ACS550_REFERENCES={
+ feedback:[
+  ['1301-1306; 4014-4021 / 4114-4121','Analog input limits/filtering and process PID1 feedback function, input sources and actual-value scaling. Trace the selected source and actual sensor range; feedback can be combined or come from communications.','pp. 123, 173-174, 177'],
+  ['4006-4009 / 4106-4109; 0130','PID1 displayed units, decimal scale and 0%/100% scaling for actual values; 0130 displays PID1 feedback. These are not the raw analog input limits.','pp. 109, 171-172, 177']
+ ],
+ setpoint:[
+  ['1102, 1106; 1001-1002','External control-location selection, REF2 source and EXT1/EXT2 commands. 1106 = 19 selects PID1 output for REF2; check active path, macro, PLC and PFC logic.','pp. 115-119, 169'],
+  ['4010-4013 / 4110-4113; 0128','PID1 setpoint source, internal setpoint and limits; 0128 displays PID1 setpoint. Internal setpoint is used when selected, not necessarily the active setpoint.','pp. 109, 172-173, 177']
+ ],
+ direction:[['4005 / 4105','PID1 error inversion: normal error is reference minus feedback; inverted is feedback minus reference. Verify application, scaling and commissioned logic before drawing conclusions.','pp. 171, 177']],
+ proportional:[['4001 / 4101','PID1 gain, range 0.1-100.0. Rev H lists a default of 1.0 for each set; this is not a tuning recommendation.','pp. 100-101, 170, 177']],
+ integral:[['4002 / 4102','PID1 integration time: 0.0 disables the integral component; otherwise 0.1-3600.0 s. Rev H lists 60.0 s as the default for each set, not a site recommendation.','pp. 100-101, 171, 177']],
+ derivative:[['4003-4004 / 4103-4104','PID1 derivation time and derivative filter, each 0.0-10.0 s. Rev H defaults are 0.0 s and 1.0 s respectively; derivative filtering is separate from analog input filtering.','pp. 100-101, 171, 177']],
+ filter:[['1303 / 1306; 4004 / 4104','AI1 / AI2 input filter time and separate PID1 derivative filter. Verify which analog input is actually used.','pp. 123, 171, 177']],
+ minimum:[['2001 / 2007','Minimum speed (rpm) / minimum output frequency (Hz). Check control mode and the pump, motor and commissioned limits; do not lower limits merely to force sleep.','pp. 133-134']],
+ maximum:[['2002 / 2008','Maximum speed (rpm) / maximum output frequency (Hz). Drive variant, control mode and commissioned equipment limits matter; speed and frequency are not interchangeable.','pp. 133-134']],
+ ramps:[['2201-2206','Ramp-pair selection, acceleration, deceleration and ramp shape. 2202/2203 describe ramp pair 1 relative to maximum frequency 2008; actual ramp time also depends on 2204 shape. Check which pair is selected.','pp. 138-139']],
+ sleep:[['4022-4024 / 4122-4124','Sleep selection, speed/frequency level and delay. Internal sleep uses selection 7; digital-input sleep is a separate selection. For internal sleep, motor speed/frequency below the level for the delay enables sleep; this is not an absolute pressure.','pp. 174-175, 177']],
+ wake:[['4025-4026 / 4125-4126','Wake-up deviation and delay, not absolute pressure. Units and scale come from 4006/4007 or 4106/4107; error inversion changes whether the wake level is above or below setpoint. Verify sleep selection and external logic.','pp. 175, 177']],
+ boost:[['Not mapped','No sleep-boost parameter is established by this cross-reference. Check the station vendor and applicable drive documentation; do not assume the ACQ580 boost function exists here.','pp. 174-177']],
+ fault:[['1604; 3101-3108','Fault-reset source, automatic-reset trial count, trial window, delay and fault-specific enables. Automatic reset can restart the drive; do not enable or increase retries without an approved safety review.','pp. 129, 152-153']],
+ interlocks:[['1601, 1608-1609; 3001, 3021-3022','Run/start enables and analog input-loss response and limits are separate from PID tuning. Trace station-vendor and hardwired safety logic; do not bypass protections.','pp. 129-132, 148, 150']]
+};
+const F800E_SOURCE='Mitsubishi FR-F800 Instruction Manual, art. 292550 Version B (2015-12-03), uploaded PDF: Mitshubishi_FR800_Parameters.pdf; and FR-A800-E / FR-F800-E Ethernet Function Manual IB(NA)-0600628ENG-B (2016-11), uploaded PDF: Mitshubishi_F800E_Parameters.pdf. Citations specify the source and printed page.';
+const F800E_CONTEXT='The 2015 detailed manual covers the FR-F800 series, while the 2016 Ethernet manual covers FR-F800-E and refers to the FR-F800 detailed manual for other functions. Their exact revision/firmware compatibility with the installed -E drive is not established by these documents: verify with Mitsubishi and the station vendor. Pr.128 configures first PID action and inputs; Pr.753 configures second PID action. Check the actual PID selection, RT/X14/X80 signals and external controls; do not assume both loops are active (detailed pp. 5-347 to 5-349, 5-356, 5-385).';
+const F800E_REFERENCES={
+ feedback:[
+  ['Pr.128, Pr.609 / Pr.610; Pr.753, Pr.1140 / Pr.1141','First / second PID action and setpoint/deviation and measured-value selection. Which selectors apply depends on the action selection; feedback is not always terminal 4. Check sensor, current/voltage configuration and calibrated scaling.','detailed pp. 5-347 to 5-349, 5-354'],
+  ['Pr.73 / Pr.267; C42-C45 (Pr.934 / Pr.935)','Analog input selection and PID display bias/gain calibration. Confirm input hardware switch, actual signal, scaling and sensor range; inverted calibration affects direction and sleep cancellation.','detailed pp. 5-354, 5-375 to 5-376']
+ ],
+ setpoint:[
+  ['Pr.128 / Pr.133 / Pr.609; Pr.753 / Pr.755 / Pr.1140','PID action and setpoint source selection, plus first/second parameter-set setpoints. Pr.133/755 value 9999 leaves the setpoint source to the action selection. Confirm the selected control path and active settings.','detailed pp. 5-347 to 5-349, 5-354'],
+  ['Pr.550 / Pr.551','NET-mode / PU-mode communication command source selection. Pr.550 = 5 selects Ethernet in NET mode; at 9999 a mounted communication option takes priority. The active mode and station control path still govern.','Ethernet pp. 9-12'],
+  ['Pr.338 / Pr.339','The Ethernet manual refers operation-command and speed-command source settings to the FR-A800/FR-F800 Instruction Manual (Detailed). Trace each separately; these references do not establish the active PID setpoint.','Ethernet p. 12']
+ ],
+ direction:[['Pr.128 / Pr.753','PID action selection includes forward/reverse action and source mode. For normal calibration, reverse action increases output frequency when setpoint exceeds measured value. Check actual sensor calibration and vendor logic; inverted calibration alters the interpretation.','detailed pp. 5-349, 5-352, 5-354, 5-376']],
+ proportional:[['Pr.129 / Pr.756','First / second PID proportional band, 0.1-1000%; 9999 selects no proportional band. Smaller band means stronger proportional response, not the same numerical meaning as gain. Listed initial value 100% is not a site recommendation.','detailed pp. 5-347, 5-349']],
+ integral:[['Pr.130 / Pr.757; Pr.1015','First / second PID integral time, 0.1-3600 s; 9999 selects no integral control. Initial value 1 s is not a site recommendation. Pr.1015 controls integral behavior at limits and during output interruption.','detailed pp. 5-347 to 5-349, 5-361']],
+ derivative:[['Pr.134 / Pr.758','First / second PID differential time, 0.01-10 s; 9999 selects no differential control. This is not a recommendation to enable derivative action.','detailed pp. 5-347, 5-349']],
+ filter:[['Pr.74','Analog input filter setting for terminals 1, 2 and 4: a 0-8 setting, not a time value in seconds. Larger settings reduce responsiveness. Check the selected signal and calibration.','detailed p. 5-258']],
+ minimum:[['Pr.2','Minimum output frequency. Respect commissioned pump and motor limits; do not lower it to force sleep.','detailed p. 5-171']],
+ maximum:[['Pr.1 / Pr.18','Maximum and high-speed maximum output-frequency settings. Check model, motor and pump limits; these are not pressure targets.','detailed p. 5-171']],
+ ramps:[['Pr.7 / Pr.8 / Pr.20; Pr.44 / Pr.45','Acceleration and deceleration times relative to Pr.20 reference frequency, with separate second ramp settings. Trace selected ramp and other active functions.','detailed pp. 5-99 to 5-101']],
+ sleep:[
+  ['Pr.575 / Pr.576 / Pr.577; Pr.1147 / Pr.1148 / Pr.1149; Pr.554','PID output suspension (SLEEP): first/second detection time, frequency level and cancellation level. For the first function, frequency after PID calculation below Pr.576 for Pr.575 time suspends output; Pr.575 = 9999 disables it. Pr.554 also selects stop behavior. Verify active control and configuration.','detailed pp. 5-347 to 5-349, 5-358, 5-360'],
+  ['Pr.1364 / Pr.1365','Optional stirring time and interval during sleep. Motor operation can occur during sleep if configured; verify the installed revision and follow electrical safety procedures.','detailed pp. 5-398 to 5-400']
+ ],
+ wake:[['Pr.577 / Pr.1149; Pr.1368','PID output interruption cancel level is an encoded deviation, not an absolute pressure: normally Pr.577 minus 1000%; the manual identifies reversed scaling conditions that invert the interpretation. In the enhanced sleep-boost description Pr.1368 sets output interruption cancel time. Verify installed revision, active PID and calibration.','detailed pp. 5-348 to 5-349, 5-360, 5-376, 5-398, 5-403']],
+ boost:[
+  ['Pr.1366 / Pr.1367 / Pr.1368','Enhanced sleep boost level, boost waiting time and output interruption cancel time. Pr.1366 = 9999 disables sleep boost in this edition. When the boost setpoint is not reached within the waiting time, PID continues without entering sleep. Verify availability on the installed version and station pressure limits.','detailed pp. 5-398, 5-403'],
+  ['Pr.127 / Pr.760-764','PID pre-charge runs before PID and may recur after waking; it is separate from sleep boost and pressure-tank precharge. Review commissioned conditions and protections.','detailed pp. 5-379 to 5-380']
+ ],
+ fault:[
+  ['Pr.65 / Pr.67 / Pr.68','Retry fault selection, count and delay. Retry can automatically reset and restart; Pr.67 settings 1-10 and 101-110 differ in fault output during retry. Do not enable retries without approved safety review.','detailed pp. 5-159 to 5-160'],
+  ['Pr.502 / Pr.779; Pr.1431 / Pr.1432','Communication-error response and frequency, Ethernet signal-loss detection and communication check interval. In NET operation, Pr.502 applicability depends on the specified detection settings (1431 = 3 or 1432 not 9999). Some responses can restart or continue operation; inspect the commissioned safety design and do not change these settings without approval.','Ethernet pp. 14-16, 19'],
+  ['Pr.342','Communication writes may be configured for EEPROM and RAM or RAM only; RAM-only changes clear on power-off and the panel shows EEPROM values. Compare actual drive and station records before concluding settings are persistent; do not change write behavior as a troubleshooting shortcut.','Ethernet pp. 14-15']
+ ],
+ interlocks:[['Pr.131 / Pr.132 / Pr.553 / Pr.554','PID upper/lower measured-value limits, deviation limit and signal/stop selection. These can affect fault and stop behavior; check external and hardwired protections separately and never bypass them.','detailed pp. 5-347, 5-358']]
+};
+const D700_SOURCE='Mitsubishi FR-D700 Instruction Manual (Basic), IB(NA)-0600438ENG-D (2019-01), uploaded PDF: Mitshubishi_D_700_Parameters.pdf; FR-D700 Instruction Manual (Applied), IB(NA)-0600366ENG-H (2018-06), uploaded PDF: Mitshubishi_D700_Applied.pdf. Citations specify the source and printed page.';
+const D700_CONTEXT='These editions cover listed FR-D720, FR-D740, FR-D720S and FR-D710W ratings; verify exact model and applicable revision. The Applied manual table identifies Pr.128 = 20 as PID reverse action, but the sleep diagram on p. 218 labels reverse action as Pr.128 = 10, which is not listed as a valid setting in its table on p. 213. Confirm this discrepancy with Mitsubishi and the applicable revision; do not substitute FR-F800 settings.';
+const D700_PANEL='Panel procedure (Basic manual p. 4): only an authorized technician, after documenting the commissioned value and backup and placing the station in an approved safe state, may change a setting. Switching PU/EXT changes control ownership: assess external start signals and follow the station procedure; do not assume the pump is safe or stopped. The manual example selects PU with PU/EXT, presses MODE for parameter mode, turns the dial to the parameter and presses SET to read it. For an approved change, turn the dial to the authorized value and press SET; parameter and value blink alternately. Re-read the value, record the change and outcome, and restore the intended operating mode only under the approved procedure. Do not use Pr.CL or ALLC. If Er1-Er4 appears, stop and investigate write permissions, operation state or mode; do not bypass locks or change Pr.77 as a shortcut. Pr.160 = 9999 shows simple parameters only; 0 displays simple and extended parameters. Consult the site procedure before changing visibility (Basic pp. 4, 32, 37; Applied pp. 164-165).';
+const D700_REFERENCES={
+ feedback:[['Pr.128 / Pr.267 / Pr.73; C6-C7 (Pr.904-905)','For process PID action 20/21, terminal 4 is the measured input; Pr.267 selects current/voltage range and terminal 2 may supply the setpoint. Trace sensor signal and calibration, and compare to a trusted gauge. Do not assume dancer or external PLC control uses the same path.','Applied pp. 213-217, 220']],
+ setpoint:[['Pr.128 / Pr.133; X14 / Pr.178-182','In process PID modes 20/21, Pr.133 specifies the setpoint; 9999 selects terminal 2. If X14 is assigned, it enables PID when on; if unassigned, Pr.128 alone enables it. Verify actual control mode and station ownership.','Applied pp. 213, 217']],
+ direction:[['Pr.128','The table lists 20 as reverse and 21 as forward process PID action; 40-43 are dancer-control modes. Reverse action increases output for positive setpoint-minus-feedback deviation. The sleep diagram labels reverse action as 10, conflicting with the table; confirm the applicable manual with Mitsubishi.','Applied pp. 213, 215, 218']],
+ proportional:[['Pr.129','PID proportional band: 0.1-1000%, 9999 means no proportional control; initial 100%. A smaller band increases proportional response. Factory values are not site recommendations.','Applied p. 213']],
+ integral:[['Pr.130','PID integral time: 0.1-3600 s; 9999 means no integral control, not zero seconds. Initial 1 s is not a site recommendation.','Applied p. 213']],
+ derivative:[['Pr.134','PID differential time: 0.01-10 s; 9999 means no differential control. Initial 9999 is not a recommendation to change it.','Applied p. 213']],
+ filter:[['Pr.74','Input filter setting 0-8 applies to analog frequency commands at terminals 2 and 4; the manual describes approximately 5 ms to 1 s across the range, not a direct seconds setting. Larger settings slow response.','Applied p. 155']],
+ minimum:[['Pr.2; C2 (Pr.902)','Pr.2 minimum frequency remains valid during PID; the manual also identifies Pr.902 as the PID minimum frequency. Review calibration and operating restrictions rather than lowering limits to force sleep.','Applied pp. 213, 220']],
+ maximum:[['Pr.1 / Pr.18; C4 (Pr.903)','Pr.1 maximum frequency remains valid during PID; the manual also identifies Pr.903 as PID maximum frequency. Check motor, pump and commissioned limits; no higher-frequency recommendation is supplied.','Applied p. 220; Basic pp. 32-33']],
+ ramps:[['Pr.7 / Pr.8 / Pr.20; Pr.44 / Pr.45','Acceleration and deceleration are referenced to Pr.20 frequency, not automatically the maximum frequency. Pr.44/45 are second ramp settings associated with RT; verify the active path.','Applied pp. 99-100']],
+ sleep:[['Pr.575 / Pr.576','In PID output suspension, output frequency after PID operation below Pr.576 for longer than Pr.575 stops inverter operation. Pr.575 = 9999 disables output interruption; level is in Hz, not pressure. Confirm station logic and applicable revision.','Applied pp. 213, 218']],
+ wake:[['Pr.577','The Applied manual defines cancel deviation as Pr.577 minus 1000% and deviation as setpoint minus measured value. While output interruption is active, reaching the cancel level automatically resumes PID operation; it is not an absolute pressure. Its reverse-action diagram conflicts with the Pr.128 table; verify applicability and interpretation with Mitsubishi.','Applied pp. 213, 218']],
+ boost:[['Not mapped','No D700 sleep-boost mapping is established by these references. Check the station vendor and applicable drive documentation; do not assume the FR-F800 boost function exists here.','Applied pp. 213-218']],
+ fault:[['Pr.65 / Pr.67 / Pr.68 / Pr.69','Retry fault selection, count and delay; Pr.69 displays successful retry count and writing 0 clears it. Automatic retry resets faults and restarts the motor. Record fault evidence; do not clear counts or enable retries without approved review.','Applied pp. 147-148']],
+ interlocks:[['Pr.9 / Pr.131 / Pr.132 / Pr.178-182','Electronic thermal protection, PID measured-value upper/lower signal limits and input assignments are separate from station hardwired protection. Identify actual interlocks; do not bypass or alter them to mask a fault.','Basic pp. 16, 33-34; Applied pp. 213, 217']]
+};
+const INTELLIDRIVE_SOURCE='Pentair Pentek Intellidrive Installation and Operation Manual PN957 (2020-06-25), PID10-01 / PID20-01 / PID30-01 / PID50-01; uploaded PDF: Pentair_Intellidrive.pdf. Printed page numbers.';
+const INTELLIDRIVE_CONTEXT='These models can control pressure directly with their own keypad and 4-20 mA transducer; external digital inputs can alter setpoint or run/fault behavior. Confirm model, software, wiring and actual control ownership. PN957 lists exposed PID settings, but does not document every algorithm detail. Manual defaults and ranges are references, not commissioned values or recommended adjustments.';
+const INTELLIDRIVE_PANEL='Keypad procedure (pp. 3, 11-13): only an authorized technician should change a setting after recording the existing value and backup, assessing hazards, control ownership and possible automatic starts, and following the site operating procedure. Keep the cover closed during operation. Before service or wiring inside, disconnect power, wait at least five minutes and verify residual voltage with a tester under the site electrical safety procedure. With the cover closed, use the authorized keypad password if locked; press MAIN MENU and use arrows to find the parameter. Press ENTER to highlight its value, use arrows to select the approved value, then press ENTER again to save. A screen change before saving discards the edited value. Re-read and record the result. PSI Preset and the running screen can also change pressure, so verify which internal/external setpoint is active. Do not select Factory Reset. Pump Out runs at fixed speed without pressure control and restricted flow can cause dangerously high pressure; do not use it as an ordinary diagnostic shortcut.';
+const INTELLIDRIVE_REFERENCES={
+ feedback:[['Sensor > Max Sensor Value','Manual specifies a 4-20 mA, 0-100 PSI transducer supplied with the drive; sensor maximum setting supports 100-300 PSI. Match the actual transducer and compare its reading to a trusted gauge. Do not change scaling to disguise a sensor or wiring fault.','pp. 5, 9, 13']],
+ setpoint:[['Settings > Setpoints > Internal / External','Internal and external setpoints are separate; an external setpoint requires configured digital input and is active when that input has voltage. Internal listed default is 60 PSI; listed range is 15 PSI to maximum sensor value minus 3 PSI. Verify active source, sensor range and site pressure rating; check tank precharge against the applicable setpoint.','pp. 9, 12-14']],
+ direction:[['Not specified','PN957 does not document a selectable PID action-direction setting in Table 5. Confirm sensor, motor rotation and station configuration; do not assume an industrial-drive direction parameter exists.','pp. 5, 13-14']],
+ proportional:[['Settings > PID Control > Proportional Gain','Range 0-10000, listed default 1500 (unit not specified). The manual does not give a conversion to other drives or a site-specific tuning target.','p. 13']],
+ integral:[['Settings > PID Control > Integration Time','Range 20-65000 ms, listed default 1500 ms. Values are milliseconds, not seconds; manufacturer defaults are not commissioned tuning values.','p. 13']],
+ derivative:[['Settings > PID Control > Derivation Time / Derivative Limit','Derivation time 0-10000 ms, listed default 60 ms. Derivative Limit 0-2000, listed default 120, sets derivative filter time constant; the table supplies no unit for that limit.','p. 13']],
+ filter:[['Settings > PID Control > Derivative Limit','This is a derivative filter time constant, not a documented general pressure-feedback filter. Investigate transducer signal and hydraulics before tuning.','pp. 13, 19']],
+ minimum:[['Motor > Min Frequency','Range starts at 30 Hz and ends 1 Hz below Max Frequency; listed default 30 Hz. Observe commissioned pump/motor restrictions; do not reduce limits to force sleep.','p. 13']],
+ maximum:[['Motor > Max Frequency','Listed default 60 Hz; maximum depends on motor type and installation. Manual permits up to 80 Hz only for 3-phase submersible motor sizing described there; do not exceed approved pump/motor limits.','pp. 12-13']],
+ ramps:[['Not separately mapped','The manual describes Wake Delay as part of the boost ramp-down process, but Table 5 does not list a general motor acceleration/deceleration setting. Check actual model documentation and station control.','p. 13']],
+ sleep:[['Settings > Sleep > Boost Differential / Boost Delay / Wake Delay','Boost Differential is the pressure boost before Wake Delay; Boost Delay is the time to start boost after stabilization. Wake Delay describes pressure ramp-down during boost, not the dry-run automatic restart delay. Table 5 does not specify a separate sleep-entry threshold; investigate demand, leakage and tank behavior before changing settings.','p. 13']],
+ wake:[['Settings > Sleep > Wake Up Differential','Pressure amount below the active setpoint that wakes the drive; listed range 5-15 PSI, default 5 PSI. This is a pressure difference, not an absolute pressure. Verify active setpoint, sensor and station logic.','p. 13']],
+ boost:[['Settings > Sleep > Boost Differential / Boost Delay / Wake Delay','Listed ranges: boost differential 3-10 PSI, boost delay 30 sec-5 min, Wake Delay 3 sec-2 min. Check pressure relief and equipment ratings; do not raise pressure merely to force sleep.','pp. 12-13']],
+ fault:[
+  ['Dry Run > Auto Restart Delay / Number of Resets / Detection Time / Sensitivity / Fill Time','Dry-run reset delay and number of attempts are distinct from sleep Wake Delay. Automatic retry can start the pump: record fault and determine cause; never add retries or weaken protection to hide a fault. Fill Time starts after 55 Hz according to Table 5.','p. 14'],
+  ['Auto Line Fill / Fill Time','The initial-startup text mentions 3 minutes, while Table 5 lists a 1-minute Fill Time default and starts its timer after 55 Hz. Do not assume either is the installed setting; inspect the actual value and applicable software/manual.','pp. 11, 14'],
+  ['Fault Log / Over Pressure','Keypad shows the last 15 faults. Over Pressure is a warning; the manual says the drive stops, waits one minute and rechecks, restarting if pressure is below the setting. Do not raise the warning to mask an unsafe condition.','pp. 5, 14, 20']
+ ],
+ interlocks:[
+  ['Motor > Service Factor Amps','Sets the maximum allowed drive output current. Confirm the correct motor and connection-specific rating with the motor manufacturer; setting above the correct rating may allow overheating. Do not increase it to conceal a motor or pump problem.','pp. 10-11, 13'],
+  ['I/O > Digital Input 1 / Digital Input 2; Over Press; No Ground','Inputs can be configured for Run Enabled, Ext Fault or Setpoint. Over Pressure and ground detection are distinct protections; do not bypass them. The manual says disabled ground detection re-enables after 72 hours.','p. 14']
+ ]
+};
+const ATV320_SOURCE='Schneider Electric Altivar Machine ATV320 Programming Manual NVE41295.06 (2025-04), software V3.5IE46; uploaded PDF: ATV320.pdf. Printed page numbers.';
+const ATV320_CONTEXT='This edition describes V3.5IE46 and states it can also be used with earlier versions; confirm the installed software and applicable functions (pp. 11, 43). PID is activated by assigning feedback PIF; check actual assignment, setpoint and command ownership. The parameter tables list factory settings for the Start/Stop macro configuration (p. 95). Defaults and ranges are references, not commissioned values or tuning recommendations. Do not transfer parameter mappings or values to other Altivar families.';
+const ATV320_PANEL='Integrated HMI (pp. 7, 32, 34, 46, 262): only an authorized technician should change a setting after backing up and recording the existing setup, assessing control ownership and possible automatic starts, and following site procedures. Rotate the jog dial to navigate, push it (ENT) to enter menus or validate a value, and use ESC to go back or cancel. The PID menu path is CONF > FULL > FUN > PID; menu visibility depends on configuration and access. Some marked assignments require holding ENT for two seconds. IMPORTANT: the internal PID reference RPI in the reference-speed menu can change with the jog dial without pressing ENT; avoid moving it during a read-only inspection. Do not factory-reset or bypass access restrictions. Before electrical work, disconnect all power including external control power, lock out, wait 15 minutes and verify absence of voltage according to the manual and site electrical safety procedure.';
+const ATV320_REFERENCES={
+ feedback:[
+  ['PIF; PIF1 / PIF2; PIP1 / PIP2','PIF assigns PID feedback; the parameter table lists analog, pulse, virtual and function-block choices. PIF1/PIF2 scale the sensor range; PIP1/PIP2 scale the process adjustment range, which must remain within the sensor range. Check units, input configuration and gauge agreement.','pp. 258-259, 262-263'],
+  ['AI3T / CRL3 / CRH3; RPF','AI3 is a current input with configurable minimum and maximum current scaling; verify the wired input and actual transmitter signal rather than assuming a 4-20 mA configuration. RPF displays PID feedback in monitoring.','pp. 66, 160']
+ ],
+ setpoint:[['PII / RPI; FR1 / FR1B; RPC; PAU / PIM','PII selects internal RPI versus reference channel; presets and manual/automatic logic may alter the path. RPC monitors PID reference. PAU can select manual operation and PIM is its manual speed reference. Trace the actual source and run command.','pp. 258, 260, 263-265']],
+ direction:[['PIC','PID inversion: with PIC = No the motor speed increases for positive detected error; with Yes it decreases. Confirm the full pressure-control application and feedback before judging direction.','pp. 260, 263']],
+ proportional:[['RPG','PID proportional gain, range 0.01-100, listed default 1. Gain is not proportional band and values must not be copied between drives.','p. 263']],
+ integral:[['RIG / PIS','RIG is integral gain, not an integral time: range 0.01-100, listed default 1. PIS can disable integral action when its assigned input or bit is active. Verify the assignment and state.','pp. 263-264']],
+ derivative:[['RDG','Derivative gain, range 0.00-100, listed default 0. This is a gain, not a derivative time; no universal tuning value is supplied.','p. 263']],
+ filter:[['AI1F / AI2F / AI3F','Analog input interference filters each list 0-10.00 s and default 0 s. Trace the feedback assignment before interpreting a filter; investigate sensor, wiring and hydraulic causes first.','pp. 157-158, 160, 262']],
+ minimum:[['LSP / POL','LSP is motor frequency at minimum reference; POL is a separate PID minimum output. Check both and the commissioned motor/pump minimum restrictions; do not lower a limit to force sleep.','pp. 101, 114, 263']],
+ maximum:[['HSP / TFR / POH','HSP is high speed, bounded by maximum frequency TFR; POH is a separate PID maximum output. HSP listed default is 50 Hz or 60 Hz with the 60 Hz motor standard. Pump, motor and vendor limits govern.','pp. 101, 114, 263']],
+ ramps:[['ACC / DEC / AC2 / PRP','ACC and DEC are motor ramps referenced to nominal motor frequency FRS; AC2 applies when PID starts and during PID wake-ups. PRP is a separate PID reference ramp from minimum to maximum process range.','pp. 100-101, 263, 265']],
+ sleep:[['LSP / TLS','TLS is the maximum time operating at low speed LSP before a stop is requested; range 0-999.9 s, listed default 0 s means unlimited time. A run command still present can permit automatic restart; low speed alone does not establish zero flow.','pp. 112, 265']],
+ wake:[['TLS / RSL','RSL is the detected PID error restart threshold after a low-speed timeout, expressed as a percentage dependent on PIF1/PIF2 scaling, not an absolute PSI value. This threshold function is inactive if TLS = 0 or RSL = 0; a retained run command can allow restart, so assess unexpected motion. RSL range 0.0-100.0, listed default 0.','pp. 265-266']],
+ boost:[['Not mapped','This edition does not establish a dedicated sleep pressure-boost parameter in the selected PID references. AC2 is a wake-up acceleration ramp, not pressure boost; do not assume a boost setting from another drive family.','pp. 258, 265']],
+ fault:[['ATR / TAR','Automatic fault reset may resume operation when the cause clears and conditions permit. Fault output is unavailable while reset attempts are in progress. TAR limits the retry window; do not enable retries or mask faults without a qualified safety review.','pp. 329-330']],
+ interlocks:[['ITH; PIF / PAL / PAH / PER','ITH is motor thermal current; verify motor nameplate and vendor setup. PID feedback and error warning thresholds are not substitutes for independent station protections. Trace actual permissives and sensor-loss response; do not bypass protections.','pp. 100, 262, 264']]
+};
+const VFD_REFERENCES={
+ acq580:{source:ACQ580_SOURCE,context:ACQ580_CONTEXT,rows:ACQ580_REFERENCES,label:'ABB ACQ580 Rev C',notesLabel:'ABB Rev C',warning:'ABB references below apply only to the verified Rev C / program 2.03.0.0 manual.'},
+ acs550:{source:ACS550_SOURCE,context:ACS550_CONTEXT,rows:ACS550_REFERENCES,label:'ABB ACS550-01/U1 Rev H',notesLabel:'ABB ACS550 Rev H',warning:'ABB references below are from Rev H for ACS550-01/U1; the manual states firmware 3.14e or later.'},
+ f800e:{source:F800E_SOURCE,context:F800E_CONTEXT,rows:F800E_REFERENCES,label:'Mitsubishi FR-F800 / -E reference',notesLabel:'Mitsubishi FR-F800 / -E',warning:'Selected FR-F800 Version B and -E Ethernet Rev B references only. The 2015 detailed manual predates the -E supplement; confirm exact drive and firmware compatibility with Mitsubishi and the station vendor.'},
+ d700:{source:D700_SOURCE,context:D700_CONTEXT,procedure:D700_PANEL,rows:D700_REFERENCES,label:'Mitsubishi FR-D700 Basic D / Applied H',notesLabel:'Mitsubishi FR-D700 Basic D / Applied H',warning:'Selected FR-D700 Basic Rev D and Applied Rev H references only. Verify exact model, revision and station logic; the Applied manual has a conflicting PID-action label in the sleep diagram.'},
+ intellidrive:{source:INTELLIDRIVE_SOURCE,context:INTELLIDRIVE_CONTEXT,procedure:INTELLIDRIVE_PANEL,rows:INTELLIDRIVE_REFERENCES,label:'Pentek Intellidrive PN957',notesLabel:'Pentek Intellidrive PN957',warning:'Selected references for PID10-01 / PID20-01 / PID30-01 / PID50-01 only. Confirm software, sensor, motor and station configuration; documented defaults are not tuning recommendations.'},
+ atv320:{source:ATV320_SOURCE,context:ATV320_CONTEXT,procedure:ATV320_PANEL,rows:ATV320_REFERENCES,label:'Schneider ATV320 NVE41295.06',notesLabel:'Schneider ATV320 NVE41295.06',warning:'Selected ATV320 references only. Verify installed software and station control; ATV600 and other Altivar families are not interchangeable.'}
+};
+const VFD_SYMPTOMS={
+ review:{name:'Baseline review / commissioning record',rows:VFD_ITEMS.map(([id])=>id),steps:['Identify the drive, pump, firmware and control owner. Obtain the vendor parameter backup before considering changes.','Record the source/date of the commissioned baseline separately from the settings observed today. Unknown is not a factory default.','Compare pressure, setpoint, speed and demand under documented operating conditions. Record deviations without assuming that a difference is a fault.']},
+ nowake:{name:'Will not wake / restart',rows:['setpoint','feedback','wake','sleep','fault','interlocks'],steps:['Check run enable, remote/local state, fault history and external permissives without bypassing them.','Compare measured pressure and scaled feedback with the actual wake criterion; distinguish absolute pressure from deviation and confirm the applicable timer.','If the PLC or station controller owns wake logic, inspect that command/history first rather than changing drive PID.']},
+ nosleep:{name:'Will not sleep',rows:['feedback','sleep','wake','minimum','boost','interlocks'],steps:['Confirm real demand, leaks, check-valve behavior and zone/master-valve states; low demand is not necessarily no flow.','Compare actual speed/flow and elapsed time with the documented sleep condition. Verify minimum-speed and minimum-run restrictions.','Check whether sleep is inhibited by vendor logic or false/noisy feedback. Do not raise pressure or lower protective limits just to force sleep.']},
+ cycling:{name:'Short cycling / repeated wake-sleep',rows:['feedback','sleep','wake','boost','minimum'],steps:['Record time-stamped pressure, setpoint, actual Hz, demand and wake/sleep state through a full cycle.','Check pressure decay, tank/precharge per its manual, leaks, check valves and changing demand before changing timers.','Compare commissioned wake separation, sleep boost and minimum-run/rest delays. Do not automatically widen the band or disable restart protection.']},
+ hunting:{name:'Pressure hunting',rows:['feedback','direction','proportional','integral','derivative','filter','ramps','minimum','sleep'],steps:['Validate the sensor against a gauge; inspect signal noise, scaling, PRVs, tanks and cycling demand before touching PID.','Use existing fixed-speed test evidence if available; any new manual-speed test requires an approved operating procedure and intact protections. Hunting at fixed speed points away from PID as the sole cause.','Confirm which controller owns the loop and the active PID set. Compare P/I definitions, ramps, limits and sleep behavior with the vendor baseline; there is no universal replacement tuning set.']},
+ slow:{name:'Slow pressure recovery',rows:['setpoint','feedback','proportional','integral','filter','ramps','maximum','interlocks'],steps:['Record setpoint, actual pressure, command and actual speed during a known demand change; compare response at similar demand.','If speed is already limited or maximum, verify pump duty point, suction and hydraulic capacity before blaming gain.','Compare ramps, filtering and integral definitions with the baseline. Do not exceed motor/pump limits to improve response.']},
+ overshoot:{name:'Pressure overshoot',rows:['feedback','direction','proportional','integral','filter','ramps','boost','interlocks'],steps:['Confirm the pressure excursion with an independent gauge and check valve/zone closure timing and sensor placement.','Distinguish a rapid hydraulic transient from a sustained control-loop overshoot; review commanded and actual speed together.','Compare active PID, filter, ramp and boost settings with the baseline. Do not disable high-pressure protection or intentionally provoke an excursion.']},
+ retry:{name:'Repeated fault / automatic restart',rows:['fault','interlocks','feedback','ramps','minimum','maximum'],steps:['Record the exact fault code, timestamp and operating stage (starting, running, stopping or idle); use the exact model manual.','Find the cause: supply, motor/cable, sensor, suction, hydraulics or external permissive. Review retry history without repeatedly resetting into a fault.','Review fault-specific commissioned retry count/delay and restart authorization with the vendor or qualified technician. Never add retries or bypass protections to hide the failure.']}
+};
+const VFD_RECORD_KEY='tracerVfdCommissioning_v1';
+const VFD_VALUE_FIELDS=[
+ ['parameter','Parameter number / exact menu (site-entered)'],['units','Units / definition (gain, band, time, absolute or deviation)'],
+ ['baseline','Vendor-commissioned baseline (unknown if blank)'],['current','Observed current setting (not a recommendation)'],
+ ['factory','Documented factory default (reference ONLY)'],['reference','Source title / revision / page for this entry']
+];
+function newVfdWorksheet(profile='acq580'){
+ return {id:'',profile,savedAt:'',meta:Object.fromEntries(VFD_META.map(([id])=>[id,''])),values:Object.fromEntries(VFD_ITEMS.map(([id])=>[id,Object.fromEntries(VFD_VALUE_FIELDS.map(([key])=>[key,'']))])),symptom:'review',observations:''};
+}
+function validVfdWorksheet(r){
+ return r&&typeof r==='object'&&typeof r.id==='string'&&typeof r.savedAt==='string'&&Object.hasOwn(VFD_PROFILES,r.profile)&&Object.hasOwn(VFD_SYMPTOMS,r.symptom)&&
+  VFD_META.every(([id])=>typeof r.meta?.[id]==='string')&&VFD_ITEMS.every(([id])=>VFD_VALUE_FIELDS.every(([key])=>typeof r.values?.[id]?.[key]==='string'))&&typeof r.observations==='string';
+}
+function readVfdRecords(storage=localStorage){
+ const raw=storage.getItem(VFD_RECORD_KEY);if(raw===null)return[];
+ const records=JSON.parse(raw);
+ if(!Array.isArray(records)||!records.every(r=>validVfdWorksheet(r)&&r.id&&r.savedAt)||new Set(records.map(r=>r.id)).size!==records.length)throw new Error('Unrecognized or damaged drive worksheet data; existing storage was not replaced.');
+ return records;
+}
+function vfdComparison(row){
+ const normalize=value=>value.trim().replace(/\s+/g,' '),baseline=normalize(row.baseline),current=normalize(row.current);
+ return !baseline&&!current?'Not recorded':!baseline?'Baseline unknown - no comparison':!current?'Current value not recorded':baseline===current?'Same recorded text - not operational verification':'Different recorded text - investigate, not a fault verdict';
+}
+function vfdWorksheetText(r){
+ const profile=VFD_PROFILES[r.profile],symptom=VFD_SYMPTOMS[r.symptom],reference=VFD_REFERENCES[r.profile];
+ return ['[Commissioned drive setup & troubleshooting]',profile.name,'Record: '+(r.id||'unsaved draft')+' | Last saved: '+(r.savedAt||'not saved'),
+  'Current worksheet snapshot; may include unsaved edits. The last-saved timestamp does not certify the current entries.',
+  'Read-only worksheet; no drive connection, programming or automatic tuning. Site-entered mappings/defaults are not independently verified. Factory defaults are reference only, never recommended replacements.',
+  ...(reference?[reference.source,reference.context,...(reference.procedure?[reference.procedure]:[])] : ['Manufacturer parameter numbers, ranges/defaults and revision/page mappings: pending document-level verification.']),
+  ...VFD_META.map(([id,label])=>label+': '+(r.meta[id]||'unknown')),
+  'Symptom: '+symptom.name,...symptom.steps.map((step,i)=>(i+1)+'. '+step),
+  ...VFD_ITEMS.map(([id,label])=>{const v=r.values[id],rows=reference?.rows[id]||[];return[label,...(reference?rows.map(([number,meaning,page])=>'  '+reference.notesLabel+' reference '+number+': '+meaning+' ('+page+')'):[]),...(reference?.pending&&!rows.length?['  '+reference.pending]:[]),'  Parameter/menu (site-entered): '+(v.parameter||'unverified / unknown'),'  Units/definition: '+(v.units||'unknown'),'  Commissioned baseline: '+(v.baseline||'unknown'),'  Observed current: '+(v.current||'not recorded'),'  Documented factory default (reference only): '+(v.factory||'not verified'),'  Source revision/page (site-entered): '+(v.reference||'not supplied'),'  Comparison: '+vfdComparison(v)].join('\n')}),
+  'Observations / time-stamped pressure, setpoint, Hz, flow, demand; approved change, rollback value and outcome:\n'+(r.observations||'not recorded'),
+  'Before authorized changes: back up settings, retain rollback values and change one setting at a time under an approved test procedure. No protection bypass, factory reset or repeated restart into faults. Stop testing for unsafe pressure, loss of suction or abnormal operation. Protection/automatic-restart changes require vendor/qualified-technician review.',
+  'Manufacturer reference (model/revision confirmation required): '+profile.manual+(profile.url?' | '+profile.url:'')].join('\n');
+}
+let vfdDraft=null,vfdDirty=false;
+function openVfdSetup(s){
+ cur='vfdsetup';setTabs();
+ if(!vfdDraft)vfdDraft=newVfdWorksheet();
+ let records=[],storageProblem='';
+ try{records=readVfdRecords()}catch(error){storageProblem='Cannot read saved drive worksheets: '+error.message+' Saving is disabled to protect existing records. Export the visible worksheet to Notes and back up your browser data.'}
+ const r=vfdDraft,profile=VFD_PROFILES[r.profile],reference=VFD_REFERENCES[r.profile];
+ const input=(id,label,value)=>`<div class="fld"><label for="${id}">${esc(label)}</label><input id="${id}" type="text" value="${esc(value)}"></div>`;
+ $('#bench').innerHTML='<h3>Commissioned drive setup & PID troubleshooting</h3>'+
+ '<div class="safety">Read-only field worksheet: this does not connect to, program or tune a drive. The vendor-commissioned pump-specific setup is the baseline, not a universal recipe. Back up the drive configuration before authorized changes. Do not factory-reset, bypass protections or repeatedly restart into faults.</div>'+
+ '<p class="small">Save each site/asset separately on this browser. Unsaved edits remain in this session when navigating the dashboard, but are lost on reload. Add to Notes, then Save/Export Notes for a portable text backup. This worksheet is not a restorable drive parameter file.</p>'+
+ '<div class="fields"><div class="fld"><label for="vfd_records">Saved site / asset worksheet</label><select id="vfd_records"><option value="">Choose a saved record...</option>'+records.map(record=>`<option value="${esc(record.id)}" ${record.id===r.id?'selected':''}>${esc(record.meta.asset)} - ${esc(VFD_PROFILES[record.profile].name)}</option>`).join('')+'</select></div>'+
+ '<div class="fld"><label for="vfd_newprofile">Profile for a NEW worksheet (does not change this record)</label><select id="vfd_newprofile">'+Object.entries(VFD_PROFILES).map(([id,p])=>`<option value="${id}" ${id===r.profile?'selected':''}>${esc(p.name)}</option>`).join('')+'</select></div></div>'+
+ '<div class="links" style="margin-top:10px"><button type="button" id="vfd_new">NEW ASSET WORKSHEET</button><button type="button" id="vfd_save" '+(storageProblem?'disabled':'')+'>SAVE WORKSHEET ON THIS DEVICE</button><button type="button" id="vfd_notes">ADD WORKSHEET TO NOTES</button></div>'+
+ '<p id="vfd_status" class="small vfd-guide-status" role="status" aria-live="polite"></p>'+
+ '<h3>'+esc(profile.name)+'</h3><p>'+esc(profile.scope)+'</p><p class="warn">'+esc(reference?reference.warning+' Confirm the installed firmware, control configuration and station-vendor logic. Manual defaults and ranges are references, not commissioned settings or recommendations.':'Parameter mappings, ranges and factory defaults: pending document-level verification. No guessed parameter numbers or recommended tuning values are supplied.')+' Worksheet entries remain technician-entered, not independently verified.</p>'+
+ (reference?'<p class="small">'+esc(reference.source)+' '+esc(reference.context)+'</p>':'')+
+ (reference?.procedure?'<details><summary>Panel: reading and authorized changes</summary><p>'+esc(reference.procedure)+'</p></details>':'')+
+ '<p class="small">'+esc(profile.manual)+(profile.url?` <a href="${profile.url}" target="_blank" rel="noopener">OPEN MANUFACTURER REFERENCE</a>`:'')+' - confirm exact model, firmware, revision and page.</p>'+
+ '<details class="vfd-section" open><summary>Equipment & commissioned baseline</summary><div class="fields">'+VFD_META.map(([id,label])=>input('vfd_meta_'+id,label,r.meta[id])).join('')+'</div></details>'+
+ '<div class="fld"><label for="vfd_symptom">Select symptom / review</label><select id="vfd_symptom">'+Object.entries(VFD_SYMPTOMS).map(([id,item])=>`<option value="${id}" ${id===r.symptom?'selected':''}>${esc(item.name)}</option>`).join('')+'</select></div>'+
+ '<div id="vfd_steps" class="res" aria-live="polite"></div><p class="small">All function records remain below. Highlighted sections are relevant to the selected symptom. Comparisons are text-only, not unit conversions, tuning advice or pass/fail judgments. A blank baseline means unknown.</p>'+
+ VFD_ITEMS.map(([id,label,hint])=>{const rows=reference?.rows[id]||[];return '<details class="vfd-section" id="vfd_section_'+id+'"><summary>'+esc(label)+'</summary><p class="small">'+esc(hint)+'</p>'+(rows.length?'<p><b>'+esc(reference.label)+' reference:</b></p><ul>'+rows.map(([number,meaning,page])=>'<li><b>'+esc(number)+'</b>: '+esc(meaning)+' <span class="small">('+esc(page)+')</span></li>').join('')+'</ul>':reference?.pending?'<p class="small">'+esc(reference.pending)+'</p>':'')+'<div class="fields">'+VFD_VALUE_FIELDS.map(([key,title])=>input('vfd_'+id+'_'+key,title,r.values[id][key])).join('')+'</div><p id="vfd_compare_'+id+'" class="small"></p></details>'}).join('')+
+ '<label for="vfd_observations">Observations / time-stamped pressure, setpoint, Hz, flow and demand; authorized change, rollback value and outcome</label><textarea class="note" id="vfd_observations"></textarea>'+
+ '<div class="safety">Only qualified, authorized personnel should change settings. Check sensor truth, hydraulic conditions and control ownership first. Any test must follow site/vendor procedures with protections intact; stop for unsafe pressure, loss of suction or abnormal operation. Changes to protections or automatic restart require vendor/qualified-technician review.</div>'+
+ '<div class="links"><button type="button" id="vfd_sensor">TRANSDUCER CHECK</button><button type="button" id="vfd_hunt">EXISTING PRESSURE-HUNTING PATH</button></div>';
+ const status=message=>{$('#vfd_status').textContent=message};
+ const dirty=()=>{vfdDirty=true;status(storageProblem||'Unsaved worksheet changes. Save on this device or add to Notes before reloading.')};
+ const comparison=id=>{$('#vfd_compare_'+id).textContent=vfdComparison(r.values[id])};
+ VFD_META.forEach(([id])=>{$('#vfd_meta_'+id).oninput=e=>{r.meta[id]=e.target.value;dirty()}});
+ VFD_ITEMS.forEach(([id])=>{comparison(id);VFD_VALUE_FIELDS.forEach(([key])=>{$('#vfd_'+id+'_'+key).oninput=e=>{r.values[id][key]=e.target.value;comparison(id);dirty()}})});
+ $('#vfd_observations').value=r.observations;
+ $('#vfd_observations').oninput=e=>{r.observations=e.target.value;dirty()};
+ const drawSymptom=()=>{
+  const symptom=VFD_SYMPTOMS[r.symptom];
+  $('#vfd_steps').innerHTML='<b>'+esc(symptom.name)+'</b><ol>'+symptom.steps.map(step=>'<li>'+esc(step)+'</li>').join('')+'</ol><p class="small">Control owner recorded: '+esc(r.meta.owner||'unknown - identify before tuning')+'. External PLC/station control must be diagnosed at that controller.</p>';
+  VFD_ITEMS.forEach(([id])=>{const section=$('#vfd_section_'+id);section.open=r.symptom!=='review'&&symptom.rows.includes(id);section.style.borderColor=symptom.rows.includes(id)?'var(--amber)':''});
+ };
+ $('#vfd_symptom').onchange=e=>{r.symptom=e.target.value;drawSymptom();dirty()};
+ $('#vfd_meta_owner').oninput=e=>{r.meta.owner=e.target.value;drawSymptom();dirty()};
+ drawSymptom();
+ const discard=()=>!vfdDirty||confirm('Discard unsaved worksheet edits? Save on this device or add to Notes first if you need them.');
+ $('#vfd_new').onclick=()=>{if(!discard())return;vfdDraft=newVfdWorksheet($('#vfd_newprofile').value);vfdDirty=false;openVfdSetup(false)};
+ $('#vfd_records').onchange=e=>{
+  const selected=records.find(record=>record.id===e.target.value);
+  if(!selected)return;
+  if(!discard()){e.target.value=r.id;return}
+  vfdDraft=JSON.parse(JSON.stringify(selected));vfdDirty=false;openVfdSetup(false);
+ };
+ $('#vfd_save').onclick=()=>{
+  if(!r.meta.asset.trim()||!r.meta.model.trim()){status('Enter a site / asset identifier and exact drive model before saving. Unknown baseline values may remain blank.');return}
+  if(r.id&&!confirm('Replace this saved worksheet, including any edited commissioned baseline? Keep the vendor backup and export the old record to Notes first if needed.'))return;
+  let saved;
+  try{
+   const latest=readVfdRecords();saved={...r,id:r.id||crypto.randomUUID(),savedAt:new Date().toISOString()};
+   const index=latest.findIndex(record=>record.id===saved.id);if(index<0)latest.push(saved);else latest[index]=saved;
+   localStorage.setItem(VFD_RECORD_KEY,JSON.stringify(latest));
+  }catch(error){status('Worksheet NOT saved: '+error.message+'. Keep this draft open and add it to Notes; Save/Export Notes separately.');return}
+  vfdDraft=saved;vfdDirty=false;openVfdSetup(false);
+  if(!$('#vfd_save').disabled)$('#vfd_status').textContent='Worksheet saved on this browser at '+saved.savedAt+'. Export Notes for a separate backup.';
+ };
+ $('#vfd_notes').onclick=()=>appendNote(vfdWorksheetText(r));
+ $('#vfd_sensor').onclick=()=>openTool('xdcr',true);
+ $('#vfd_hunt').onclick=()=>openFlow('hunt',true);
+ status(storageProblem||(vfdDirty?'Unsaved worksheet changes.':r.savedAt?'Last saved: '+r.savedAt:'New worksheet - not saved.'));scrollBench(s);
+}
+/* ---------- end commissioned drive setup ---------- */
 
 /* ---------- central control platform notes ---------- */
 const PLAT={
