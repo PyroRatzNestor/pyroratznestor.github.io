@@ -620,7 +620,10 @@ test('guide remains a reference, reachable from VFD menu, tab and pressure-hunti
   assert.match(html, /Commissioned drive setup & PID troubleshooting','view','vfdsetup'/);
   assert.match(html, /tabsDef\.push\(\['vfdsetup','Drive setup \/ PID'\]\)/);
   assert.match(html, /if\(k==='vfdsetup'\)\{openVfdSetup\(s\);return\}/);
-  assert.match(html, /'VFD booster pump PID tuning hunting acceleration deceleration','vfdsetup'/);
+  const {techniques} = vm.runInNewContext(
+    fs.readFileSync(path.join(__dirname, '..', 'data', 'troubleshooting.js'), 'utf8') + '\nTRACER_TROUBLESHOOTING'
+  );
+  assert.equal(techniques.hunt.nodes.t1.tool, 'vfdsetup');
   assert.match(html, /OPEN DRIVE SETUP GUIDE/);
   assert.doesNotMatch(html, /vfdsetup:\{name:/);
 });

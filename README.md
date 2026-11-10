@@ -15,6 +15,8 @@ No build step, dependencies, accounts or backend are required.
 - `help.html`: quick start, local-storage/backups, safety and feedback.
 - `assets/portal.css`: shared portal styling, navigation and responsive layout.
 - `assets/directory.js`: client-side filtering of the tool directory.
+- `data/troubleshooting.js`: diagnostic questions, decisions and result guidance,
+  kept separate from dashboard rendering and calculators.
 
 Navigation uses relative URLs and works on GitHub Pages without server rewrites.
 Keep all pages, `assets/` and `data/` together when publishing. Open the dashboard
