@@ -5,7 +5,7 @@ const test = require('node:test');
 const vm = require('node:vm');
 
 const root = path.join(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(root, 'dashboard.html'), 'utf8');
 const files = ['hunter', 'rainbird', 'toro'].map(brand => `data/golf-${brand}.js`);
 const scripts = files.map(file => fs.readFileSync(path.join(root, file), 'utf8')).join('\n');
 const golf = html.slice(

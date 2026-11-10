@@ -4,7 +4,7 @@ const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
 
-const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', 'dashboard.html'), 'utf8');
 
 test('recent-search UI and history recording are removed', () => {
   assert.doesNotMatch(html, /id="recent"|drawRecent|tracerRecent/);

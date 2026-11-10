@@ -1,7 +1,36 @@
 # pyroratznestor.github.io
 
-Single-page field technical dashboard. Open `index.html`, or serve the repository
-with `python3 -m http.server 8899`.
+Static technician field portal. Serve the repository with
+`python3 -m http.server 8899`, then open `http://localhost:8899/`.
+No build step, dependencies, accounts or backend are required.
+
+## Portal structure
+
+- `index.html`: landing page and field-playbook introduction.
+- `dashboard.html`: the existing field workspace, calculators, diagnostic paths,
+  equipment profiles, references, training links and notes.
+- `tools.html`: searchable common starting points, with links to the complete
+  calculator dropdown and troubleshooting menus.
+- `references.html`: library entry points, source policy and limitations.
+- `help.html`: quick start, local-storage/backups, safety and feedback.
+- `assets/portal.css`: shared portal styling, navigation and responsive layout.
+- `assets/directory.js`: client-side filtering of the tool directory.
+
+Navigation uses relative URLs and works on GitHub Pages without server rewrites.
+Keep all pages, `assets/` and `data/` together when publishing. Open the dashboard
+directly at `dashboard.html`; `dashboard.html?tool=pipe` and similar entry links
+open an existing calculator/reference in the Field Bench. Unknown tool keys
+show a message instead of opening an unintended view.
+
+The move from `index.html` to `dashboard.html` does not change browser-storage
+keys. Existing data remains available on the same origin, browser and device.
+Save notes and drive worksheets before leaving the dashboard. Unsaved note or
+worksheet changes request a browser navigation warning; this is not a backup.
+Directory search filters local links, while dashboard web search opens Google.
+Offline installation/caching and cross-device sync are not included.
+
+Regression suites read the application from `dashboard.html`. Run all suites
+with `node --test tests/*.test.cjs`.
 
 The dashboard uses black and forest-green surfaces with neon-green accents;
 amber and red remain reserved for warnings and errors. **High Contrast** switches
@@ -203,7 +232,7 @@ Listed model variants and accessory identifiers are searchable and included in
 Original workbook, landscape and filtration records are retained.
 
 The factual indexes live in `data/golf-hunter.js`, `data/golf-rainbird.js` and
-`data/golf-toro.js`. Keep these files with `index.html`; they load synchronously,
+`data/golf-toro.js`. Keep these files with `dashboard.html`; they load synchronously,
 without a network API or PDF download. The **Golf catalog coverage and source
 limits** disclosure in Part Finder lists each verified edition and the reviewed
 page ranges, distinguishing product, technical and introductory pages.

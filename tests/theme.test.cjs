@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 
-const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', 'dashboard.html'), 'utf8');
 const root = html.match(/:root\{([^}]+)\}/)[1];
 const highContrast = html.match(/body\.hc\{([^}]+)\}/)[1];
 const variables = css => Object.fromEntries([...css.matchAll(/--([\w-]+):\s*(#[0-9a-f]{3,6})/gi)].map(([, key, value]) => [key, value]));

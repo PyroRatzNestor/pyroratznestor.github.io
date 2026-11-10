@@ -4,7 +4,7 @@ const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
 
-const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', 'dashboard.html'), 'utf8');
 const source = html.slice(html.indexOf('const f1='), html.indexOf('const PARTS='));
 const { tools, resistance } = vm.runInNewContext(`(function(){
   ${source}

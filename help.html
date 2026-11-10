@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Get started with the Technician Field Portal and understand local storage, backups, safety and feedback.">
+  <title>Help &amp; About | Technician Field Portal</title>
+  <link rel="stylesheet" href="assets/portal.css">
+</head>
+<body class="portal-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><div class="portal-shell header-inner"><a class="site-brand" href="index.html">TECHNICIAN<span>FIELD PORTAL</span></a><nav class="site-nav" aria-label="Main navigation"><a href="index.html">Home</a><a href="dashboard.html">Field dashboard</a><a href="tools.html">Tool directory</a><a href="references.html">References</a><a href="help.html" aria-current="page">Help &amp; about</a></nav></div></header>
+  <main class="portal-shell" id="main">
+    <span class="eyebrow">THE FIELD PLAYBOOK</span>
+    <h1>Help &amp; about</h1>
+    <p class="lead">A field-first reference for separating hydraulic, electrical, mechanical and control-system causes before changing parts or parameters.</p>
+    <div class="article-layout portal-section">
+      <nav class="article-nav" aria-label="Help topics"><a href="#start">Quick start</a><a href="#storage">Storage &amp; backups</a><a href="#safety">Safe use</a><a href="#access">Access &amp; connectivity</a><a href="#feedback">Feedback</a></nav>
+      <div class="article-content">
+        <section id="start">
+          <h2>Quick start</h2>
+          <ol>
+            <li><strong>Identify.</strong> Open the <a href="dashboard.html#prof">field dashboard</a> and select the pump / station, controller and drive. Record the model and manual revision.</li>
+            <li><strong>Choose a path.</strong> Use the troubleshooting menus for the symptom, or the <a href="tools.html">tool directory</a> for a known calculation or reference. A dropdown selection alone does not open a troubleshooting topic; press Open Selection.</li>
+            <li><strong>Measure and compare.</strong> Follow the diagnostic prompts and verify assumptions against the installed equipment manual. Calculators do not connect to or control equipment.</li>
+            <li><strong>Record and prove.</strong> Add results to Notes, insert a job card and record the outcome under load. Save notes on this device and export a text backup.</li>
+          </ol>
+        </section>
+        <section id="storage">
+          <h2>Local storage &amp; backups</h2>
+          <p>There are no portal accounts, shared records or cloud sync. Profiles, saved calculator inputs, checklists and saved notes use this browser's storage on this device. Existing saved data is still available when you use the dashboard on the same website, browser and device.</p>
+          <p><strong>Save before leaving the dashboard.</strong> Notes require Save Notes on This Device. Drive worksheets require their own Save Worksheet action. Unsaved worksheet drafts survive switching dashboard tools, but not a reload or navigation to another page. The dashboard requests a browser warning when notes or worksheets have unsaved changes; do not rely on that warning as a backup.</p>
+          <p>Export .TXT creates a portable notes backup. Import .TXT adds text to the editor; save the imported notes afterward. Add Worksheet to Notes does not itself save either the worksheet or the notes. Exported notes cannot restore a drive configuration or its structured worksheet.</p>
+          <p>Clearing site data, private browsing, a different device, or a new website domain can remove or separate local records. Before changing browsers or domains, save and export your notes and retain independent equipment parameter backups. Check for storage error messages.</p>
+        </section>
+        <section id="safety">
+          <h2>Safe use</h2>
+          <p>This beta portal supports evidence gathering; it does not authorize electrical work, equipment operation or parameter changes. Follow your employer's procedures, site isolation / lockout requirements and the applicable equipment manual.</p>
+          <p>Keep commissioned values separate from observations and factory references. Blank means unknown. Do not factory-reset, disable protections or repeatedly restart into a fault based on a calculator or checklist.</p>
+          <p><a href="references.html#source-policy">Read the source policy and technical limitations</a>.</p>
+        </section>
+        <section id="access">
+          <h2>Access &amp; connectivity</h2>
+          <p>The portal is a static website. Once loaded, its calculations run in the browser without a calculation API. Reliable offline installation and caching are not included yet; do not assume the pages will be available without connectivity.</p>
+          <p>Directory search filters local starting points. The dashboard's Search Web button sends your entered query to Google in a new tab; manufacturer and training links open external websites. Avoid including confidential site information in web searches.</p>
+          <p>Use a current browser with JavaScript enabled. The dashboard has a High Contrast button, and pressing <kbd>/</kbd> outside an input focuses its web search. Navigation and tools support keyboard use; layouts adapt to smaller screens.</p>
+        </section>
+        <section id="feedback">
+          <h2>Feedback &amp; corrections</h2>
+          <p><a href="https://github.com/PyroRatzNestor/pyroratznestor.github.io/issues">Use the project issue tracker</a> to report a broken link, incorrect reference or tool problem (GitHub sign-in is required to submit). Include the page / tool, expected behavior, observed result and source model / revision / page when applicable. Do not post passwords, customer records or sensitive site information.</p>
+          <p>For an urgent equipment or safety issue, follow your site's escalation procedure and contact the appropriate qualified service provider rather than waiting for a portal update.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer portal-shell"><p>Measure. Isolate. Verify. Repair. Prove.</p><a href="dashboard.html">Open field dashboard</a><a href="references.html#source-policy">Sources &amp; limitations</a></footer>
+</body>
+</html>
