@@ -3,27 +3,51 @@ globalThis.TRACER_TROUBLESHOOTING = {
   "safety": "De-energize, lock out and verify zero energy before touching conductors or doing insulation tests. Follow your employer’s procedures.",
   "techniques": {
     "wont": {
-      "n": "Pump won't build pressure",
-      "s": "a",
+      "title": "Pump won't build pressure",
+      "symptom": "Pump won't build pressure",
+      "appliesTo": [
+        "Pump systems; verify pump model, speed, curve and operating range."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Compare simultaneous flow, pressure, speed and current with the applicable pump curve and nameplate.",
+        "Record the symptom and readings before and after the authorized correction at comparable demand."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Is the pump running at full speed, with motor amps near expected for this flow?",
-          "o": [
-            [
-              "No: low/zero amps or speed below command",
-              "e1"
-            ],
-            [
-              "Yes: speed and amps look normal",
-              "b"
-            ]
+          "question": "Is the pump running at full speed, with motor amps near expected for this flow?",
+          "options": [
+            {
+              "label": "No: low/zero amps or speed below command",
+              "next": "e1"
+            },
+            {
+              "label": "Yes: speed and amps look normal",
+              "next": "b"
+            }
           ]
         },
         "e1": {
-          "r": 1,
+          "result": true,
           "domain": "ELECTRICAL / CONTROL",
-          "text": "Pump is not being driven properly. Separate supply, drive and command problems.",
-          "measure": [
+          "assessment": "Pump is not being driven properly. Separate supply, drive and command problems.",
+          "measurements": [
             "Drive fault/status codes",
             "Voltage on all three phases at drive input and motor",
             "Commanded Hz vs actual Hz and Hand/Auto/remote source",
@@ -32,27 +56,27 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "VFD pump will not reach commanded speed troubleshooting"
         },
         "b": {
-          "q": "With flow and pressure measured, where does the point sit on the pump curve?",
-          "o": [
-            [
-              "Flow HIGH, pressure low (running out the curve)",
-              "h1"
-            ],
-            [
-              "Flow LOW, pressure low, noisy or vibrating",
-              "c1"
-            ],
-            [
-              "Flow and pressure both low, amps normal/high, quiet",
-              "m1"
-            ]
+          "question": "With flow and pressure measured, where does the point sit on the pump curve?",
+          "options": [
+            {
+              "label": "Flow HIGH, pressure low (running out the curve)",
+              "next": "h1"
+            },
+            {
+              "label": "Flow LOW, pressure low, noisy or vibrating",
+              "next": "c1"
+            },
+            {
+              "label": "Flow and pressure both low, amps normal/high, quiet",
+              "next": "m1"
+            }
           ]
         },
         "h1": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC",
-          "text": "Demand exceeds what the system restricts: open or broken line, stuck-open valve, failed PRV, too many zones.",
-          "measure": [
+          "assessment": "Demand exceeds what the system restricts: open or broken line, stuck-open valve, failed PRV, too many zones.",
+          "measurements": [
             "Pressure at pump vs far end of system",
             "Flow vs expected zone demand",
             "Valve positions, PRV settings, mainline leak indicators",
@@ -62,10 +86,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "affinity"
         },
         "c1": {
-          "r": 1,
+          "result": true,
           "domain": "SUCTION / CAVITATION",
-          "text": "Likely air entrainment, restricted suction or insufficient NPSHa.",
-          "measure": [
+          "assessment": "Likely air entrainment, restricted suction or insufficient NPSHa.",
+          "measurements": [
             "Suction gauge (vacuum/pressure)",
             "Strainer/intake condition, water level, suction valve position",
             "Calculated NPSHa vs NPSHr"
@@ -74,10 +98,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "npsh"
         },
         "m1": {
-          "r": 1,
+          "result": true,
           "domain": "MECHANICAL",
-          "text": "Worn or damaged impeller/wear rings, wrong rotation, clogged impeller or slipping coupling.",
-          "measure": [
+          "assessment": "Worn or damaged impeller/wear rings, wrong rotation, clogged impeller or slipping coupling.",
+          "measurements": [
             "Compare shutoff head to curve (if safe)",
             "Rotation, coupling and shaft turning",
             "Impeller clearance/condition at inspection",
@@ -88,27 +112,51 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "hunt": {
-      "n": "Pressure hunting",
-      "s": "a",
+      "title": "Pressure hunting",
+      "symptom": "Pressure hunting",
+      "appliesTo": [
+        "Pressure-regulated pump systems; establish whether the drive or station controller owns the loop."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Record pressure, setpoint, speed and demand through a representative operating cycle.",
+        "Verify the original oscillation is resolved without violating commissioned limits or protection requirements."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Does the hunting continue with the VFD in fixed/manual speed?",
-          "o": [
-            [
-              "Yes, it hunts at fixed speed",
-              "h"
-            ],
-            [
-              "No, only in PID/auto control",
-              "b"
-            ]
+          "question": "Does the hunting continue with the VFD in fixed/manual speed?",
+          "options": [
+            {
+              "label": "Yes, it hunts at fixed speed",
+              "next": "h"
+            },
+            {
+              "label": "No, only in PID/auto control",
+              "next": "b"
+            }
           ]
         },
         "h": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC / SYSTEM",
-          "text": "Demand or system devices are cycling: PRV, check valve, air in line, tank precharge, cycling zones.",
-          "measure": [
+          "assessment": "Demand or system devices are cycling: PRV, check valve, air in line, tank precharge, cycling zones.",
+          "measurements": [
             "Pressure trace at pump and remote point",
             "Zone sequencing at time of swings",
             "Tank precharge (if present), PRV behavior"
@@ -116,23 +164,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "irrigation pump station pressure fluctuating PRV hunting causes"
         },
         "b": {
-          "q": "Is the transducer signal steady and in agreement with a reference gauge?",
-          "o": [
-            [
-              "No: noisy, drifting or disagreeing",
-              "s1"
-            ],
-            [
-              "Yes: signal is stable and accurate",
-              "t1"
-            ]
+          "question": "Is the transducer signal steady and in agreement with a reference gauge?",
+          "options": [
+            {
+              "label": "No: noisy, drifting or disagreeing",
+              "next": "s1"
+            },
+            {
+              "label": "Yes: signal is stable and accurate",
+              "next": "t1"
+            }
           ]
         },
         "s1": {
-          "r": 1,
+          "result": true,
           "domain": "SENSOR / WIRING",
-          "text": "Feedback is unreliable. Fix this before touching PID values.",
-          "measure": [
+          "assessment": "Feedback is unreliable. Fix this before touching PID values.",
+          "measurements": [
             "mA/V at the drive input vs gauge",
             "Shield termination and routing away from motor leads",
             "Supply voltage and scaling (low/high range)"
@@ -141,10 +189,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "xdcr"
         },
         "t1": {
-          "r": 1,
+          "result": true,
           "domain": "CONTROL TUNING",
-          "text": "Loop is too aggressive or ramps/minimum speed/sleep settings fight the system.",
-          "measure": [
+          "assessment": "Loop is too aggressive or ramps/minimum speed/sleep settings fight the system.",
+          "measurements": [
             "Record ALL current PID, ramp and min-speed values first",
             "Change one parameter at a time and log the result",
             "Observe at low and high demand"
@@ -155,43 +203,67 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "trip": {
-      "n": "VFD / motor trip",
-      "s": "a",
+      "title": "VFD / motor trip",
+      "symptom": "VFD / motor trip",
+      "appliesTo": [
+        "VFD-driven motors; use the exact drive fault code, motor data and station schematic."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Record the original fault history and the evidence supporting its cause.",
+        "Verify operation under the permitted duty condition with protections intact; do not use repeated resets as proof."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "What did the drive report?",
-          "o": [
-            [
-              "Rain Bird CLP/ACLP named alarm (E16/E17/E18/PCH/AIE or Delta alarm)",
-              "flow:rbclp"
-            ],
-            [
-              "Overcurrent / short circuit",
-              "oc"
-            ],
-            [
-              "Ground fault / earth leakage",
-              "gf"
-            ],
-            [
-              "Overload / thermal",
-              "ol"
-            ],
-            [
-              "Over- or under-voltage",
-              "uv"
-            ],
-            [
-              "No fault, but won’t accelerate",
-              "ac"
-            ]
+          "question": "What did the drive report?",
+          "options": [
+            {
+              "label": "Rain Bird CLP/ACLP named alarm (E16/E17/E18/PCH/AIE or Delta alarm)",
+              "next": "flow:rbclp"
+            },
+            {
+              "label": "Overcurrent / short circuit",
+              "next": "oc"
+            },
+            {
+              "label": "Ground fault / earth leakage",
+              "next": "gf"
+            },
+            {
+              "label": "Overload / thermal",
+              "next": "ol"
+            },
+            {
+              "label": "Over- or under-voltage",
+              "next": "uv"
+            },
+            {
+              "label": "No fault, but won’t accelerate",
+              "next": "ac"
+            }
           ]
         },
         "oc": {
-          "r": 1,
+          "result": true,
           "domain": "ELECTRICAL / MECHANICAL",
-          "text": "Possible winding or cable fault, locked rotor/binding, or too-short acceleration ramp.",
-          "measure": [
+          "assessment": "Possible winding or cable fault, locked rotor/binding, or too-short acceleration ramp.",
+          "measurements": [
             "Insulation resistance of motor and cable with leads disconnected from the drive",
             "Phase-to-phase resistance balance",
             "Shaft turns freely by hand; ramp time"
@@ -199,10 +271,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "VFD overcurrent fault pump motor insulation resistance test"
         },
         "gf": {
-          "r": 1,
+          "result": true,
           "domain": "ELECTRICAL",
-          "text": "Leakage to ground in motor, cable or moisture ingress; surge damage possible.",
-          "measure": [
+          "assessment": "Leakage to ground in motor, cable or moisture ingress; surge damage possible.",
+          "measurements": [
             "Megger phase-to-ground for motor and cable separately",
             "Look for water in junction box or conduit",
             "Check grounding and drive output filter/length"
@@ -210,10 +282,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "VFD ground fault motor cable megger insulation test"
         },
         "ol": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC / MECHANICAL",
-          "text": "Motor is loaded beyond nameplate. Often pump running out on the curve, bearing drag or voltage problem.",
-          "measure": [
+          "assessment": "Motor is loaded beyond nameplate. Often pump running out on the curve, bearing drag or voltage problem.",
+          "measurements": [
             "Amps vs nameplate FLA/service factor each phase",
             "Flow and TDH vs curve (hydraulic overload?)",
             "Bearing condition, voltage balance"
@@ -222,10 +294,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "affinity"
         },
         "uv": {
-          "r": 1,
+          "result": true,
           "domain": "SUPPLY",
-          "text": "Incoming power or decel energy issue.",
-          "measure": [
+          "assessment": "Incoming power or decel energy issue.",
+          "measurements": [
             "Line voltage at drive during start and run",
             "Voltage imbalance between phases",
             "Deceleration time (overvoltage on stopping)",
@@ -236,10 +308,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "VFD overvoltage undervoltage fault pump supply voltage"
         },
         "ac": {
-          "r": 1,
+          "result": true,
           "domain": "PARAMETERS / PERMISSIVES",
-          "text": "Drive is limited by a setting or command source, not necessarily a fault.",
-          "measure": [
+          "assessment": "Drive is limited by a setting or command source, not necessarily a fault.",
+          "measurements": [
             "Run/enable permissives and command source (local vs remote)",
             "Current limit, accel time, min/max frequency",
             "Motor data entered correctly; PID setpoint vs feedback"
@@ -250,35 +322,59 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "rbclp": {
-      "n": "Rain Bird CLP/ACLP alarm map",
-      "s": "a",
+      "title": "Rain Bird CLP/ACLP alarm map",
+      "symptom": "Rain Bird CLP/ACLP alarm map",
+      "appliesTo": [
+        "Rain Bird CLP/ACLP stations; confirm platform, drive family, firmware and programming guide."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Match the alarm to the exact station/drive manual and record supporting sensor or power measurements.",
+        "Verify the corrected station completes the relevant start, run or shutdown sequence with protections intact."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Which family and alarm pattern best matches the station?",
-          "o": [
-            [
-              "Mitsubishi alarms (E16/E17/E18/PCH/AIE/ILF/UVT)",
-              "m"
-            ],
-            [
-              "Delta alarms (high/low pressure, overload, phase-loss, ACI-loss)",
-              "d"
-            ],
-            [
-              "Station will not shut down after irrigation",
-              "sd"
-            ],
-            [
-              "Small Platform symptom set (-62 PSI, max starts, prime loss, flow meter fault)",
-              "sp"
-            ]
+          "question": "Which family and alarm pattern best matches the station?",
+          "options": [
+            {
+              "label": "Mitsubishi alarms (E16/E17/E18/PCH/AIE/ILF/UVT)",
+              "next": "m"
+            },
+            {
+              "label": "Delta alarms (high/low pressure, overload, phase-loss, ACI-loss)",
+              "next": "d"
+            },
+            {
+              "label": "Station will not shut down after irrigation",
+              "next": "sd"
+            },
+            {
+              "label": "Small Platform symptom set (-62 PSI, max starts, prime loss, flow meter fault)",
+              "next": "sp"
+            }
           ]
         },
         "m": {
-          "r": 1,
+          "result": true,
           "domain": "RAIN BIRD MITSUBISHI ALARMS",
-          "text": "Use alarm-specific checks before broad retuning.",
-          "measure": [
+          "assessment": "Use alarm-specific checks before broad retuning.",
+          "measurements": [
             "E16 loss of prime: verify suction condition and related low-pressure/frequency parameters in your current programming guide",
             "E17 pipe break: verify transducer truth first, then review the break-detection parameter group",
             "E18 deadhead: confirm discharge path (master/discharge/zone valves) and deadhead logic settings",
@@ -290,10 +386,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "xdcr"
         },
         "d": {
-          "r": 1,
+          "result": true,
           "domain": "RAIN BIRD DELTA ALARMS",
-          "text": "Validate sensor truth and power quality before changing PID or thresholds.",
-          "measure": [
+          "assessment": "Validate sensor truth and power quality before changing PID or thresholds.",
+          "measurements": [
             "High/low pressure alarms: compare VFD reading to a known-good gauge",
             "Overload/over-torque alarms: verify pump can turn freely, rotation is correct and demand is within curve",
             "Phase-loss alarms: verify all incoming legs under load and re-torque line/motor terminations",
@@ -304,10 +400,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "xdcr"
         },
         "sd": {
-          "r": 1,
+          "result": true,
           "domain": "WAKE / SLEEP & FLOW-SWITCH LOGIC",
-          "text": "Shutdown problems are often wake/sleep or flow-switch behavior, not only pressure PID.",
-          "measure": [
+          "assessment": "Shutdown problems are often wake/sleep or flow-switch behavior, not only pressure PID.",
+          "measurements": [
             "Confirm pressure decay behavior and sleep timing are realistic for site volume and leak profile",
             "Review wake/sleep and flow-switch function settings per your current Rain Bird programming guide before raising thresholds",
             "On CLPRS flow-switch variants, verify sleep-test parameters match the intended mode (Test Timer / Retest Time / Max Retest are often fixed baseline values)",
@@ -317,39 +413,39 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "Rain Bird ACLP station does not shut down wake sleep flow switch troubleshooting"
         },
         "sp": {
-          "q": "Which Small Platform symptom is closest?",
-          "o": [
-            [
-              "Touchscreen reads -62 PSI or pressure is clearly wrong",
-              "sp_pt"
-            ],
-            [
-              "Max starts per hour / rapid cycling",
-              "sp_ms"
-            ],
-            [
-              "Prime loss alarm",
-              "sp_pl"
-            ],
-            [
-              "Flow meter fault or mismatch",
-              "sp_fm"
-            ],
-            [
-              "Power-failure or phase-monitor alarm",
-              "sp_pf"
-            ],
-            [
-              "VFD E.OV# or retries exceeded",
-              "sp_vfd"
-            ]
+          "question": "Which Small Platform symptom is closest?",
+          "options": [
+            {
+              "label": "Touchscreen reads -62 PSI or pressure is clearly wrong",
+              "next": "sp_pt"
+            },
+            {
+              "label": "Max starts per hour / rapid cycling",
+              "next": "sp_ms"
+            },
+            {
+              "label": "Prime loss alarm",
+              "next": "sp_pl"
+            },
+            {
+              "label": "Flow meter fault or mismatch",
+              "next": "sp_fm"
+            },
+            {
+              "label": "Power-failure or phase-monitor alarm",
+              "next": "sp_pf"
+            },
+            {
+              "label": "VFD E.OV# or retries exceeded",
+              "next": "sp_vfd"
+            }
           ]
         },
         "sp_pt": {
-          "r": 1,
+          "result": true,
           "domain": "SMALL PLATFORM TRANSDUCER LOOP",
-          "text": "Treat this as a signal/scaling path issue before PID changes.",
-          "measure": [
+          "assessment": "Treat this as a signal/scaling path issue before PID changes.",
+          "measurements": [
             "Compare displayed pressure with a reference gauge",
             "Confirm 4-20 mA loop wiring and signal at the expected PLC/VFD inputs (Input 4/PC on many revisions)",
             "If reading is fixed near -62 PSI, verify VFD-to-PLC communication path and test with a known-good Ethernet cable",
@@ -359,10 +455,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "xdcr"
         },
         "sp_ms": {
-          "r": 1,
+          "result": true,
           "domain": "SMALL PLATFORM SHORT CYCLING",
-          "text": "Frequent starts are usually demand-driven or leak-driven, not a pure drive problem.",
-          "measure": [
+          "assessment": "Frequent starts are usually demand-driven or leak-driven, not a pure drive problem.",
+          "measurements": [
             "Find leaks (field, foot valve, filter train, check valve, PRV) before raising start limits",
             "Confirm start/stop delta and wake/sleep timing are reasonable for site volume",
             "Verify check valve and master-valve sealing after shutdown"
@@ -370,10 +466,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "Rain Bird small platform max starts per hour short cycling troubleshooting"
         },
         "sp_pl": {
-          "r": 1,
+          "result": true,
           "domain": "SMALL PLATFORM PRIME LOSS",
-          "text": "Loss-of-prime alarms are commonly suction-side or prime-circuit issues.",
-          "measure": [
+          "assessment": "Loss-of-prime alarms are commonly suction-side or prime-circuit issues.",
+          "measurements": [
             "Suction line integrity, foot-valve orientation and open ball valves",
             "Prime-loss kit and regulator setting per your current station guidance",
             "Air leaks at flanges/high points and whether suction lines were fully purged"
@@ -382,10 +478,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "npsh"
         },
         "sp_fm": {
-          "r": 1,
+          "result": true,
           "domain": "SMALL PLATFORM FLOW METER CHECK",
-          "text": "Do not assume the meter is bad until speed, pressure and scaling agree.",
-          "measure": [
+          "assessment": "Do not assume the meter is bad until speed, pressure and scaling agree.",
+          "measurements": [
             "Confirm the station is configured for the correct sensor type (flow switch vs flow meter) and that the flow meter is enabled/installed in HMI logic",
             "Confirm pump is running and compare VFD speed/flow to expected zone demand",
             "For paddlewheel meters: verify K/offset, insertion depth/alignment, optical isolator path and clean sensor body",
@@ -395,10 +491,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "flowcal"
         },
         "sp_pf": {
-          "r": 1,
+          "result": true,
           "domain": "SMALL PLATFORM POWER / PHASE",
-          "text": "Phase-monitor and surge-protection faults can mimic unrelated alarms.",
-          "measure": [
+          "assessment": "Phase-monitor and surge-protection faults can mimic unrelated alarms.",
+          "measurements": [
             "Verify phase monitor power and output contact state during fault window",
             "Measure all three phases under load for imbalance or dropouts",
             "Inspect surge-arrestor indicators and replace failed modules before retesting"
@@ -407,10 +503,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "imb"
         },
         "sp_vfd": {
-          "r": 1,
+          "result": true,
           "domain": "SMALL PLATFORM VFD FAULT",
-          "text": "Overvoltage/retry faults need power-quality and ramp checks before hardware swaps.",
-          "measure": [
+          "assessment": "Overvoltage/retry faults need power-quality and ramp checks before hardware swaps.",
+          "measurements": [
             "Read exact VFD alarm history from the drive keypad/log",
             "Compare motor current to nameplate and review thermal/current-limit settings",
             "If E.OV# appears, review accel/decel and line-voltage behavior during stop/start",
@@ -423,27 +519,51 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "cav": {
-      "n": "Suspected cavitation",
-      "s": "a",
+      "title": "Suspected cavitation",
+      "symptom": "Suspected cavitation",
+      "appliesTo": [
+        "Pump suction systems; use the installed pump curve and current fluid/source conditions."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Compare suction conditions and NPSHa with the pump curve and manufacturer-required margin at actual flow.",
+        "Record noise, pressure, flow and suction behavior after correction at comparable demand."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Does it get worse at higher flow or when more zones run?",
-          "o": [
-            [
-              "Yes, worse with high flow",
-              "h"
-            ],
-            [
-              "No, it is steady or random",
-              "b"
-            ]
+          "question": "Does it get worse at higher flow or when more zones run?",
+          "options": [
+            {
+              "label": "Yes, worse with high flow",
+              "next": "h"
+            },
+            {
+              "label": "No, it is steady or random",
+              "next": "b"
+            }
           ]
         },
         "h": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC",
-          "text": "Pump is far right on its curve where NPSHr is higher.",
-          "measure": [
+          "assessment": "Pump is far right on its curve where NPSHr is higher.",
+          "measurements": [
             "Flow vs curve and NPSHr at that flow",
             "Throttle discharge slightly (if permitted) to see if noise clears",
             "Suction pressure at that flow"
@@ -452,23 +572,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "npsh"
         },
         "b": {
-          "q": "Found a restriction or air entry on the suction side (strainer, valve, intake level, fittings)?",
-          "o": [
-            [
-              "Yes",
-              "fx"
-            ],
-            [
-              "No, suction looks clean",
-              "n1"
-            ]
+          "question": "Found a restriction or air entry on the suction side (strainer, valve, intake level, fittings)?",
+          "options": [
+            {
+              "label": "Yes",
+              "next": "fx"
+            },
+            {
+              "label": "No, suction looks clean",
+              "next": "n1"
+            }
           ]
         },
         "fx": {
-          "r": 1,
+          "result": true,
           "domain": "SUCTION",
-          "text": "Correct it and re-test under load.",
-          "measure": [
+          "assessment": "Correct it and re-test under load.",
+          "measurements": [
             "Suction gauge before/after repair",
             "Noise and discharge pressure stability",
             "Amps and flow vs baseline"
@@ -476,10 +596,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "pump suction strainer air leak cavitation symptoms fix"
         },
         "n1": {
-          "r": 1,
+          "result": true,
           "domain": "NPSH / FLUID",
-          "text": "Calculate NPSHa for real conditions: elevation, temperature, lift and friction.",
-          "measure": [
+          "assessment": "Calculate NPSHa for real conditions: elevation, temperature, lift and friction.",
+          "measurements": [
             "Water temperature and level",
             "Measured suction pressure",
             "NPSHr from curve at operating flow"
@@ -490,27 +610,51 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "flow": {
-      "n": "Flow reading disagrees",
-      "s": "a",
+      "title": "Flow reading disagrees",
+      "symptom": "Flow reading disagrees",
+      "appliesTo": [
+        "Flow meter and controller signal paths; confirm sensor type, output units and installation requirements."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Compare the controller reading with a suitable independent flow reference and the meter output.",
+        "Record units, scaling and installation conditions; use the applicable meter accuracy specification, not an invented tolerance."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Does the controller reading match the meter’s own local display/output?",
-          "o": [
-            [
-              "No, they differ",
-              "w"
-            ],
-            [
-              "Yes, they match",
-              "b"
-            ]
+          "question": "Does the controller reading match the meter’s own local display/output?",
+          "options": [
+            {
+              "label": "No, they differ",
+              "next": "w"
+            },
+            {
+              "label": "Yes, they match",
+              "next": "b"
+            }
           ]
         },
         "w": {
-          "r": 1,
+          "result": true,
           "domain": "SIGNAL / SCALING",
-          "text": "The meter may be fine; units, K-factor/pulse scaling or signal type is off.",
-          "measure": [
+          "assessment": "The meter may be fine; units, K-factor/pulse scaling or signal type is off.",
+          "measurements": [
             "Meter output (pulse/mA) with a meter",
             "Controller scaling units and K-factor",
             "Wiring, shielding and splices"
@@ -519,23 +663,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "xdcr"
         },
         "b": {
-          "q": "Is the meter installed to spec (straight runs, full pipe, correct size, clean)?",
-          "o": [
-            [
-              "No, or unknown",
-              "i"
-            ],
-            [
-              "Yes",
-              "c"
-            ]
+          "question": "Is the meter installed to spec (straight runs, full pipe, correct size, clean)?",
+          "options": [
+            {
+              "label": "No, or unknown",
+              "next": "i"
+            },
+            {
+              "label": "Yes",
+              "next": "c"
+            }
           ]
         },
         "i": {
-          "r": 1,
+          "result": true,
           "domain": "INSTALLATION",
-          "text": "Turbulence, air or oversizing causes errors.",
-          "measure": [
+          "assessment": "Turbulence, air or oversizing causes errors.",
+          "measurements": [
             "Upstream/downstream straight pipe lengths",
             "Pipe full at low flow?",
             "Sensor fouling/debris"
@@ -543,10 +687,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "flow meter straight pipe requirements installation errors"
         },
         "c": {
-          "r": 1,
+          "result": true,
           "domain": "VERIFY INDEPENDENTLY",
-          "text": "Compare with a second source before blaming the meter.",
-          "measure": [
+          "assessment": "Compare with a second source before blaming the meter.",
+          "measurements": [
             "Flow from pump curve (head, amps)",
             "Tank fill time or portable meter",
             "Pipe velocity from known zone demand"
@@ -557,27 +701,51 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "ctrl": {
-      "n": "Controller vs hydraulic",
-      "s": "a",
+      "title": "Controller vs hydraulic",
+      "symptom": "Controller vs hydraulic",
+      "appliesTo": [
+        "Irrigation controller, field valve and hydraulic system; confirm conventional or decoder wiring."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Verify the commanded valve responds and the measured flow/pressure matches the documented operating condition.",
+        "Record evidence distinguishing command delivery, valve response and hydraulic capacity."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Does the problem remain when you run the station manually at the valve?",
-          "o": [
-            [
-              "Yes, still wrong",
-              "h"
-            ],
-            [
-              "No, manual works fine",
-              "b"
-            ]
+          "question": "Does the problem remain when you run the station manually at the valve?",
+          "options": [
+            {
+              "label": "Yes, still wrong",
+              "next": "h"
+            },
+            {
+              "label": "No, manual works fine",
+              "next": "b"
+            }
           ]
         },
         "h": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC",
-          "text": "Fault is in the field/hydraulics, not the controller.",
-          "measure": [
+          "assessment": "Fault is in the field/hydraulics, not the controller.",
+          "measurements": [
             "Pressure/flow at the station",
             "Valve/solenoid condition, strainers, pipe size",
             "Compare with learned or expected flow"
@@ -586,23 +754,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "pipe"
         },
         "b": {
-          "q": "Is solenoid/decoder voltage and response good at the valve during a command?",
-          "o": [
-            [
-              "No: low voltage or no response",
-              "t"
-            ],
-            [
-              "Yes: command arrives properly",
-              "p"
-            ]
+          "question": "Is solenoid/decoder voltage and response good at the valve during a command?",
+          "options": [
+            {
+              "label": "No: low voltage or no response",
+              "next": "t"
+            },
+            {
+              "label": "Yes: command arrives properly",
+              "next": "p"
+            }
           ]
         },
         "t": {
-          "r": 1,
+          "result": true,
           "domain": "TWO-WIRE / ELECTRICAL",
-          "text": "Command isn’t reaching the valve reliably.",
-          "measure": [
+          "assessment": "Command isn’t reaching the valve reliably.",
+          "measurements": [
             "Voltage at decoder and at solenoid during command",
             "Line current/signal quality",
             "Splices, surge protection, ground"
@@ -610,10 +778,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "two wire decoder irrigation low voltage troubleshooting current draw"
         },
         "p": {
-          "r": 1,
+          "result": true,
           "domain": "CONTROLLER CONFIG",
-          "text": "Look at stale learned flow, hydraulic tree/sequence, flow zones or schedule conflicts.",
-          "measure": [
+          "assessment": "Look at stale learned flow, hydraulic tree/sequence, flow zones or schedule conflicts.",
+          "measurements": [
             "Learned flow history vs measured",
             "Sequence/overlap and capacity settings",
             "Alarm timing and thresholds"
@@ -623,43 +791,67 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "sfault": {
-      "n": "Station safety fault",
-      "s": "a",
+      "title": "Station safety fault",
+      "symptom": "Station safety fault",
+      "appliesTo": [
+        "Pump stations with active safety faults; use the station-specific protection logic."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Verify the triggering condition against an independent reading and the documented safety logic.",
+        "Prove the cause is corrected without bypassing a safety or raising its limit merely to clear the fault."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Which safety or fault is showing? (Find the cause; do not bypass a safety or raise its setpoint just to clear it.)",
-          "o": [
-            [
-              "Low discharge pressure",
-              "flow:wont"
-            ],
-            [
-              "High discharge pressure",
-              "hp"
-            ],
-            [
-              "Low inlet pressure / loss of prime / low level",
-              "lo"
-            ],
-            [
-              "Phase fault",
-              "ph"
-            ],
-            [
-              "VFD fault",
-              "flow:trip"
-            ],
-            [
-              "Motor won’t start",
-              "flow:nostart"
-            ]
+          "question": "Which safety or fault is showing? (Find the cause; do not bypass a safety or raise its setpoint just to clear it.)",
+          "options": [
+            {
+              "label": "Low discharge pressure",
+              "next": "flow:wont"
+            },
+            {
+              "label": "High discharge pressure",
+              "next": "hp"
+            },
+            {
+              "label": "Low inlet pressure / loss of prime / low level",
+              "next": "lo"
+            },
+            {
+              "label": "Phase fault",
+              "next": "ph"
+            },
+            {
+              "label": "VFD fault",
+              "next": "flow:trip"
+            },
+            {
+              "label": "Motor won’t start",
+              "next": "flow:nostart"
+            }
           ]
         },
         "hp": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC / CONTROL",
-          "text": "Pressure is above the safety limit. Confirm the reading is real before chasing the pump.",
-          "measure": [
+          "assessment": "Pressure is above the safety limit. Confirm the reading is real before chasing the pump.",
+          "measurements": [
             "Reference gauge vs transducer reading",
             "Regulating/PRV valves, closed downstream valves, zones not running",
             "Setpoint, PID overshoot and decel behavior"
@@ -668,10 +860,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "xdcr"
         },
         "lo": {
-          "r": 1,
+          "result": true,
           "domain": "SUCTION / SOURCE",
-          "text": "Water source, intake or sensing problem.",
-          "measure": [
+          "assessment": "Water source, intake or sensing problem.",
+          "measurements": [
             "Source level and intake/screen condition",
             "Suction valves, strainers, air leaks, prime status",
             "Verify the low-level/low-inlet switch or transducer actually matches reality",
@@ -681,10 +873,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "npsh"
         },
         "ph": {
-          "r": 1,
+          "result": true,
           "domain": "SUPPLY",
-          "text": "Incoming power or phase monitoring problem.",
-          "measure": [
+          "assessment": "Incoming power or phase monitoring problem.",
+          "measurements": [
             "Voltage on each phase at the service disconnect and at the panel",
             "Fuses/breakers, utility outage or single-phasing",
             "Phase monitor settings, sequence and imbalance thresholds",
@@ -695,27 +887,51 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "nostart": {
-      "n": "Motor won’t start",
-      "s": "a",
+      "title": "Motor won’t start",
+      "symptom": "Motor won’t start",
+      "appliesTo": [
+        "Pump motor start chains; confirm drive/starter, command source and site permissives."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Verify the authorized start command reaches the motor chain with required permissives intact.",
+        "Record voltage, current, speed and delivered duty after the corrected start sequence."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Is control power present, and is the station in the right mode with no active fault or safety?",
-          "o": [
-            [
-              "No: dead panel, fault or safety active",
-              "c1"
-            ],
-            [
-              "Yes: ready and calling to run",
-              "b"
-            ]
+          "question": "Is control power present, and is the station in the right mode with no active fault or safety?",
+          "options": [
+            {
+              "label": "No: dead panel, fault or safety active",
+              "next": "c1"
+            },
+            {
+              "label": "Yes: ready and calling to run",
+              "next": "b"
+            }
           ]
         },
         "c1": {
-          "r": 1,
+          "result": true,
           "domain": "CONTROL / PERMISSIVES",
-          "text": "Something in the start chain is open.",
-          "measure": [
+          "assessment": "Something in the start chain is open.",
+          "measurements": [
             "Control power and control transformer fuses",
             "E-stop, door and safety interlocks, reset status",
             "HOA/local-remote mode state (HAND is test-only and may bypass safeties)",
@@ -724,23 +940,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "pump station will not start control power safety interlock reset"
         },
         "b": {
-          "q": "Does the drive or starter respond (contactor pulls in or drive shows run)?",
-          "o": [
-            [
-              "No response",
-              "c2"
-            ],
-            [
-              "Yes, it energizes",
-              "c"
-            ]
+          "question": "Does the drive or starter respond (contactor pulls in or drive shows run)?",
+          "options": [
+            {
+              "label": "No response",
+              "next": "c2"
+            },
+            {
+              "label": "Yes, it energizes",
+              "next": "c"
+            }
           ]
         },
         "c2": {
-          "r": 1,
+          "result": true,
           "domain": "COMMAND CHAIN",
-          "text": "Run command is not reaching the drive/starter.",
-          "measure": [
+          "assessment": "Run command is not reaching the drive/starter.",
+          "measurements": [
             "Run command voltage at the drive/starter input",
             "Local/remote/auto mode selection",
             "Permissive relays and PLC output status",
@@ -749,23 +965,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "VFD pump will not run start command local remote permissive"
         },
         "c": {
-          "q": "What does motor current do while commanded to run?",
-          "o": [
-            [
-              "No current",
-              "o1"
-            ],
-            [
-              "High current, shaft not turning",
-              "m1"
-            ]
+          "question": "What does motor current do while commanded to run?",
+          "options": [
+            {
+              "label": "No current",
+              "next": "o1"
+            },
+            {
+              "label": "High current, shaft not turning",
+              "next": "m1"
+            }
           ]
         },
         "o1": {
-          "r": 1,
+          "result": true,
           "domain": "ELECTRICAL",
-          "text": "Output path is open: contactor, overload, disconnected lead, or winding.",
-          "measure": [
+          "assessment": "Output path is open: contactor, overload, disconnected lead, or winding.",
+          "measurements": [
             "Output voltage at drive/starter",
             "Overload relay state",
             "Winding continuity and insulation resistance with leads isolated (locked out)"
@@ -773,10 +989,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "3 phase motor no current open winding troubleshooting megger"
         },
         "m1": {
-          "r": 1,
+          "result": true,
           "domain": "MECHANICAL",
-          "text": "Locked rotor or severe binding.",
-          "measure": [
+          "assessment": "Locked rotor or severe binding.",
+          "measurements": [
             "Shaft turns by hand (locked out)",
             "Bearings, impeller binding, debris or ice",
             "Coupling/shaft condition"
@@ -786,31 +1002,55 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "vib": {
-      "n": "Seal leak / noise / vibration",
-      "s": "a",
+      "title": "Seal leak / noise / vibration",
+      "symptom": "Seal leak / noise / vibration",
+      "appliesTo": [
+        "Pump seals, bearings and coupled equipment; confirm pump construction and allowable operating range."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Compare leakage, vibration or temperature with the applicable manufacturer limit at documented duty.",
+        "Record the inspection/correction and repeat observations under comparable operating conditions."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "What are you seeing?",
-          "o": [
-            [
-              "Leak at the mechanical seal",
-              "sl"
-            ],
-            [
-              "Bearing noise or heat",
-              "br"
-            ],
-            [
-              "Vibration or rumbling",
-              "b"
-            ]
+          "question": "What are you seeing?",
+          "options": [
+            {
+              "label": "Leak at the mechanical seal",
+              "next": "sl"
+            },
+            {
+              "label": "Bearing noise or heat",
+              "next": "br"
+            },
+            {
+              "label": "Vibration or rumbling",
+              "next": "b"
+            }
           ]
         },
         "sl": {
-          "r": 1,
+          "result": true,
           "domain": "MECHANICAL",
-          "text": "Seals fail from dry running, cavitation, misalignment, shaft runout or contamination. Find why before replacing.",
-          "measure": [
+          "assessment": "Seals fail from dry running, cavitation, misalignment, shaft runout or contamination. Find why before replacing.",
+          "measurements": [
             "Leak source: seal vs casing/gland",
             "Shaft runout and alignment",
             "Evidence of dry running or cavitation upstream"
@@ -818,10 +1058,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "centrifugal pump mechanical seal failure causes shaft runout alignment"
         },
         "br": {
-          "r": 1,
+          "result": true,
           "domain": "MECHANICAL",
-          "text": "Check lubrication, alignment, load and contamination.",
-          "measure": [
+          "assessment": "Check lubrication, alignment, load and contamination.",
+          "measurements": [
             "Bearing temperature and lubrication",
             "Alignment and belt tension (if belt drive)",
             "Radial/axial load from piping strain"
@@ -829,27 +1069,27 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "centrifugal pump bearing failure causes misalignment lubrication"
         },
         "b": {
-          "q": "Does vibration change with flow or speed?",
-          "o": [
-            [
-              "Worse at high or low flow",
-              "h"
-            ],
-            [
-              "Worse at a certain Hz/speed",
-              "r"
-            ],
-            [
-              "Constant at all conditions",
-              "al"
-            ]
+          "question": "Does vibration change with flow or speed?",
+          "options": [
+            {
+              "label": "Worse at high or low flow",
+              "next": "h"
+            },
+            {
+              "label": "Worse at a certain Hz/speed",
+              "next": "r"
+            },
+            {
+              "label": "Constant at all conditions",
+              "next": "al"
+            }
           ]
         },
         "h": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC",
-          "text": "Operating far from best efficiency point or cavitating.",
-          "measure": [
+          "assessment": "Operating far from best efficiency point or cavitating.",
+          "measurements": [
             "Flow vs pump curve and BEP",
             "Suction conditions and noise character"
           ],
@@ -857,10 +1097,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "npsh"
         },
         "r": {
-          "r": 1,
+          "result": true,
           "domain": "RESONANCE",
-          "text": "A structural or piping resonance at a specific speed.",
-          "measure": [
+          "assessment": "A structural or piping resonance at a specific speed.",
+          "measurements": [
             "Note the Hz where it peaks",
             "Use VFD skip/jump frequency per your manual",
             "Check supports, bases and pipe clamps"
@@ -869,10 +1109,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "hz"
         },
         "al": {
-          "r": 1,
+          "result": true,
           "domain": "MECHANICAL",
-          "text": "Typical: soft foot, misalignment, imbalance, pipe strain or worn bearings.",
-          "measure": [
+          "assessment": "Typical: soft foot, misalignment, imbalance, pipe strain or worn bearings.",
+          "measurements": [
             "Soft foot and base bolts",
             "Coupling alignment",
             "Impeller condition and pipe strain"
@@ -882,35 +1122,59 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "fa": {
-      "n": "High / low flow alarm",
-      "s": "a",
+      "title": "High / low flow alarm",
+      "symptom": "High / low flow alarm",
+      "appliesTo": [
+        "Irrigation systems with flow monitoring; confirm controller, flow zone and alarm definition."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Record the alarm category, measured flow, expected demand and the applicable controller threshold/delay.",
+        "Verify the underlying flow condition and alarm behavior during the permitted operating sequence."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Is the alarm confirmed by an independent source (second meter, pump curve, visual)?",
-          "o": [
-            [
-              "No / not sure",
-              "flow:flow"
-            ],
-            [
-              "Yes, flow really is high",
-              "hi"
-            ],
-            [
-              "Yes, flow really is low",
-              "lw"
-            ],
-            [
-              "Rain Bird wording: Flow Meter Fault / Pipe Break / Starts Per Hour",
-              "flow:rbflow"
-            ]
+          "question": "Is the alarm confirmed by an independent source (second meter, pump curve, visual)?",
+          "options": [
+            {
+              "label": "No / not sure",
+              "next": "flow:flow"
+            },
+            {
+              "label": "Yes, flow really is high",
+              "next": "hi"
+            },
+            {
+              "label": "Yes, flow really is low",
+              "next": "lw"
+            },
+            {
+              "label": "Rain Bird wording: Flow Meter Fault / Pipe Break / Starts Per Hour",
+              "next": "flow:rbflow"
+            }
           ]
         },
         "hi": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC",
-          "text": "Real excess flow: break, valve stuck open, damaged heads or overlapping zones.",
-          "measure": [
+          "assessment": "Real excess flow: break, valve stuck open, damaged heads or overlapping zones.",
+          "measurements": [
             "Pressure drop vs normal at same station",
             "Which zones are on when it starts",
             "Valve positions, mainline and lateral leak signs"
@@ -918,10 +1182,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "irrigation high flow alarm mainline break stuck valve troubleshooting"
         },
         "lw": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC / VALVE",
-          "text": "Restriction or valves not opening.",
-          "measure": [
+          "assessment": "Restriction or valves not opening.",
+          "measurements": [
             "Strainers, filters, partially closed valves",
             "Pump output at this speed vs curve",
             "Valve/solenoid command and voltage"
@@ -932,43 +1196,67 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "rbflow": {
-      "n": "Rain Bird flow/pressure alarms",
-      "s": "a",
+      "title": "Rain Bird flow/pressure alarms",
+      "symptom": "Rain Bird flow/pressure alarms",
+      "appliesTo": [
+        "Rain Bird flow/pressure monitoring; confirm platform, sensor and alarm definition."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Verify sensor readings and alarm conditions against the exact Rain Bird platform documentation.",
+        "Record the corrected flow/pressure or filter-flush behavior without masking a real alarm."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Which Rain Bird alarm pattern is active?",
-          "o": [
-            [
-              "Flow Meter Fault",
-              "fm"
-            ],
-            [
-              "Pipe Break / High Flow",
-              "hf"
-            ],
-            [
-              "Low Pressure Fault",
-              "lp"
-            ],
-            [
-              "Pressure Transducer Fault",
-              "pt"
-            ],
-            [
-              "Starts Per Hour",
-              "sh"
-            ],
-            [
-              "Filter platform rinse/flush behavior",
-              "fi"
-            ]
+          "question": "Which Rain Bird alarm pattern is active?",
+          "options": [
+            {
+              "label": "Flow Meter Fault",
+              "next": "fm"
+            },
+            {
+              "label": "Pipe Break / High Flow",
+              "next": "hf"
+            },
+            {
+              "label": "Low Pressure Fault",
+              "next": "lp"
+            },
+            {
+              "label": "Pressure Transducer Fault",
+              "next": "pt"
+            },
+            {
+              "label": "Starts Per Hour",
+              "next": "sh"
+            },
+            {
+              "label": "Filter platform rinse/flush behavior",
+              "next": "fi"
+            }
           ]
         },
         "fm": {
-          "r": 1,
+          "result": true,
           "domain": "RAIN BIRD FLOW METER FAULT",
-          "text": "This can mean low/no flow plus low pressure after pump run time; it does not automatically prove a bad meter.",
-          "measure": [
+          "assessment": "This can mean low/no flow plus low pressure after pump run time; it does not automatically prove a bad meter.",
+          "measurements": [
             "Typical trigger context in Rain Bird training is less than about 3 GPM with low pressure after run time (confirm against your controller revision)",
             "Confirm the commanded pump is truly running (breaker/contactor/VFD status)",
             "Verify controller logic is using the correct sensor type (flow switch vs flow meter) and that the meter is enabled where required",
@@ -979,10 +1267,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "flowcal"
         },
         "hf": {
-          "r": 1,
+          "result": true,
           "domain": "RAIN BIRD PIPE BREAK / HIGH FLOW",
-          "text": "High flow compares measured flow to computed capacity from alarm-flow-per-pump and running pumps.",
-          "measure": [
+          "assessment": "High flow compares measured flow to computed capacity from alarm-flow-per-pump and running pumps.",
+          "measurements": [
             "Alarm Flow per Pump setting versus actual pump capacity and staged pump count",
             "Leak path, stuck-open valve, or overlap timing when the event starts",
             "Whether the alarm is now blocked hard after repeated auto-resets"
@@ -991,10 +1279,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "pipe"
         },
         "lp": {
-          "r": 1,
+          "result": true,
           "domain": "RAIN BIRD LOW PRESSURE FAULT",
-          "text": "Low pressure may be hydraulic demand, inlet condition, or an expected pump that is not actually running.",
-          "measure": [
+          "assessment": "Low pressure may be hydraulic demand, inlet condition, or an expected pump that is not actually running.",
+          "measurements": [
             "Inlet pressure/lift and suction condition under load",
             "PRV stuck open, active filter flush, and discharge-valve position",
             "Expected running pumps versus actual running pumps (including tripped breakers)"
@@ -1003,10 +1291,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "npsh"
         },
         "pt": {
-          "r": 1,
+          "result": true,
           "domain": "RAIN BIRD PRESSURE TRANSDUCER FAULT",
-          "text": "No valid pressure signal under run conditions is often wiring/scaling/transducer failure, not PID.",
-          "measure": [
+          "assessment": "No valid pressure signal under run conditions is often wiring/scaling/transducer failure, not PID.",
+          "measurements": [
             "Reference gauge versus displayed pressure and live 4-20 mA signal",
             "Small-platform clue: -62 PSI often indicates loop/scaling or VFD-to-PLC communication setup issues (check Input 4/PC path and comm cable)",
             "Cable/terminal integrity and analog input health (including freeze damage) and verify transducer max scaling value for the installed sensor"
@@ -1015,10 +1303,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "xdcr"
         },
         "sh": {
-          "r": 1,
+          "result": true,
           "domain": "RAIN BIRD STARTS PER HOUR",
-          "text": "Short cycling usually starts with system demand behavior, not with increasing alarm limits.",
-          "measure": [
+          "assessment": "Short cycling usually starts with system demand behavior, not with increasing alarm limits.",
+          "measurements": [
             "Field leaks, overlap/program timing, hand watering/syringing, and check-valve sealing",
             "Remember: starts are triggered by low pressure and stops by low flow behavior",
             "Adjust wake/sleep margins only after the hydraulic cause is confirmed"
@@ -1026,10 +1314,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "Rain Bird starts per hour alarm short cycling troubleshooting"
         },
         "fi": {
-          "r": 1,
+          "result": true,
           "domain": "RAIN BIRD FILTER PLATFORM",
-          "text": "Filter issues can mimic pump or flow faults if rinse hydraulics are wrong.",
-          "measure": [
+          "assessment": "Filter issues can mimic pump or flow faults if rinse hydraulics are wrong.",
+          "measurements": [
             "Confirm rinse discharge goes to atmosphere (not submerged, not into a pressurized line)",
             "Verify rinse-line routing: avoid long runs/multiple bends and avoid downsizing",
             "Check wye strainer and speed regulator on hydraulic piston control tubing",
@@ -1041,39 +1329,63 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "wtflow": {
-      "n": "WeatherTRAK flow alerts",
-      "s": "a",
+      "title": "WeatherTRAK flow alerts",
+      "symptom": "WeatherTRAK flow alerts",
+      "appliesTo": [
+        "WeatherTRAK flow monitoring; confirm controller model, firmware and applicable alert definition."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Match the WeatherTRAK alert category to actual valve states, demand and independent readings.",
+        "Record the corrected behavior under the documented flow-monitoring window and settings."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Which WeatherTRAK flow condition are you troubleshooting?",
-          "o": [
-            [
-              "Controller high flow / mainline break",
-              "mh"
-            ],
-            [
-              "Station high flow",
-              "sh"
-            ],
-            [
-              "Station no flow",
-              "sn"
-            ],
-            [
-              "Leak / extended leak",
-              "lk"
-            ],
-            [
-              "Flow history does not match field evidence",
-              "vr"
-            ]
+          "question": "Which WeatherTRAK flow condition are you troubleshooting?",
+          "options": [
+            {
+              "label": "Controller high flow / mainline break",
+              "next": "mh"
+            },
+            {
+              "label": "Station high flow",
+              "next": "sh"
+            },
+            {
+              "label": "Station no flow",
+              "next": "sn"
+            },
+            {
+              "label": "Leak / extended leak",
+              "next": "lk"
+            },
+            {
+              "label": "Flow history does not match field evidence",
+              "next": "vr"
+            }
           ]
         },
         "mh": {
-          "r": 1,
+          "result": true,
           "domain": "CONTROL / FLOW CONFIG",
-          "text": "Treat this as a potential mainline break until proven otherwise. WeatherTRAK logic can stop stations, test for continuing flow, and then close the master valve if break conditions persist.",
-          "measure": [
+          "assessment": "Treat this as a potential mainline break until proven otherwise. WeatherTRAK logic can stop stations, test for continuing flow, and then close the master valve if break conditions persist.",
+          "measurements": [
             "Mainline break threshold and delay (1-6 min) in controller/central settings",
             "Whether stations were stacked or overlapping when the alert occurred",
             "Flow after stations stop; if it remains above threshold, find leak path before restart",
@@ -1082,10 +1394,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "WeatherTRAK mainline break threshold delay troubleshooting"
         },
         "sh": {
-          "r": 1,
+          "result": true,
           "domain": "CONTROL / FLOW CONFIG",
-          "text": "Station high flow uses learned/assigned station flow plus offsets or station-specific limits. False trips usually come from stale learned values, threshold drift, or hydraulic changes.",
-          "measure": [
+          "assessment": "Station high flow uses learned/assigned station flow plus offsets or station-specific limits. False trips usually come from stale learned values, threshold drift, or hydraulic changes.",
+          "measurements": [
             "Assigned/learned station flow vs measured station flow",
             "Global offset or station-specific high-flow threshold and delay",
             "Recent nozzle/valve/head changes since the last learn cycle",
@@ -1095,10 +1407,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "flowcal"
         },
         "sn": {
-          "r": 1,
+          "result": true,
           "domain": "CONTROL / FLOW CONFIG",
-          "text": "No-flow alerts mean commanded irrigation with little/no measured flow (for example pump start fail, closed isolation/backflow, or scaling error).",
-          "measure": [
+          "assessment": "No-flow alerts mean commanded irrigation with little/no measured flow (for example pump start fail, closed isolation/backflow, or scaling error).",
+          "measurements": [
             "No-flow threshold/delay and any excluded stations",
             "Pump-start/master-valve output state during the event",
             "Upstream isolation/backflow status and station command voltage at valve",
@@ -1107,10 +1419,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "WeatherTRAK station no flow alert troubleshooting pump start master valve"
         },
         "lk": {
-          "r": 1,
+          "result": true,
           "domain": "CONTROL / LEAK MONITORING",
-          "text": "Leak monitoring is evaluated when no scheduled/manual station is running. Extended leak logic supports normally-open master-valve systems while reducing nuisance trips.",
-          "measure": [
+          "assessment": "Leak monitoring is evaluated when no scheduled/manual station is running. Extended leak logic supports normally-open master-valve systems while reducing nuisance trips.",
+          "measurements": [
             "Leak threshold and delay plus extended-leak settings",
             "Whether any station/manual run was active during the event window",
             "If normally-open MV is used, confirm extended-leak closure and reset behavior",
@@ -1119,10 +1431,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "WeatherTRAK extended leak detection normally open master valve troubleshooting"
         },
         "vr": {
-          "r": 1,
+          "result": true,
           "domain": "SIGNAL / SCALING",
-          "text": "History mismatches are usually K/offset, wiring/signal, or installation-condition issues before they are software defects.",
-          "measure": [
+          "assessment": "History mismatches are usually K/offset, wiring/signal, or installation-condition issues before they are software defects.",
+          "measurements": [
             "Sensor type and K/offset at controller match the meter output/register",
             "Pulse/mA signal at controller input matches live meter output",
             "For FlowHD, verify straight-run and air-vent install guidance; for Flow3, verify register/output selection",
@@ -1134,27 +1446,51 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "lflow": {
-      "n": "Learned vs measured flow",
-      "s": "a",
+      "title": "Learned vs measured flow",
+      "symptom": "Learned vs measured flow",
+      "appliesTo": [
+        "Irrigation flow-learning systems; confirm the learning conditions, sensor and hydraulic capacity."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Compare learned and measured flow under equivalent pressure, valve and demand conditions.",
+        "Document the cause of the mismatch before any authorized relearning or threshold change."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Has anything changed hydraulically since the flow was learned (nozzles, heads, repairs, valve or zone changes, pump or pressure changes)?",
-          "o": [
-            [
-              "Yes, something changed",
-              "st"
-            ],
-            [
-              "No / not sure",
-              "b"
-            ]
+          "question": "Has anything changed hydraulically since the flow was learned (nozzles, heads, repairs, valve or zone changes, pump or pressure changes)?",
+          "options": [
+            {
+              "label": "Yes, something changed",
+              "next": "st"
+            },
+            {
+              "label": "No / not sure",
+              "next": "b"
+            }
           ]
         },
         "st": {
-          "r": 1,
+          "result": true,
           "domain": "CONTROL CONFIG",
-          "text": "Learned values may be stale for the new hydraulics. Fix any real problem first, then re-learn per the controller manual.",
-          "measure": [
+          "assessment": "Learned values may be stale for the new hydraulics. Fix any real problem first, then re-learn per the controller manual.",
+          "measurements": [
             "What changed and when",
             "Pressure at the station now vs before",
             "Learned flow history vs current measured flow"
@@ -1162,23 +1498,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "central control learned flow out of date after changes relearn flow"
         },
         "b": {
-          "q": "Does an independent flow reading (portable meter, tank fill, pump curve) agree with the flow sensor?",
-          "o": [
-            [
-              "Yes, the sensor is right",
-              "hy"
-            ],
-            [
-              "No, they differ",
-              "flow:flow"
-            ]
+          "question": "Does an independent flow reading (portable meter, tank fill, pump curve) agree with the flow sensor?",
+          "options": [
+            {
+              "label": "Yes, the sensor is right",
+              "next": "hy"
+            },
+            {
+              "label": "No, they differ",
+              "next": "flow:flow"
+            }
           ]
         },
         "hy": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC",
-          "text": "Real flow differs from learned: leak, partial blockage, worn valve, overlapping stations, or a pressure shift.",
-          "measure": [
+          "assessment": "Real flow differs from learned: leak, partial blockage, worn valve, overlapping stations, or a pressure shift.",
+          "measurements": [
             "Station pressure vs normal at the same flow",
             "Which stations run together at alarm time",
             "Valve and strainer condition; signs of a leak"
@@ -1189,35 +1525,59 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "tw": {
-      "n": "Two-wire / decoder problem",
-      "s": "a",
+      "title": "Two-wire / decoder problem",
+      "symptom": "Two-wire / decoder problem",
+      "appliesTo": [
+        "Two-wire irrigation systems; use the exact compatible controller/decoder family and approved diagnostic method."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Compare path measurements with the exact controller/decoder diagnostic procedure and documented baseline.",
+        "Verify compatible devices and affected stations respond after repair; an idle-current subtotal alone is not a pass/fail test."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "How much of the system is affected?",
-          "o": [
-            [
-              "One decoder/station",
-              "one"
-            ],
-            [
-              "A branch or section",
-              "br"
-            ],
-            [
-              "The whole line",
-              "all"
-            ],
-            [
-              "Check expected idle current from decoder count",
-              "idle"
-            ]
+          "question": "How much of the system is affected?",
+          "options": [
+            {
+              "label": "One decoder/station",
+              "next": "one"
+            },
+            {
+              "label": "A branch or section",
+              "next": "br"
+            },
+            {
+              "label": "The whole line",
+              "next": "all"
+            },
+            {
+              "label": "Check expected idle current from decoder count",
+              "next": "idle"
+            }
           ]
         },
         "idle": {
-          "r": 1,
+          "result": true,
           "domain": "IDLE CURRENT / INVENTORY",
-          "text": "Calculate a decoder-only idle subtotal for the exact family. Nominal figures without tolerances are not pass/fail limits.",
-          "measure": [
+          "assessment": "Calculate a decoder-only idle subtotal for the exact family. Nominal figures without tolerances are not pass/fail limits.",
+          "measurements": [
             "Physical decoder count on the measured path/module, not station or solenoid count",
             "No active stations or master valves; path powered in the specified diagnostic state",
             "Exact controller/decoder family and manufacturer-approved measurement method",
@@ -1227,10 +1587,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "decoderidle"
         },
         "one": {
-          "r": 1,
+          "result": true,
           "domain": "DECODER / LOCAL",
-          "text": "Likely the decoder, solenoid or its splice at that valve.",
-          "measure": [
+          "assessment": "Likely the decoder, solenoid or its splice at that valve.",
+          "measurements": [
             "Voltage at the decoder and solenoid resistance (power off)",
             "Splice condition (water ingress)",
             "Swap test with a known-good decoder",
@@ -1239,10 +1599,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "two wire decoder single station not working solenoid resistance splice"
         },
         "br": {
-          "r": 1,
+          "result": true,
           "domain": "WIRING",
-          "text": "Break, bad splice or short on that branch.",
-          "measure": [
+          "assessment": "Break, bad splice or short on that branch.",
+          "measurements": [
             "Line current with the branch connected vs isolated",
             "Continuity and insulation to ground on the branch (locked out)",
             "Splices between the last working and first failed decoder",
@@ -1252,10 +1612,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "twvd"
         },
         "all": {
-          "r": 1,
+          "result": true,
           "domain": "ELECTRICAL / CONTROLLER",
-          "text": "Controller output, short on the line, ground leakage, or surge damage.",
-          "measure": [
+          "assessment": "Controller output, short on the line, ground leakage, or surge damage.",
+          "measurements": [
             "Line voltage at the controller output and at the far end",
             "Line current draw vs normal",
             "Insulation to ground, surge protection and ground rod condition",
@@ -1267,27 +1627,51 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "comm": {
-      "n": "Controller offline / comms",
-      "s": "a",
+      "title": "Controller offline / comms",
+      "symptom": "Controller offline / comms",
+      "appliesTo": [
+        "Irrigation controller communications; confirm local operation and the installed communication service."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Verify the controller still operates locally and communication reports reach the intended platform.",
+        "Record controller identity, connection type, report time and relevant service/firmware status."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Does the controller have power and run its program locally?",
-          "o": [
-            [
-              "No: dead or not running",
-              "pw"
-            ],
-            [
-              "Yes, it runs but isn’t reporting",
-              "b"
-            ]
+          "question": "Does the controller have power and run its program locally?",
+          "options": [
+            {
+              "label": "No: dead or not running",
+              "next": "pw"
+            },
+            {
+              "label": "Yes, it runs but isn’t reporting",
+              "next": "b"
+            }
           ]
         },
         "pw": {
-          "r": 1,
+          "result": true,
           "domain": "POWER",
-          "text": "Check power before communications.",
-          "measure": [
+          "assessment": "Check power before communications.",
+          "measurements": [
             "Voltage at the controller input and breaker",
             "Transformer/fuse and battery",
             "Display and status LEDs"
@@ -1295,23 +1679,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "irrigation controller no power transformer fuse troubleshooting"
         },
         "b": {
-          "q": "Is the signal strength/antenna indicator healthy and the service/account active?",
-          "o": [
-            [
-              "No: weak or no signal",
-              "sg"
-            ],
-            [
-              "Signal looks fine",
-              "ac"
-            ]
+          "question": "Is the signal strength/antenna indicator healthy and the service/account active?",
+          "options": [
+            {
+              "label": "No: weak or no signal",
+              "next": "sg"
+            },
+            {
+              "label": "Signal looks fine",
+              "next": "ac"
+            }
           ]
         },
         "sg": {
-          "r": 1,
+          "result": true,
           "domain": "SIGNAL",
-          "text": "Antenna or coverage problem.",
-          "measure": [
+          "assessment": "Antenna or coverage problem.",
+          "measurements": [
             "Signal strength indicator at the controller",
             "Antenna placement, cable and connectors",
             "Metal enclosure or obstruction effects"
@@ -1319,10 +1703,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "irrigation controller cellular antenna weak signal troubleshooting"
         },
         "ac": {
-          "r": 1,
+          "result": true,
           "domain": "ACCOUNT / SOFTWARE",
-          "text": "Service, activation or firmware issue.",
-          "measure": [
+          "assessment": "Service, activation or firmware issue.",
+          "measurements": [
             "Account, activation and subscription status",
             "Firmware version and update availability",
             "Communication alert indicators at controller (for example days-since-ET update / audible alert behavior)",
@@ -1333,27 +1717,51 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "pstart": {
-      "n": "Pump start / master valve not operating",
-      "s": "a",
+      "title": "Pump start / master valve not operating",
+      "symptom": "Pump start / master valve not operating",
+      "appliesTo": [
+        "Irrigation pump-start and master-valve chains; confirm output assignment, relay and station interfaces."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Verify the output, relay/master valve and station start sequence under an authorized command.",
+        "Record command and response evidence; return the system to its documented normal operating mode."
+      ],
+      "equipmentOptional": false,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Does the controller show the pump-start or master-valve output as ON when it should?",
-          "o": [
-            [
-              "No, output not turning on",
-              "cf"
-            ],
-            [
-              "Yes, it shows ON",
-              "b"
-            ]
+          "question": "Does the controller show the pump-start or master-valve output as ON when it should?",
+          "options": [
+            {
+              "label": "No, output not turning on",
+              "next": "cf"
+            },
+            {
+              "label": "Yes, it shows ON",
+              "next": "b"
+            }
           ]
         },
         "cf": {
-          "r": 1,
+          "result": true,
           "domain": "CONTROLLER CONFIG",
-          "text": "Output is not being called.",
-          "measure": [
+          "assessment": "Output is not being called.",
+          "measurements": [
             "Pump-start/master-valve assignment on the running stations",
             "Watering window, pauses, rain or sensor holds, active alarms",
             "Output status in the controller diagnostics",
@@ -1363,23 +1771,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "irrigation controller pump start master valve output not activating"
         },
         "b": {
-          "q": "Is voltage present at the relay coil or master-valve solenoid terminals while ON?",
-          "o": [
-            [
-              "No voltage",
-              "wr"
-            ],
-            [
-              "Voltage present",
-              "c"
-            ]
+          "question": "Is voltage present at the relay coil or master-valve solenoid terminals while ON?",
+          "options": [
+            {
+              "label": "No voltage",
+              "next": "wr"
+            },
+            {
+              "label": "Voltage present",
+              "next": "c"
+            }
           ]
         },
         "wr": {
-          "r": 1,
+          "result": true,
           "domain": "ELECTRICAL",
-          "text": "Output path is broken between controller and relay/valve.",
-          "measure": [
+          "assessment": "Output path is broken between controller and relay/valve.",
+          "measurements": [
             "Voltage at the controller output terminals",
             "Fuses, wiring and splices to the relay/valve",
             "Output module health per your manual"
@@ -1387,23 +1795,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "irrigation pump start relay no voltage controller output troubleshooting"
         },
         "c": {
-          "q": "Does the relay/contactor or valve respond when energized?",
-          "o": [
-            [
-              "No: relay or valve does not act",
-              "rl"
-            ],
-            [
-              "Yes, and the pump station still doesn’t start",
-              "flow:nostart"
-            ]
+          "question": "Does the relay/contactor or valve respond when energized?",
+          "options": [
+            {
+              "label": "No: relay or valve does not act",
+              "next": "rl"
+            },
+            {
+              "label": "Yes, and the pump station still doesn’t start",
+              "next": "flow:nostart"
+            }
           ]
         },
         "rl": {
-          "r": 1,
+          "result": true,
           "domain": "COMPONENT",
-          "text": "Coil, relay, contactor or master valve failure.",
-          "measure": [
+          "assessment": "Coil, relay, contactor or master valve failure.",
+          "measurements": [
             "Coil resistance and mechanical movement",
             "Relay contacts continuity (locked out)",
             "Replace with known-good and retest"
@@ -1413,78 +1821,123 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "ptype": {
-      "n": "Pump type",
-      "pt": 1,
-      "s": "a",
+      "title": "Pump type",
+      "symptom": "Identify or troubleshoot the installed pump type.",
+      "appliesTo": [
+        "Pump identification only; confirm the nameplate and actual suction/intake arrangement."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Confirm the selected pump type using the nameplate, installation record and actual water path.",
+        "Continue with that type-specific path; identification alone does not establish a fault."
+      ],
+      "equipmentOptional": true,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "What type of pump is it? Check the nameplate and how the water reaches the pump.",
-          "o": [
-            [
-              "Suction lift: pump sits above the water and pulls it up",
-              "flow:pt_lift"
-            ],
-            [
-              "Flooded suction: water level above the pump inlet",
-              "flow:pt_flood"
-            ],
-            [
-              "Vertical turbine: bowls submerged on a lineshaft, motor on top",
-              "flow:pt_vt"
-            ],
-            [
-              "Submersible: pump and motor submerged together",
-              "flow:pt_sub"
-            ],
-            [
-              "Booster: takes pressurized water from a supply",
-              "flow:pt_boost"
-            ],
-            [
-              "Jet pump: ejector (nozzle and venturi) assists suction",
-              "flow:pt_jet"
-            ]
+          "question": "What type of pump is it? Check the nameplate and how the water reaches the pump.",
+          "options": [
+            {
+              "label": "Suction lift: pump sits above the water and pulls it up",
+              "next": "flow:pt_lift"
+            },
+            {
+              "label": "Flooded suction: water level above the pump inlet",
+              "next": "flow:pt_flood"
+            },
+            {
+              "label": "Vertical turbine: bowls submerged on a lineshaft, motor on top",
+              "next": "flow:pt_vt"
+            },
+            {
+              "label": "Submersible: pump and motor submerged together",
+              "next": "flow:pt_sub"
+            },
+            {
+              "label": "Booster: takes pressurized water from a supply",
+              "next": "flow:pt_boost"
+            },
+            {
+              "label": "Jet pump: ejector (nozzle and venturi) assists suction",
+              "next": "flow:pt_jet"
+            }
           ]
         }
       }
     },
     "pt_lift": {
-      "n": "Suction lift pump",
-      "pt": 1,
-      "basis": "Basis: engineering fundamentals and common industry practice, not manufacturer specifications. Minimum submergence, minimum flow, operating range, clearances and adjustment values come from your pump’s manual and curve. Items marked PROBABLE are hypotheses to confirm.",
-      "s": "a",
+      "title": "Suction lift pump",
+      "symptom": "Identify or troubleshoot the installed suction lift pump.",
+      "appliesTo": [
+        "Suction-lift pumps; verify priming arrangement, installed lift, curve and source level."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "engineering-guidance",
+        "note": "Basis: engineering fundamentals and common industry practice, not manufacturer specifications. Minimum submergence, minimum flow, operating range, clearances and adjustment values come from your pump’s manual and curve. Items marked PROBABLE are hypotheses to confirm.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Verify prime retention and suction behavior at the documented duty and current water level.",
+        "Compare delivered head/flow and NPSH conditions with the exact pump documentation."
+      ],
+      "equipmentOptional": true,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Does it lose prime, pull air, or surge (no pressure after start)?",
-          "o": [
-            [
-              "Yes: loses prime, surges or sucks air",
-              "b"
-            ],
-            [
-              "No: it primes, but flow is low or it is noisy",
-              "c"
-            ]
+          "question": "Does it lose prime, pull air, or surge (no pressure after start)?",
+          "options": [
+            {
+              "label": "Yes: loses prime, surges or sucks air",
+              "next": "b"
+            },
+            {
+              "label": "No: it primes, but flow is low or it is noisy",
+              "next": "c"
+            }
           ]
         },
         "b": {
-          "q": "With the pump locked out, do the suction line and foot valve hold water or vacuum?",
-          "o": [
-            [
-              "No: loses water or vacuum",
-              "leak"
-            ],
-            [
-              "Yes: holds",
-              "sh"
-            ]
+          "question": "With the pump locked out, do the suction line and foot valve hold water or vacuum?",
+          "options": [
+            {
+              "label": "No: loses water or vacuum",
+              "next": "leak"
+            },
+            {
+              "label": "Yes: holds",
+              "next": "sh"
+            }
           ]
         },
         "leak": {
-          "r": 1,
+          "result": true,
           "domain": "SUCTION AIR LEAK / FOOT VALVE",
-          "text": "PROBABLE: Air is entering or water is draining back through the foot valve, a loose or cracked suction fitting, a worn shaft seal, a casing gasket or a strainer lid. Air breaks prime and cuts capacity before it looks like classic cavitation.",
-          "measure": [
+          "assessment": "PROBABLE: Air is entering or water is draining back through the foot valve, a loose or cracked suction fitting, a worn shaft seal, a casing gasket or a strainer lid. Air breaks prime and cuts capacity before it looks like classic cavitation.",
+          "measurements": [
             "Fill the suction line with the pump off and watch the level drop to test the foot valve and joints",
             "Look for bubbles in a clear section or at the priming port while running",
             "Vacuum gauge: a fluttering or creeping needle points to air; a steady high reading points to lift or restriction",
@@ -1496,10 +1949,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "npsh"
         },
         "sh": {
-          "r": 1,
+          "result": true,
           "domain": "PRIMING DEVICE / PUMP",
-          "text": "PROBABLE: Suction is tight but prime is not established or held. For a self-priming pump check the priming chamber level, wear clearances and rotation; for an external priming system check the vacuum pump, ejector or priming valve.",
-          "measure": [
+          "assessment": "PROBABLE: Suction is tight but prime is not established or held. For a self-priming pump check the priming chamber level, wear clearances and rotation; for an external priming system check the vacuum pump, ejector or priming valve.",
+          "measurements": [
             "Casing or priming chamber filled to the level the manual states before start",
             "Rotation and speed (a VFD running slow can also fail to prime)",
             "Prime time against the manufacturer’s expectation for this lift",
@@ -1510,23 +1963,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "self priming centrifugal pump will not prime troubleshooting wear plate clearance"
         },
         "c": {
-          "q": "Have you measured suction vacuum at the pump inlet while running at duty flow?",
-          "o": [
-            [
-              "Yes: high vacuum, noise, flow falling",
-              "vp"
-            ],
-            [
-              "No: not measured yet",
-              "m"
-            ]
+          "question": "Have you measured suction vacuum at the pump inlet while running at duty flow?",
+          "options": [
+            {
+              "label": "Yes: high vacuum, noise, flow falling",
+              "next": "vp"
+            },
+            {
+              "label": "No: not measured yet",
+              "next": "m"
+            }
           ]
         },
         "m": {
-          "r": 1,
+          "result": true,
           "domain": "SUCTION / MEASUREMENT",
-          "text": "UNKNOWN until suction is measured at the inlet while running at duty flow, not static.",
-          "measure": [
+          "assessment": "UNKNOWN until suction is measured at the inlet while running at duty flow, not static.",
+          "measurements": [
             "Vacuum gauge at the suction flange at running flow",
             "Conversion (CALCULATED): 1 inHg is about 1.13 ft of water; 1 psi is 2.31 ft",
             "Actual lift: water level to pump centerline, and strainer or intake condition",
@@ -1538,31 +1991,31 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "sys"
         },
         "vp": {
-          "q": "As flow increases, what does the suction vacuum pattern look like?",
-          "o": [
-            [
-              "Vacuum rises rapidly with flow",
-              "vr"
-            ],
-            [
-              "Vacuum rises then suddenly drops as prime is lost",
-              "vl"
-            ],
-            [
-              "Vacuum does not rise as expected and discharge head collapses when flow opens",
-              "vi"
-            ],
-            [
-              "Pattern unclear, but vacuum remains high and unstable",
-              "nl"
-            ]
+          "question": "As flow increases, what does the suction vacuum pattern look like?",
+          "options": [
+            {
+              "label": "Vacuum rises rapidly with flow",
+              "next": "vr"
+            },
+            {
+              "label": "Vacuum rises then suddenly drops as prime is lost",
+              "next": "vl"
+            },
+            {
+              "label": "Vacuum does not rise as expected and discharge head collapses when flow opens",
+              "next": "vi"
+            },
+            {
+              "label": "Pattern unclear, but vacuum remains high and unstable",
+              "next": "nl"
+            }
           ]
         },
         "vr": {
-          "r": 1,
+          "result": true,
           "domain": "SUCTION RESTRICTION",
-          "text": "PROBABLE: Restriction on the suction side (screen, strainer, valve, intake path). A restricted intake commonly shows rapid vacuum rise as flow increases.",
-          "measure": [
+          "assessment": "PROBABLE: Restriction on the suction side (screen, strainer, valve, intake path). A restricted intake commonly shows rapid vacuum rise as flow increases.",
+          "measurements": [
             "Pressure/vacuum drop across suction-side strainers and valves",
             "Intake screen condition and source level during demand",
             "Suction line sizing/route and high-friction sections"
@@ -1571,10 +2024,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "npsh"
         },
         "vl": {
-          "r": 1,
+          "result": true,
           "domain": "SUCTION AIR LEAK",
-          "text": "PROBABLE: Air leak in suction piping or fittings. A common signature is normal vacuum rise, then sudden drop with loss of prime as vacuum opens the leak path.",
-          "measure": [
+          "assessment": "PROBABLE: Air leak in suction piping or fittings. A common signature is normal vacuum rise, then sudden drop with loss of prime as vacuum opens the leak path.",
+          "measurements": [
             "Inspect suction-side joints/fittings, especially long PVC runs and any hairline cracks",
             "Watch gauge behavior on shutdown; rising vacuum with water draining back can indicate leak path",
             "Check foot valve seal and suction-line hold test before restart"
@@ -1583,10 +2036,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "npsh"
         },
         "vi": {
-          "r": 1,
+          "result": true,
           "domain": "IMPELLER / INTERNAL BLOCKAGE",
-          "text": "PROBABLE: Impeller blockage or internal flow restriction. A telltale pattern is weak vacuum-rise response with discharge pressure that deadheads correctly but falls quickly when flow is introduced.",
-          "measure": [
+          "assessment": "PROBABLE: Impeller blockage or internal flow restriction. A telltale pattern is weak vacuum-rise response with discharge pressure that deadheads correctly but falls quickly when flow is introduced.",
+          "measurements": [
             "Compare deadhead pressure to curve versus pressure under flow",
             "Inspect impeller/eye for blockage and wear",
             "Confirm rotation/speed and re-test with clean suction path"
@@ -1594,10 +2047,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "centrifugal pump impeller blockage deadhead ok pressure falls with flow troubleshooting"
         },
         "nl": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC / SUCTION",
-          "text": "PROBABLE: High lift plus friction leaves little NPSHa. Atmosphere supports about 34 ft of water at sea level in theory (CALCULATED), and the practical lift is far lower after vapor pressure, suction friction and the pump’s NPSHr. Warmer water, a falling water level or a fouled strainer each reduce NPSHa.",
-          "measure": [
+          "assessment": "PROBABLE: High lift plus friction leaves little NPSHa. Atmosphere supports about 34 ft of water at sea level in theory (CALCULATED), and the practical lift is far lower after vapor pressure, suction friction and the pump’s NPSHr. Warmer water, a falling water level or a fouled strainer each reduce NPSHa.",
+          "measurements": [
             "Actual lift now versus at installation (water level change)",
             "Vacuum drop across strainer, screen and foot valve",
             "Suction pipe size, length and velocity at flow",
@@ -1611,33 +2064,55 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "pt_flood": {
-      "n": "Flooded suction pump",
-      "pt": 1,
-      "basis": "Basis: engineering fundamentals and common industry practice, not manufacturer specifications. Minimum submergence, minimum flow, operating range, clearances and adjustment values come from your pump’s manual and curve. Items marked PROBABLE are hypotheses to confirm.",
-      "s": "a",
+      "title": "Flooded suction pump",
+      "symptom": "Identify or troubleshoot the installed flooded suction pump.",
+      "appliesTo": [
+        "Flooded-suction pumps; verify source pressure, intake arrangement and pump curve."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "engineering-guidance",
+        "note": "Basis: engineering fundamentals and common industry practice, not manufacturer specifications. Minimum submergence, minimum flow, operating range, clearances and adjustment values come from your pump’s manual and curve. Items marked PROBABLE are hypotheses to confirm.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Compare static and running inlet pressure, flow and intake conditions after correction.",
+        "Verify the operating point and NPSH conditions against the pump curve and manufacturer requirements."
+      ],
+      "equipmentOptional": true,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Compare suction pressure at the pump while running at duty flow with the static (pump off) value.",
-          "o": [
-            [
-              "Drops a lot when running",
-              "b"
-            ],
-            [
-              "Little change, still noisy or low flow",
-              "c"
-            ],
-            [
-              "Not measured",
-              "m"
-            ]
+          "question": "Compare suction pressure at the pump while running at duty flow with the static (pump off) value.",
+          "options": [
+            {
+              "label": "Drops a lot when running",
+              "next": "b"
+            },
+            {
+              "label": "Little change, still noisy or low flow",
+              "next": "c"
+            },
+            {
+              "label": "Not measured",
+              "next": "m"
+            }
           ]
         },
         "m": {
-          "r": 1,
+          "result": true,
           "domain": "SUCTION / MEASUREMENT",
-          "text": "UNKNOWN until suction pressure is measured static and running.",
-          "measure": [
+          "assessment": "UNKNOWN until suction pressure is measured static and running.",
+          "measurements": [
             "Suction gauge static and at duty flow, same gauge",
             "Discharge pressure and flow at the same time",
             "Water level, water temperature and elevation for NPSHa"
@@ -1646,23 +2121,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "sys"
         },
         "b": {
-          "q": "Is any suction valve partly closed, or a strainer, screen or intake plugged?",
-          "o": [
-            [
-              "Yes or unsure",
-              "r1"
-            ],
-            [
-              "No: valves open, screens clean",
-              "p1"
-            ]
+          "question": "Is any suction valve partly closed, or a strainer, screen or intake plugged?",
+          "options": [
+            {
+              "label": "Yes or unsure",
+              "next": "r1"
+            },
+            {
+              "label": "No: valves open, screens clean",
+              "next": "p1"
+            }
           ]
         },
         "r1": {
-          "r": 1,
+          "result": true,
           "domain": "SUCTION RESTRICTION",
-          "text": "PROBABLE: A large drop from static to running suction pressure means friction or a restriction between the source and the pump inlet.",
-          "measure": [
+          "assessment": "PROBABLE: A large drop from static to running suction pressure means friction or a restriction between the source and the pump inlet.",
+          "measurements": [
             "Pressure on both sides of each strainer, valve and screen",
             "Valve position: confirm fully open (a disc can come loose from its stem)",
             "Intake screen debris and water level",
@@ -1671,10 +2146,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "pump suction strainer plugged pressure drop flooded suction troubleshooting"
         },
         "p1": {
-          "r": 1,
+          "result": true,
           "domain": "SUCTION PIPING",
-          "text": "PROBABLE: Suction velocity or friction is too high for the flow, or air is trapped. Flooded suction helps NPSHa but does not guarantee it.",
-          "measure": [
+          "assessment": "PROBABLE: Suction velocity or friction is too high for the flow, or air is trapped. Flooded suction helps NPSHa but does not guarantee it.",
+          "measurements": [
             "Suction pipe size and velocity at flow (Pipe velocity tool)",
             "Elbows or reducers close to the inlet; eccentric reducers are commonly installed flat side up on horizontal suction so air does not trap (confirm in your pump manual)",
             "High points in the suction line that trap air, and venting",
@@ -1685,23 +2160,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "pipe"
         },
         "c": {
-          "q": "Is there a vortex or air entry at the intake (low level, inlet near the surface, wall or a tank outlet)?",
-          "o": [
-            [
-              "Yes or likely",
-              "v"
-            ],
-            [
-              "No",
-              "n"
-            ]
+          "question": "Is there a vortex or air entry at the intake (low level, inlet near the surface, wall or a tank outlet)?",
+          "options": [
+            {
+              "label": "Yes or likely",
+              "next": "v"
+            },
+            {
+              "label": "No",
+              "next": "n"
+            }
           ]
         },
         "v": {
-          "r": 1,
+          "result": true,
           "domain": "INTAKE / AIR ENTRAINMENT",
-          "text": "PROBABLE: Air drawn in at the intake gives noise, surging and falling head, which sounds like cavitation but is a different cause.",
-          "measure": [
+          "assessment": "PROBABLE: Air drawn in at the intake gives noise, surging and falling head, which sounds like cavitation but is a different cause.",
+          "measurements": [
             "Water level versus the submergence your pump manufacturer or intake guidance requires",
             "Surface vortices, swirl, and returns dropping water near the intake",
             "Air in a clear pipe section or at a high-point vent",
@@ -1711,10 +2186,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "pump intake vortex air entrainment submergence wet well troubleshooting"
         },
         "n": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC / NPSH",
-          "text": "UNKNOWN until NPSHa is calculated. Hot water, high elevation, long suction friction, or running far right on the curve (higher NPSHr) can still cause cavitation.",
-          "measure": [
+          "assessment": "UNKNOWN until NPSHa is calculated. Hot water, high elevation, long suction friction, or running far right on the curve (higher NPSHr) can still cause cavitation.",
+          "measurements": [
             "NPSHa with the System check tool, using a negative lift for flooded suction",
             "Operating flow on the curve versus BEP and NPSHr at that flow",
             "Water temperature"
@@ -1725,30 +2200,52 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "pt_vt": {
-      "n": "Vertical turbine pump",
-      "pt": 1,
-      "basis": "Basis: engineering fundamentals and common industry practice, not manufacturer specifications. Minimum submergence, minimum flow, operating range, clearances and adjustment values come from your pump’s manual and curve. Items marked PROBABLE are hypotheses to confirm.",
-      "x": "Wet wells, vaults and ponds can be confined spaces. Rig and lift only at the manufacturer’s lifting points, and keep clear of the open discharge head and column during pulls.",
-      "s": "a",
+      "title": "Vertical turbine pump",
+      "symptom": "Identify or troubleshoot the installed vertical turbine pump.",
+      "appliesTo": [
+        "Vertical turbine pumps; verify bowl setting, driver, lineshaft and pumping water level."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "engineering-guidance",
+        "note": "Basis: engineering fundamentals and common industry practice, not manufacturer specifications. Minimum submergence, minimum flow, operating range, clearances and adjustment values come from your pump’s manual and curve. Items marked PROBABLE are hypotheses to confirm.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections.",
+        "Wet wells, vaults and ponds can be confined spaces. Rig and lift only at the manufacturer’s lifting points, and keep clear of the open discharge head and column during pulls."
+      ],
+      "verification": [
+        "Record pumping water level, submergence, speed, flow and delivered head at the tested duty.",
+        "Verify vibration, lubrication and operating range against the installed turbine/driver documentation."
+      ],
+      "equipmentOptional": true,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Do you know the static and pumping (drawdown) water level at this flow?",
-          "o": [
-            [
-              "Yes: measured or readable",
-              "b"
-            ],
-            [
-              "No: not available",
-              "m"
-            ]
+          "question": "Do you know the static and pumping (drawdown) water level at this flow?",
+          "options": [
+            {
+              "label": "Yes: measured or readable",
+              "next": "b"
+            },
+            {
+              "label": "No: not available",
+              "next": "m"
+            }
           ]
         },
         "m": {
-          "r": 1,
+          "result": true,
           "domain": "SUCTION / MEASUREMENT",
-          "text": "UNKNOWN: A turbine has no suction gauge. The water level over the first bowl is the suction condition.",
-          "measure": [
+          "assessment": "UNKNOWN: A turbine has no suction gauge. The water level over the first bowl is the suction condition.",
+          "measurements": [
             "Static and pumping water level at running flow (sounder, airline or transducer as installed)",
             "Discharge pressure at the head and flow at the same time",
             "Setting depth and bowl data from the pump record, and the curve for this model"
@@ -1757,23 +2254,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "sys"
         },
         "b": {
-          "q": "Is the pumping level close to the first bowl, or falling over time?",
-          "o": [
-            [
-              "Yes: low submergence or falling level",
-              "s1"
-            ],
-            [
-              "No: plenty of submergence",
-              "c"
-            ]
+          "question": "Is the pumping level close to the first bowl, or falling over time?",
+          "options": [
+            {
+              "label": "Yes: low submergence or falling level",
+              "next": "s1"
+            },
+            {
+              "label": "No: plenty of submergence",
+              "next": "c"
+            }
           ]
         },
         "s1": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC / SUBMERGENCE",
-          "text": "PROBABLE: Too little submergence over the first impeller gives cavitation and vortexing. The requirement (NPSHr plus minimum submergence) comes from the manufacturer.",
-          "measure": [
+          "assessment": "PROBABLE: Too little submergence over the first impeller gives cavitation and vortexing. The requirement (NPSHr plus minimum submergence) comes from the manufacturer.",
+          "measurements": [
             "Minimum submergence in the manual versus actual pumping level",
             "Seasonal or drought decline in the source; wet well or pond level control",
             "Swirl or vortex at the intake",
@@ -1782,23 +2279,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "vertical turbine pump minimum submergence vortex cavitation NPSH"
         },
         "c": {
-          "q": "Compared with the curve at the measured flow, is total head low? Total head is lift to the surface plus discharge pressure plus column loss.",
-          "o": [
-            [
-              "Head or flow low versus the curve",
-              "d"
-            ],
-            [
-              "Matches the curve but vibration, noise or amps are odd",
-              "e"
-            ]
+          "question": "Compared with the curve at the measured flow, is total head low? Total head is lift to the surface plus discharge pressure plus column loss.",
+          "options": [
+            {
+              "label": "Head or flow low versus the curve",
+              "next": "d"
+            },
+            {
+              "label": "Matches the curve but vibration, noise or amps are odd",
+              "next": "e"
+            }
           ]
         },
         "d": {
-          "r": 1,
+          "result": true,
           "domain": "MECHANICAL / HYDRAULIC",
-          "text": "PROBABLE (confirm one at a time): impeller lateral setting wrong or impellers worn, bowl wear, wrong rotation or speed, a column or discharge head leak, a broken lineshaft or coupling, a closed or partly closed valve, air, or sand.",
-          "measure": [
+          "assessment": "PROBABLE (confirm one at a time): impeller lateral setting wrong or impellers worn, bowl wear, wrong rotation or speed, a column or discharge head leak, a broken lineshaft or coupling, a closed or partly closed valve, air, or sand.",
+          "measurements": [
             "Rotation and VFD output frequency",
             "Impeller adjustment per the manufacturer’s procedure for the motor type (hollow shaft or solid shaft)",
             "Column joints, discharge head, check valve and air/vacuum release valve operation",
@@ -1810,10 +2307,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "affinity"
         },
         "e": {
-          "r": 1,
+          "result": true,
           "domain": "MECHANICAL",
-          "text": "PROBABLE: Vibration or noise at a normal operating point points to lineshaft bearings or lubrication, a bent shaft, driver and discharge head misalignment, resonance, or intake turbulence.",
-          "measure": [
+          "assessment": "PROBABLE: Vibration or noise at a normal operating point points to lineshaft bearings or lubrication, a bent shaft, driver and discharge head misalignment, resonance, or intake turbulence.",
+          "measurements": [
             "Vibration at the motor and discharge head versus speed (VFD resonance and skip frequencies per the manual)",
             "Lineshaft lubrication: oil tube drip rate or water supply to the bearings, per the manual",
             "Motor thrust bearing condition and non-reverse ratchet",
@@ -1824,30 +2321,52 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "pt_sub": {
-      "n": "Submersible pump",
-      "pt": 1,
-      "basis": "Basis: engineering fundamentals and common industry practice, not manufacturer specifications. Minimum submergence, minimum flow, operating range, clearances and adjustment values come from your pump’s manual and curve. Items marked PROBABLE are hypotheses to confirm.",
-      "x": "Submerged cable and motor can hold dangerous voltage. Lock out and verify before pulling the pump; rig at the manufacturer’s lifting points; treat wet wells and vaults as confined spaces.",
-      "s": "a",
+      "title": "Submersible pump",
+      "symptom": "Identify or troubleshoot the installed submersible pump.",
+      "appliesTo": [
+        "Submersible pumps and motors; verify motor cooling, cable, pump curve and submergence requirements."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "engineering-guidance",
+        "note": "Basis: engineering fundamentals and common industry practice, not manufacturer specifications. Minimum submergence, minimum flow, operating range, clearances and adjustment values come from your pump’s manual and curve. Items marked PROBABLE are hypotheses to confirm.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections.",
+        "Submerged cable and motor can hold dangerous voltage. Lock out and verify before pulling the pump; rig at the manufacturer’s lifting points; treat wet wells and vaults as confined spaces."
+      ],
+      "verification": [
+        "Record water level, flow, head, motor current and cooling conditions at the tested duty.",
+        "Verify electrical/cable results and operating range against the installed motor and pump requirements."
+      ],
+      "equipmentOptional": true,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Is the motor tripping on overload, drawing unbalanced amps, or reading low insulation resistance?",
-          "o": [
-            [
-              "Yes: overload, imbalance or low insulation resistance",
-              "el"
-            ],
-            [
-              "No: it runs, but flow or pressure is low or it is noisy",
-              "b"
-            ]
+          "question": "Is the motor tripping on overload, drawing unbalanced amps, or reading low insulation resistance?",
+          "options": [
+            {
+              "label": "Yes: overload, imbalance or low insulation resistance",
+              "next": "el"
+            },
+            {
+              "label": "No: it runs, but flow or pressure is low or it is noisy",
+              "next": "b"
+            }
           ]
         },
         "el": {
-          "r": 1,
+          "result": true,
           "domain": "ELECTRICAL",
-          "text": "PROBABLE (confirm with measurements): damaged cable or splice, water ingress to the motor, supply imbalance, a VFD output problem (long cable, voltage spikes), or the pump binding from sand or debris.",
-          "measure": [
+          "assessment": "PROBABLE (confirm with measurements): damaged cable or splice, water ingress to the motor, supply imbalance, a VFD output problem (long cable, voltage spikes), or the pump binding from sand or debris.",
+          "measurements": [
             "Insulation resistance: cable alone versus cable and motor, compared with the manufacturer’s minimum and earlier readings",
             "Phase resistance balance, voltage and current per phase",
             "Cable splice and cable condition; voltage drop over the cable run",
@@ -1858,23 +2377,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "imb"
         },
         "b": {
-          "q": "Is the water level near the pump intake, or could air or a vortex enter at the intake?",
-          "o": [
-            [
-              "Low level or vortex possible",
-              "lv"
-            ],
-            [
-              "Level is fine",
-              "c"
-            ]
+          "question": "Is the water level near the pump intake, or could air or a vortex enter at the intake?",
+          "options": [
+            {
+              "label": "Low level or vortex possible",
+              "next": "lv"
+            },
+            {
+              "label": "Level is fine",
+              "next": "c"
+            }
           ]
         },
         "lv": {
-          "r": 1,
+          "result": true,
           "domain": "SUCTION / SUBMERGENCE",
-          "text": "PROBABLE: Low submergence causes air entrainment and can reduce motor cooling. Minimum submergence and cooling requirements come from the manufacturer.",
-          "measure": [
+          "assessment": "PROBABLE: Low submergence causes air entrainment and can reduce motor cooling. Minimum submergence and cooling requirements come from the manufacturer.",
+          "measurements": [
             "Water level versus the manufacturer’s minimum submergence",
             "Level control and float or transducer settings",
             "Intake screen condition and distance from walls or the surface",
@@ -1883,27 +2402,27 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "submersible pump minimum submergence cooling air entrainment vortex"
         },
         "c": {
-          "q": "Where is it operating: far from the curve, or at reduced VFD speed?",
-          "o": [
-            [
-              "Far right (low head, high flow) or near shutoff",
-              "up"
-            ],
-            [
-              "Reduced speed on a VFD",
-              "vfd"
-            ],
-            [
-              "Normal point on the curve",
-              "cr"
-            ]
+          "question": "Where is it operating: far from the curve, or at reduced VFD speed?",
+          "options": [
+            {
+              "label": "Far right (low head, high flow) or near shutoff",
+              "next": "up"
+            },
+            {
+              "label": "Reduced speed on a VFD",
+              "next": "vfd"
+            },
+            {
+              "label": "Normal point on the curve",
+              "next": "cr"
+            }
           ]
         },
         "up": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC / MECHANICAL",
-          "text": "PROBABLE: Staged pumps are built for an operating range. Far-right operation can cause upthrust and wear; near shutoff causes heat, recirculation and downthrust. Limits come from the manufacturer.",
-          "measure": [
+          "assessment": "PROBABLE: Staged pumps are built for an operating range. Far-right operation can cause upthrust and wear; near shutoff causes heat, recirculation and downthrust. Limits come from the manufacturer.",
+          "measurements": [
             "Flow and head versus the curve and the manufacturer’s allowable range",
             "Discharge valve, check valve and system pressure changes",
             "Pressure setpoint and PID behavior on a VFD",
@@ -1913,10 +2432,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "affinity"
         },
         "vfd": {
-          "r": 1,
+          "result": true,
           "domain": "CONTROL / COOLING",
-          "text": "PROBABLE: At reduced speed the flow past the motor falls. Below the manufacturer’s minimum speed or flow the motor may overheat.",
-          "measure": [
+          "assessment": "PROBABLE: At reduced speed the flow past the motor falls. Below the manufacturer’s minimum speed or flow the motor may overheat.",
+          "measurements": [
             "Programmed minimum frequency versus the manufacturer’s minimum",
             "Cooling flow past the motor or the cooling sleeve in this installation",
             "Motor temperature if monitored",
@@ -1926,10 +2445,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "affinity"
         },
         "cr": {
-          "r": 1,
+          "result": true,
           "domain": "MECHANICAL / HYDRAULIC",
-          "text": "UNKNOWN until head and flow are compared with the curve. Look for sand wear, rotation, a clogged intake screen, a discharge leak or a stuck check valve.",
-          "measure": [
+          "assessment": "UNKNOWN until head and flow are compared with the curve. Look for sand wear, rotation, a clogged intake screen, a discharge leak or a stuck check valve.",
+          "measurements": [
             "Head and flow versus the curve at the actual speed",
             "Rotation and amps per phase",
             "Intake screen, check valve and discharge piping",
@@ -1940,33 +2459,55 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "pt_boost": {
-      "n": "Booster pump",
-      "pt": 1,
-      "basis": "Basis: engineering fundamentals and common industry practice, not manufacturer specifications. Minimum submergence, minimum flow, operating range, clearances and adjustment values come from your pump’s manual and curve. Items marked PROBABLE are hypotheses to confirm.",
-      "s": "a",
+      "title": "Booster pump",
+      "symptom": "Identify or troubleshoot the installed booster pump.",
+      "appliesTo": [
+        "Booster pumps on a pressurized supply; verify available inlet pressure and upstream capacity."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "engineering-guidance",
+        "note": "Basis: engineering fundamentals and common industry practice, not manufacturer specifications. Minimum submergence, minimum flow, operating range, clearances and adjustment values come from your pump’s manual and curve. Items marked PROBABLE are hypotheses to confirm.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Record inlet and outlet pressure simultaneously with flow and speed.",
+        "Verify differential head against the curve and confirm the supply and low-suction protections remain adequate."
+      ],
+      "equipmentOptional": true,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Does inlet pressure at the booster drop when it runs?",
-          "o": [
-            [
-              "Yes: inlet pressure collapses at running flow",
-              "b"
-            ],
-            [
-              "No: inlet stays steady",
-              "c"
-            ],
-            [
-              "Not measured",
-              "m"
-            ]
+          "question": "Does inlet pressure at the booster drop when it runs?",
+          "options": [
+            {
+              "label": "Yes: inlet pressure collapses at running flow",
+              "next": "b"
+            },
+            {
+              "label": "No: inlet stays steady",
+              "next": "c"
+            },
+            {
+              "label": "Not measured",
+              "next": "m"
+            }
           ]
         },
         "m": {
-          "r": 1,
+          "result": true,
           "domain": "MEASUREMENT",
-          "text": "UNKNOWN: A booster only adds to what the supply provides, so you need inlet pressure, outlet pressure and flow together.",
-          "measure": [
+          "assessment": "UNKNOWN: A booster only adds to what the supply provides, so you need inlet pressure, outlet pressure and flow together.",
+          "measurements": [
             "Inlet and outlet pressure at the same time at running flow; the difference is the head the pump adds (CALCULATED: psi × 2.31 = ft)",
             "Static (pump off) versus running inlet pressure",
             "Flow at the same moment, compared with the curve"
@@ -1974,23 +2515,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "booster pump measure inlet outlet pressure differential head curve"
         },
         "b": {
-          "q": "Can the supply (main, tank or upstream pump) deliver the booster’s flow?",
-          "o": [
-            [
-              "No or unsure: limited or fed by another pump",
-              "sup"
-            ],
-            [
-              "Yes: supply is adequate",
-              "c"
-            ]
+          "question": "Can the supply (main, tank or upstream pump) deliver the booster’s flow?",
+          "options": [
+            {
+              "label": "No or unsure: limited or fed by another pump",
+              "next": "sup"
+            },
+            {
+              "label": "Yes: supply is adequate",
+              "next": "c"
+            }
           ]
         },
         "sup": {
-          "r": 1,
+          "result": true,
           "domain": "SUPPLY / SUCTION",
-          "text": "PROBABLE: Booster demand exceeds the supply, so inlet pressure collapses, NPSHa falls, and the booster cavitates or trips on its low-suction safety. Repairing the pump will not fix the supply. Do not defeat or lower the low-suction cutoff to keep it running.",
-          "measure": [
+          "assessment": "PROBABLE: Booster demand exceeds the supply, so inlet pressure collapses, NPSHa falls, and the booster cavitates or trips on its low-suction safety. Repairing the pump will not fix the supply. Do not defeat or lower the low-suction cutoff to keep it running.",
+          "measurements": [
             "Upstream pressure, valves, strainers and backflow or PRV assemblies (pressure drop across each)",
             "Upstream pump or tank capability at this flow",
             "Low-suction cutoff setpoint versus actual inlet pressure, and that the sensor reads true",
@@ -2000,27 +2541,27 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "sys"
         },
         "c": {
-          "q": "How is it operating?",
-          "o": [
-            [
-              "Near shutoff, hot, or cycling on and off",
-              "low"
-            ],
-            [
-              "High flow, running out the curve",
-              "high"
-            ],
-            [
-              "Neither: head or flow does not match the curve",
-              "cur"
-            ]
+          "question": "How is it operating?",
+          "options": [
+            {
+              "label": "Near shutoff, hot, or cycling on and off",
+              "next": "low"
+            },
+            {
+              "label": "High flow, running out the curve",
+              "next": "high"
+            },
+            {
+              "label": "Neither: head or flow does not match the curve",
+              "next": "cur"
+            }
           ]
         },
         "low": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC / CONTROL",
-          "text": "PROBABLE: Low-flow operation heats the water in the casing and causes recirculation, vibration and seal or bearing damage. Short cycling stresses the motor and starter. The minimum flow comes from the manual.",
-          "measure": [
+          "assessment": "PROBABLE: Low-flow operation heats the water in the casing and causes recirculation, vibration and seal or bearing damage. Short cycling stresses the motor and starter. The minimum flow comes from the manual.",
+          "measurements": [
             "Casing and seal temperature and noise",
             "Minimum continuous flow in the manual versus actual flow",
             "Pressure setpoint, deadband, tank precharge and check valve",
@@ -2029,10 +2570,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "booster pump minimum flow shutoff overheating short cycling pressure tank VFD sleep"
         },
         "high": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC",
-          "text": "PROBABLE: More flow than designed (open lines, a break) moves the pump right on the curve, where NPSHr and motor load rise, while inlet pressure falls.",
-          "measure": [
+          "assessment": "PROBABLE: More flow than designed (open lines, a break) moves the pump right on the curve, where NPSHr and motor load rise, while inlet pressure falls.",
+          "measurements": [
             "Flow versus design and versus the curve",
             "Inlet pressure at that flow",
             "Motor amps versus nameplate",
@@ -2042,10 +2583,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "tool": "sys"
         },
         "cur": {
-          "r": 1,
+          "result": true,
           "domain": "MECHANICAL / HYDRAULIC",
-          "text": "UNKNOWN until the differential head and flow are compared with the curve. A mismatch can come from rotation or speed, wear, instrument error, or a changed system.",
-          "measure": [
+          "assessment": "UNKNOWN until the differential head and flow are compared with the curve. A mismatch can come from rotation or speed, wear, instrument error, or a changed system.",
+          "measurements": [
             "Rotation and VFD speed",
             "Gauge and transducer accuracy",
             "Impeller diameter and wear",
@@ -2057,29 +2598,51 @@ globalThis.TRACER_TROUBLESHOOTING = {
       }
     },
     "pt_jet": {
-      "n": "Jet pump",
-      "pt": 1,
-      "basis": "Basis: engineering fundamentals and common industry practice, not manufacturer specifications. Minimum submergence, minimum flow, operating range, clearances and adjustment values come from your pump’s manual and curve. Items marked PROBABLE are hypotheses to confirm.",
-      "s": "a",
+      "title": "Jet pump",
+      "symptom": "Identify or troubleshoot the installed jet pump.",
+      "appliesTo": [
+        "Jet pumps; verify well depth and the installed nozzle/venturi and one- or two-pipe arrangement."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+      },
+      "evidence": {
+        "kind": "engineering-guidance",
+        "note": "Basis: engineering fundamentals and common industry practice, not manufacturer specifications. Minimum submergence, minimum flow, operating range, clearances and adjustment values come from your pump’s manual and curve. Items marked PROBABLE are hypotheses to confirm.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Follow the site authorization and equipment isolation procedure before any inspection or test.",
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+      ],
+      "verification": [
+        "Compare pressure and delivered flow with the correct ejector performance table at actual water depth.",
+        "Verify prime retention and operating behavior after the authorized correction."
+      ],
+      "equipmentOptional": true,
+      "start": "a",
       "nodes": {
         "a": {
-          "q": "Does it prime and hold pressure?",
-          "o": [
-            [
-              "No: loses prime or no pressure",
-              "p"
-            ],
-            [
-              "Yes: it primes, but flow or pressure is low",
-              "q"
-            ]
+          "question": "Does it prime and hold pressure?",
+          "options": [
+            {
+              "label": "No: loses prime or no pressure",
+              "next": "p"
+            },
+            {
+              "label": "Yes: it primes, but flow or pressure is low",
+              "next": "q"
+            }
           ]
         },
         "p": {
-          "r": 1,
+          "result": true,
           "domain": "SUCTION AIR / FOOT VALVE",
-          "text": "PROBABLE: A jet pump needs tight suction and drive piping. Air in the suction line, a leaking foot valve or an empty casing stops it from priming.",
-          "measure": [
+          "assessment": "PROBABLE: A jet pump needs tight suction and drive piping. Air in the suction line, a leaking foot valve or an empty casing stops it from priming.",
+          "measurements": [
             "Casing and pipes filled with water per the manual before start",
             "Foot valve seat and all fittings (on a two-pipe deep-well system check both pipes)",
             "Vacuum and pressure gauges steady or fluttering",
@@ -2088,23 +2651,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "jet pump loses prime foot valve air leak troubleshooting"
         },
         "q": {
-          "q": "Has the ejector (nozzle and venturi) been checked for plugging, wear, or a mismatch with the well depth?",
-          "o": [
-            [
-              "Not checked, or suspect it",
-              "ej"
-            ],
-            [
-              "Checked and clean",
-              "pc"
-            ]
+          "question": "Has the ejector (nozzle and venturi) been checked for plugging, wear, or a mismatch with the well depth?",
+          "options": [
+            {
+              "label": "Not checked, or suspect it",
+              "next": "ej"
+            },
+            {
+              "label": "Checked and clean",
+              "next": "pc"
+            }
           ]
         },
         "ej": {
-          "r": 1,
+          "result": true,
           "domain": "EJECTOR",
-          "text": "PROBABLE: The nozzle and venturi pair sets performance for a given depth and pressure. Plugging from sand or scale, wear, or the wrong combination reduces flow and priming ability.",
-          "measure": [
+          "assessment": "PROBABLE: The nozzle and venturi pair sets performance for a given depth and pressure. Plugging from sand or scale, wear, or the wrong combination reduces flow and priming ability.",
+          "measurements": [
             "Installed nozzle and venturi part numbers versus the manufacturer’s performance table for your depth",
             "Inspect and clean them with the pump locked out and depressurized",
             "Foot valve screen or strainer",
@@ -2113,10 +2676,10 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "jet pump nozzle venturi ejector plugged performance table well depth"
         },
         "pc": {
-          "r": 1,
+          "result": true,
           "domain": "HYDRAULIC",
-          "text": "UNKNOWN: A jet pump recirculates part of its flow, so efficiency is low and output falls as the water level (drawdown) falls. Compare pressure and flow with the manufacturer’s performance table at the actual depth.",
-          "measure": [
+          "assessment": "UNKNOWN: A jet pump recirculates part of its flow, so efficiency is low and output falls as the water level (drawdown) falls. Compare pressure and flow with the manufacturer’s performance table at the actual depth.",
+          "measurements": [
             "Depth to water now versus at installation",
             "Pressure and flow versus the table",
             "Motor amps versus nameplate",

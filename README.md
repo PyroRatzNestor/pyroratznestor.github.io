@@ -17,6 +17,24 @@ No build step, dependencies, accounts or backend are required.
 - `assets/directory.js`: client-side filtering of the tool directory.
 - `data/troubleshooting.js`: diagnostic questions, decisions and result guidance,
   kept separate from dashboard rendering and calculators.
+- `assets/troubleshooting.js`: validation of technique metadata, sources and
+  decision-graph integrity before any path can run.
+
+## Evolving the troubleshooting playbook
+
+Each diagnostic technique now records symptom, applicability, safety
+prerequisites, measurements/decisions, verification criteria, source provenance,
+content revision and technical-review status. Existing paths are explicitly
+`needs-review`, not newly certified manufacturer instructions. Missing citations
+and unrecorded review dates stay blank/unknown. Draft paths cannot run as field
+guidance. Status and source context appear in the path and its Notes export.
+The Diagnostic Playbook dropdown discovers all entries directly from the data
+file. `dashboard.html?technique=hunt` opens a specific technique for preview.
+
+See [Maintaining troubleshooting techniques](docs/troubleshooting.md) for the
+content format, authoring example and draft → review → preview → publish cycle.
+Schema/graph validation is not technical approval. Invalid/missing content
+blocks diagnostics with a visible error but leaves calculators and notes usable.
 
 Navigation uses relative URLs and works on GitHub Pages without server rewrites.
 Keep all pages, `assets/` and `data/` together when publishing. Open the dashboard

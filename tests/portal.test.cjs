@@ -47,6 +47,7 @@ function route(search) {
     window: {location: {search}},
     $: selector => { assert.equal(selector, '#portalRouteStatus'); return status; },
     openTool: (...args) => calls.push(['tool', ...args]),
+    openFlow: (...args) => calls.push(['technique', ...args]),
     openCheck: () => calls.push(['check']),
     scrollBench: value => calls.push(['scroll', value])
   });
@@ -74,6 +75,12 @@ test('missing tool links keep the default dashboard; unknown and prototype keys 
     assert.match(status.textContent, /not available/);
     assert.ok(!status.textContent.includes(key));
   }
+});
+
+test('technique entry links dispatch to diagnostics without changing calculator routing', () => {
+  assert.deepEqual(route('?technique=hunt').calls, [['technique', 'hunt', true]]);
+  assert.deepEqual(route('?technique=hunt&tool=pipe').calls, [['technique', 'hunt', true]]);
+  assert.deepEqual(route('?technique=&tool=pipe').calls, [['tool', 'pipe', true]]);
 });
 
 function directory(search = '') {

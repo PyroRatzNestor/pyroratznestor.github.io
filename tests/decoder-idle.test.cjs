@@ -113,7 +113,7 @@ test('idle calculator is reachable from menus, decoder references and diagnostic
     fs.readFileSync(path.join(__dirname, '..', 'data', 'troubleshooting.js'), 'utf8') + '\nTRACER_TROUBLESHOOTING'
   );
   assert.match(html, /Decoder idle current \/ expected mA','tool','decoderidle/);
-  assert.ok(techniques.tw.nodes.a.o.some(([label, next]) => label === 'Check expected idle current from decoder count' && next === 'idle'));
+  assert.ok(techniques.tw.nodes.a.options.some(({label, next}) => label === 'Check expected idle current from decoder count' && next === 'idle'));
   assert.equal(techniques.tw.nodes.idle.tool, 'decoderidle');
   assert.match(html, /id="dcidle"/);
   assert.match(html, /\$\('#dcidle'\)\.onclick=\(\)=>openTool\('decoderidle',false\)/);

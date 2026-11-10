@@ -32,7 +32,7 @@ a:not(.btn),a:not(.btn):visited{color:var(--cyan)}:focus-visible{outline:3px sol
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header"><div class="portal-shell header-inner"><a class="site-brand" href="index.html">TECHNICIAN<span>FIELD PORTAL</span></a><nav class="site-nav" aria-label="Main navigation"><a href="index.html">Home</a><a href="dashboard.html" aria-current="page">Field dashboard</a><a href="tools.html">Tool directory</a><a href="references.html">References</a><a href="help.html">Help &amp; about</a></nav></div></header>
 <main class="wrap" id="main">
-<div class="dashboard-intro"><span class="eyebrow">YOUR FIELD WORKSPACE</span><p>Identify the equipment, follow the evidence, and keep a record of what you prove.</p><nav class="section-nav" aria-label="Dashboard sections"><a href="#prof">Equipment</a><a href="#c1">Troubleshooting</a><a href="#benchCard">Field bench</a><a href="#quickCalculator">Calculators</a><a href="#training">Training</a><a href="#fieldNotes">Notes</a></nav></div>
+<div class="dashboard-intro"><span class="eyebrow">YOUR FIELD WORKSPACE</span><p>Identify the equipment, follow the evidence, and keep a record of what you prove.</p><nav class="section-nav" aria-label="Dashboard sections"><a href="#prof">Equipment</a><a href="#c1">Troubleshooting</a><a href="#diagnosticPlaybook">Playbook</a><a href="#benchCard">Field bench</a><a href="#quickCalculator">Calculators</a><a href="#training">Training</a><a href="#fieldNotes">Notes</a></nav></div>
 <p id="portalRouteStatus" class="portal-status" role="status" hidden></p>
 
 <section class="top"><h1 class="title">Technician Dashboard</h1><div class="motto">MEASURE → ISOLATE → VERIFY → REPAIR → PROVE</div><p class="sub">Start with evidence. Separate hydraulic, electrical, mechanical and control-system causes before changing parts or parameters.</p>
@@ -57,6 +57,8 @@ a:not(.btn),a:not(.btn):visited{color:var(--cyan)}:focus-visible{outline:3px sol
 <section class="card"><h2>VFD // CONTROLS</h2><div class="items" id="c2"></div></section>
 <section class="card"><h2>IRRIGATION CONTROL</h2><div class="items" id="c3"></div></section>
 
+<section class="card full" id="diagnosticPlaybook"><h2>DIAGNOSTIC PLAYBOOK</h2><p class="small">Browse every technique in the evolving playbook. Review status is not a diagnosis or authorization to work. Draft entries show metadata only.</p><form class="topic-menu" id="techniquePicker"><div class="fld"><label for="techniqueSelect">Choose a diagnostic technique</label><select id="techniqueSelect" required disabled><option value="">Choose a technique…</option></select></div><button id="techniqueOpen" type="submit" disabled>OPEN TECHNIQUE</button></form><p id="techniqueStatus" class="small" role="status"></p></section>
+
 <section class="card full" id="benchCard"><h2>FIELD BENCH</h2><div class="tabs" id="tabs"></div><div id="bench"></div></section>
 
 <section class="card wide"><h2>GIS // FIELD MAPPING</h2><div class="links"><a class="btn" href="https://app.atlas.co/" target="_blank" rel="noopener">OPEN ATLAS GIS</a><a class="btn" href="https://explore.garmin.com/" target="_blank" rel="noopener">OPEN GARMIN EXPLORE</a><button type="button" data-tool="coords">COORDINATE CONVERTER</button></div><p class="small">Workflow: field pin capture → coordinates → Atlas asset map. Use for equipment, valves, decoders, splices, mainline features and locations without reliable landmarks.</p></section>
@@ -77,6 +79,7 @@ a:not(.btn),a:not(.btn):visited{color:var(--cyan)}:focus-visible{outline:3px sol
 <script src="data/golf-rainbird.js"></script>
 <script src="data/golf-toro.js"></script>
 <script src="data/troubleshooting.js"></script>
+<script src="assets/troubleshooting.js"></script>
 <script>
 (()=>{
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
@@ -839,22 +842,66 @@ const hints=d=>{d=d.toUpperCase();const h=[];
  h.push('Manual revision/date matches your nameplate and serial number');return h};
 let skipProfile=false;
 function gate(k,s){cur='flow';setTabs();const p=prof();
- $('#bench').innerHTML='<h3>Equipment first</h3><p class="small">Choose what you’re working on so each result can point to the right manufacturer literature. You can skip.</p><div class="fields"><div class="fld"><label for="g_make">Pump station / pump make</label><select id="g_make"></select></div><div class="fld"><label for="g_ctrl">Central control</label><select id="g_ctrl"></select></div><div class="fld"><label for="g_vfdb">VFD brand</label><select id="g_vfdb"></select></div></div><div class="links" style="margin-top:10px"><button type="button" id="g_go">START: '+esc(flows[k].n.toUpperCase())+'</button><button type="button" id="g_skip">SKIP</button></div>';
+ $('#bench').innerHTML='<h3>Equipment first</h3><p class="small">Choose what you’re working on so each result can point to the right manufacturer literature. You can skip.</p>'+techniqueDetails(flows[k])+'<div class="fields"><div class="fld"><label for="g_make">Pump station / pump make</label><select id="g_make"></select></div><div class="fld"><label for="g_ctrl">Central control</label><select id="g_ctrl"></select></div><div class="fld"><label for="g_vfdb">VFD brand</label><select id="g_vfdb"></select></div></div><div class="links" style="margin-top:10px"><button type="button" id="g_go">START: '+esc(flows[k].title.toUpperCase())+'</button><button type="button" id="g_skip">SKIP</button></div>';
  fillSel('#g_make',MAKES,'— choose —');fillSel('#g_ctrl',CTRLS,'— choose —');fillSel('#g_vfdb',VFDS,'— choose —');$('#g_make').value=p.make||'';$('#g_ctrl').value=p.ctrl||'';$('#g_vfdb').value=p.vfdb||'';
  $('#g_go').onclick=()=>{const q2=prof();store.set('tracerProfile',{make:$('#g_make').value,ctrl:$('#g_ctrl').value,vfdb:$('#g_vfdb').value,vfd:q2.vfd||'',model:q2.model||''});drawProfile();skipProfile=true;openFlow(k,false)};
  $('#g_skip').onclick=()=>{skipProfile=true;openFlow(k,false)};scrollBench(s)}
 
 /* ---------- diagnostic paths ---------- */
-const {safety:S,techniques:flows}=globalThis.TRACER_TROUBLESHOOTING;
-function openFlow(k,s){if(!flows[k].pt&&!prof().make&&!prof().vfdb&&!skipProfile){gate(k,s);return}cur='flow';setTabs();const f=flows[k];const path=[];
- const draw=id=>{const n=f.nodes[id];let h='<h3>'+esc(f.n)+'</h3><div class="safety">'+S+'</div>'+(f.x?'<div class="safety">'+esc(f.x)+'</div>':'')+(f.basis?'<div class="small">'+esc(f.basis)+'</div>':'');
+let diagnosticLibrary=null,diagnosticError='';
+try{
+ if(!globalThis.TRACER_TECHNIQUES_API)throw new Error('Troubleshooting validation script did not load.');
+ diagnosticLibrary=globalThis.TRACER_TECHNIQUES_API.validate(globalThis.TRACER_TROUBLESHOOTING,[...Object.keys(tools),'vfdsetup']);
+}catch(error){
+ diagnosticError='Troubleshooting content is unavailable: '+error.message+' Reload the page or report this content problem. Calculators and saved notes remain available.';
+ console.error(diagnosticError);
+ const status=$('#portalRouteStatus');status.hidden=false;status.textContent=diagnosticError;
+}
+const flows=diagnosticLibrary?diagnosticLibrary.techniques:{};
+const reviewLabels={'draft':'Draft — not available for field use','needs-review':'Needs technical review','reviewed':'Technically reviewed'};
+const evidenceLabels={'field-guidance':'Field guidance — not manufacturer-verified','engineering-guidance':'Engineering guidance — not manufacturer specifications','manufacturer-backed':'Manufacturer-backed references — verify installed applicability'};
+function techniqueDetails(f){
+ const list=items=>'<ul>'+items.map(item=>'<li>'+esc(item)+'</li>').join('')+'</ul>';
+ return '<p class="'+(f.review.status==='reviewed'?'small':'safety')+'"><strong>'+esc(reviewLabels[f.review.status])+'</strong> · Revision '+f.revision+' · '+esc(evidenceLabels[f.evidence.kind])+'</p>'+
+ '<details class="vfd-section"><summary>Scope, safety prerequisites, sources &amp; verification</summary><p><strong>Symptom:</strong> '+esc(f.symptom)+'</p><h4>Applies to</h4>'+list(f.appliesTo)+'<h4>Safety prerequisites</h4>'+list(f.safetyPrerequisites)+
+ '<h4>Evidence &amp; sources</h4><p>'+esc(f.evidence.note)+'</p>'+(f.evidence.sources.length?'<ul>'+f.evidence.sources.map(source=>'<li>'+esc(source.title)+' · '+esc(source.revision)+' · '+esc(source.locator)+(source.url?' · <a href="'+esc(source.url)+'" target="_blank" rel="noopener">Open source</a>':'')+'</li>').join('')+'</ul>':'<p>No verified path-level citation is recorded. Search results and equipment-library links are not source approval.</p>')+
+ '<h4>Review record</h4><p>'+esc(f.review.note)+' Last technical review: '+esc(f.review.reviewedOn||'not recorded')+'.</p><h4>Verification criteria</h4>'+list(f.verification)+'</details>';
+}
+function diagnosticNote(k,f,path,n){
+ return '[Diagnostic: '+f.title+']\nTechnique: '+k+' | Revision: '+f.revision+' | '+reviewLabels[f.review.status]+'\n'+
+ evidenceLabels[f.evidence.kind]+'\nSymptom: '+f.symptom+'\nApplies to: '+f.appliesTo.join('; ')+
+ '\nSafety: '+diagnosticLibrary.safety+' '+f.safetyPrerequisites.join(' ')+'\nPath: '+path.join(' → ')+' → '+n.domain+
+ '\nAssessment (confirm, not a diagnosis): '+n.assessment+'\nMeasure / check: '+n.measurements.join('; ')+
+ '\nVerification: '+f.verification.join('; ')+'\nEvidence: '+f.evidence.note+
+ '\nSources: '+(f.evidence.sources.map(source=>source.title+' | '+source.revision+' | '+source.locator+(source.url?' | '+source.url:'')).join('; ')||'No verified path-level citation recorded')+
+ '\nReview: '+f.review.note+' | Last technical review: '+(f.review.reviewedOn||'not recorded');
+}
+function initTechniquePicker(){
+ const select=$('#techniqueSelect'),status=$('#techniqueStatus');
+ if(diagnosticError){status.textContent=diagnosticError;return}
+ Object.entries(flows).sort(([,a],[,b])=>a.title.localeCompare(b.title)).forEach(([key,technique])=>{
+  const option=document.createElement('option');option.value=key;option.textContent=technique.title+' — '+reviewLabels[technique.review.status];select.appendChild(option);
+ });
+ select.disabled=false;$('#techniqueOpen').disabled=false;
+ status.textContent=Object.keys(flows).length+' techniques available. Check scope, safety and sources before proceeding.';
+ $('#techniquePicker').onsubmit=event=>{event.preventDefault();if(select.value)openFlow(select.value,true)};
+}
+function openFlow(k,s){
+ if(diagnosticError||!Object.hasOwn(flows,k)){
+  cur='flow';setTabs();$('#bench').innerHTML='<h3>Troubleshooting unavailable</h3><p role="alert">'+esc(diagnosticError||'That diagnostic technique does not exist. Choose a dashboard topic or report the broken link.')+'</p>';scrollBench(s);return;
+ }
+ const f=flows[k];
+ if(f.review.status==='draft'){cur='flow';setTabs();$('#bench').innerHTML='<h3>'+esc(f.title)+'</h3>'+techniqueDetails(f)+'<p class="safety">Draft techniques cannot be run as field guidance. Complete technical review before changing the status.</p>';scrollBench(s);return}
+ if(!f.equipmentOptional&&!prof().make&&!prof().vfdb&&!skipProfile){gate(k,s);return}
+ cur='flow';setTabs();const path=[];
+ const draw=id=>{const n=f.nodes[id];let h='<h3>'+esc(f.title)+'</h3><div class="safety">'+esc(diagnosticLibrary.safety)+'</div><div class="safety"><strong>Before proceeding:</strong><ul>'+f.safetyPrerequisites.map(text=>'<li>'+esc(text)+'</li>').join('')+'</ul></div>'+techniqueDetails(f);
   if(path.length)h+='<div class="small">'+path.map(esc).join(' → ')+'</div>';
-  if(n.r){h+=`<div class="res"><b>Most likely area: ${esc(n.domain)}</b><br>${esc(n.text)}<br><br>Measure / check:<ul>${n.measure.map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Confirm in your manual:<ul>${hints(n.domain).map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Make the smallest justified change, then prove it under operating conditions.</div><div class="links" id="lit" style="margin-top:10px"></div><div class="links" style="margin-top:10px"><button type="button" id="fs">SEARCH THIS</button>${n.tool?'<button type="button" id="ft2">'+(n.tool==='vfdsetup'?'OPEN DRIVE SETUP GUIDE':'OPEN CALCULATOR')+'</button>':''}<button type="button" id="fn">LOG TO NOTES</button><button type="button" id="fr">START OVER</button></div>`}
-  else h+=`<div class="q">${esc(n.q)}</div><div class="opts">${n.o.map((o,i)=>`<button type="button" data-i="${i}">${esc(o[0])}</button>`).join('')}</div>${path.length?'<div class="links" style="margin-top:10px"><button type="button" id="fr">START OVER</button></div>':''}`;
+  if(n.result){h+=`<div class="res"><b>Area to investigate (not a confirmed diagnosis): ${esc(n.domain)}</b><br>${esc(n.assessment)}<br><br>Measure / check:<ul>${n.measurements.map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Confirm in your manual:<ul>${hints(n.domain).map(m=>'<li>'+esc(m)+'</li>').join('')}</ul><strong>Verify the result:</strong><ul>${f.verification.map(item=>'<li>'+esc(item)+'</li>').join('')}</ul>Make the smallest justified change, then prove it under operating conditions.</div><div class="links" id="lit" style="margin-top:10px"></div><div class="links" style="margin-top:10px"><button type="button" id="fs">SEARCH THIS</button>${n.tool?'<button type="button" id="ft2">'+(n.tool==='vfdsetup'?'OPEN DRIVE SETUP GUIDE':'OPEN CALCULATOR')+'</button>':''}<button type="button" id="fn">LOG TO NOTES</button><button type="button" id="fr">START OVER</button></div>`}
+  else h+=`<div class="q">${esc(n.question)}</div><div class="opts">${n.options.map((option,i)=>`<button type="button" data-i="${i}">${esc(option.label)}</button>`).join('')}</div>${path.length?'<div class="links" style="margin-top:10px"><button type="button" id="fr">START OVER</button></div>':''}`;
   $('#bench').innerHTML=h;
-  if(n.r){litButtons($('#lit'),n.search.split(' ').slice(0,5).join(' '));$('#fs').onclick=()=>go(withBrand(n.search));if(n.tool)$('#ft2').onclick=()=>openTool(n.tool,true);$('#fn').onclick=()=>appendNote(`[Diagnostic: ${f.n}] Path: ${path.join(' → ')} → ${n.domain}. Next: ${n.measure.join('; ')}`)}
-  $$('#bench .opts button').forEach(b=>b.onclick=()=>{const o=n.o[b.dataset.i];if(o[1].startsWith('flow:')){openFlow(o[1].slice(5),true);return}path.push(o[0]);draw(o[1])});
-  const r=$('#fr');if(r)r.onclick=()=>{path.length=0;draw(f.s)}};draw(f.s);scrollBench(s)}
+  if(n.result){litButtons($('#lit'),n.search.split(' ').slice(0,5).join(' '));$('#fs').onclick=()=>go(withBrand(n.search));if(n.tool)$('#ft2').onclick=()=>openTool(n.tool,true);$('#fn').onclick=()=>appendNote(diagnosticNote(k,f,path,n))}
+  $$('#bench .opts button').forEach(b=>b.onclick=()=>{const option=n.options[b.dataset.i];if(option.next.startsWith('flow:')){openFlow(option.next.slice(5),true);return}path.push(option.label);draw(option.next)});
+  const r=$('#fr');if(r)r.onclick=()=>{path.length=0;draw(f.start)}};draw(f.start);scrollBench(s)}
 
 /* ---------- commissioned drive setup ---------- */
 const VFD_PROFILES={
@@ -1316,13 +1363,15 @@ window.addEventListener('beforeunload',event=>{
 
 /* ---------- portal entry links ---------- */
 function initPortalRoute(){
- const key=new URLSearchParams(window.location.search).get('tool');
+ const params=new URLSearchParams(window.location.search),technique=params.get('technique');
+ if(technique){openFlow(technique,true);return}
+ const key=params.get('tool');
  if(!key)return;
  if(key==='check'){openCheck();scrollBench(true);return}
  if(Object.hasOwn(tools,key)||['vfdsetup','plat','dec','lib','landscape','filters','pfind'].includes(key)){openTool(key,true);return}
  const status=$('#portalRouteStatus');status.hidden=false;status.textContent='That tool link is not available. Choose a tool from the directory or the dashboard menus.';
 }
 
-setTabs();drawProfile();initQuickCalculators();initPortalRoute();
+setTabs();drawProfile();initQuickCalculators();initTechniquePicker();initPortalRoute();
 })();
 </script></body></html>
