@@ -68,6 +68,17 @@
           });
         }
       }
+      if(technique.reviewFlags!==undefined){
+        if(!Array.isArray(technique.reviewFlags))fail(at+'.reviewFlags','list required');
+        technique.reviewFlags.forEach((flag,index)=>{
+          const location=at+'.reviewFlags['+index+']';
+          if(!object(flag))fail(location,'object required');
+          text(flag.node,location+'.node');text(flag.note,location+'.note');
+          if(!own(technique.nodes,flag.node))fail(location+'.node','unknown decision/result node');
+          if(!['energized-testing','operating-test','parameter-change','model-specific-limit','source-verification'].includes(flag.category))fail(location+'.category','unknown review category');
+        });
+        if(review.status==='reviewed'&&technique.reviewFlags.length)fail(at+'.reviewFlags','resolve outstanding flags before marking guidance reviewed');
+      }
     }
     const visiting=new Set(),visited=new Set();
     const visit=(id,nodeId)=>{

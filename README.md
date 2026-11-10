@@ -30,11 +30,16 @@ and unrecorded review dates stay blank/unknown. Draft paths cannot run as field
 guidance. Status and source context appear in the path and its Notes export.
 The Diagnostic Playbook dropdown discovers all entries directly from the data
 file. `dashboard.html?technique=hunt` opens a specific technique for preview.
+Step-specific review flags identify unresolved electrical/operating tests,
+parameter changes and model-dependent limits; flags appear in the affected
+step and Notes. A technique with outstanding flags cannot be marked reviewed.
 
 See [Maintaining troubleshooting techniques](docs/troubleshooting.md) for the
 content format, authoring example and draft → review → preview → publish cycle.
 Schema/graph validation is not technical approval. Invalid/missing content
 blocks diagnostics with a visible error but leaves calculators and notes usable.
+The [beta readiness checklist](docs/beta-checklist.md) covers a no-equipment
+desktop/phone walkthrough and the separate qualified-review/publication gates.
 
 Navigation uses relative URLs and works on GitHub Pages without server rewrites.
 Keep all pages, `assets/` and `data/` together when publishing. Open the dashboard

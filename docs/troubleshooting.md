@@ -51,6 +51,7 @@ Each technique has:
 | `appliesTo` | Equipment families/configurations and exclusions or applicability checks. |
 | `revision` | A positive integer identifying the content revision, not device firmware. |
 | `review` | `status` (`draft`, `needs-review`, `reviewed`), actual `reviewedOn` date or `null`, and an explanatory `note`. |
+| `reviewFlags` | Optional list of unresolved step-specific concerns: each needs `node`, `category` and `note`. Flags are not test instructions or technical approval. |
 | `evidence` | `kind`, an honest provenance `note`, and a `sources` list. |
 | `safetyPrerequisites` | Site authorization, test/isolation prerequisites and equipment-specific hazards. |
 | `verification` | What must be measured and compared after the correction; use documented limits, not invented pass/fail tolerances. |
@@ -74,6 +75,59 @@ Result nodes use `result: true`, `domain`, `assessment`, `measurements`,
 `search`, and optionally `tool` for an existing calculator or `vfdsetup`.
 Search phrases are external lookup conveniences, not citations.
 Assessments must remain hypotheses until confirmed by measurements.
+
+### Step-specific review flags
+
+Use the existing node key to attach a concern where it matters. Categories are
+`energized-testing`, `operating-test`, `parameter-change`,
+`model-specific-limit` and `source-verification`. The dashboard displays
+applicable flags alongside that step, lists all flags in the technique details,
+and preserves them in Log to Notes. A technique with outstanding flags cannot
+validate with `review.status: "reviewed"`.
+
+Resolve a flag only when its required source, safe procedure or reviewer
+decision is documented. Clearing the array alone is not evidence of approval.
+Retain the disposition in the review note and version-control diff, increase
+the content revision, and obtain the qualified review described above.
+
+## Readiness example: pump pressure
+
+The `wont` technique is the first editorial readiness example, not an approved
+technical reference. Revision 2:
+
+- Narrows applicability to a centrifugal-water-pump screen with the actual
+  speed/impeller curve. Other pump arrangements need their type-specific path.
+- Separates pump differential total head from discharge gauge pressure, with
+  inlet pressure and instrument/elevation context for booster installations.
+- Adds explicit insufficient-evidence exits instead of forcing an electrical,
+  suction or mechanical classification. Current or lack of noise alone does
+  not establish pump health.
+- Replaces a loosely qualified shutoff-test suggestion with a clear boundary:
+  no deadhead test, mode change, restart or intrusive inspection is authorized
+  by the guide. Such work needs a separate approved procedure.
+- Removes the generic 150 PSI single-stage/multistage rule as a decision basis.
+- Requires comparable before/after evidence and documented equipment limits,
+  not a generic green result.
+
+**Source-verification blocker:** On 2026-11-10, both the existing PPS
+manufacturer manuals page and its linked Master O&M PDF failed DNS retrieval;
+an alternate direct retrieval also failed. No source text, edition/page
+coverage or installed-model applicability was verified. The existing links
+remain literature starting points, not citations supporting this path.
+`evidence.sources` therefore remains empty, the evidence kind remains
+`field-guidance`, and `reviewedOn` remains `null`.
+
+The broader wording scan recorded step-specific flags for energized work,
+manual/operating tests, parameter/recovery changes and unsupported
+model-dependent limits. In particular, legacy deadhead comparisons, generic
+intake submergence/clearance ratios and platform parameter/reset references
+are not approved procedures or limits. These flags are an unresolved-review
+queue, not a claim that the rest of each legacy technique is technically
+verified.
+
+Use the [beta checklist](beta-checklist.md) for a no-equipment interface pass.
+Qualified technical/source review and an actual-handset check remain separate
+release gates; browser simulation cannot approve a field technique.
 
 Example shape for a new draft (adapt the safety, applicability and verification
 to the actual technique; this is not approved field guidance):
@@ -126,7 +180,7 @@ to the actual technique; this is not approved field guidance):
 
 `assets/troubleshooting.js` validates required metadata, supported statuses,
 review dates, citation fields, safe source URLs, node targets, tool links,
-reachability and cycles. It does not interpret manufacturer documentation or
+review-flag targets/categories, reachability and cycles. It does not interpret manufacturer documentation or
 approve a diagnostic claim. A missing or malformed content/validation file
 shows a visible error and blocks diagnostics, while leaving calculators and
 saved notes available. Fix the file rather than substituting a silent default.

@@ -4,95 +4,110 @@ globalThis.TRACER_TROUBLESHOOTING = {
   "techniques": {
     "wont": {
       "title": "Pump won't build pressure",
-      "symptom": "Pump won't build pressure",
+      "symptom": "A centrifugal water-pump system is delivering less pressure or head than expected under a documented demand.",
       "appliesTo": [
-        "Pump systems; verify pump model, speed, curve and operating range."
+        "Centrifugal water pumps with an identified model, impeller configuration and applicable curve at the actual operating speed.",
+        "For boosters, include inlet pressure: discharge gauge pressure alone is not pump differential head. Account for gauge locations, elevations and velocity-head differences where relevant.",
+        "Use the pump-type paths for vertical turbine, submersible, jet or unidentified installations before applying this generic screen. This is not a positive-displacement-pump procedure."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Content-readiness pass clarified scope, unknown readings, actual-speed curve comparison and maintenance boundaries. Exact model/manual source verification and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
-        "note": "Existing diagnostic guidance with no traceable path-level source citation. Verify each model-specific instruction against the installed equipment documentation; search links are not verified sources.",
+        "note": "Provisional field guidance, not a manufacturer-approved diagnostic tree. Retrieval of the existing PPS manual reference failed DNS checks during the 2026-11-10 readiness pass; no path-level source citation was verified. Obtain the installed pump curve, motor/drive documentation and station schematic before applying limits.",
         "sources": []
       },
       "safetyPrerequisites": [
         "Follow the site authorization and equipment isolation procedure before any inspection or test.",
-        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections."
+        "Use qualified personnel and the exact equipment manual for energized measurements or operating tests. Do not bypass protections.",
+        "Use existing readings or approved observation points. Do not open electrical enclosures, change modes, command a restart or change parameters merely to answer this path.",
+        "Do not run dry or close a discharge valve to create a shutoff/deadhead test. Any operating test needs a separate manufacturer-approved procedure with minimum-flow, pressure and stop limits.",
+        "Before inspection of couplings, shafts or pump internals, isolate all energy, verify zero energy and isolate/depressurize the hydraulic system under the site procedure. Keep guards in place during operation."
       ],
       "verification": [
-        "Compare simultaneous flow, pressure, speed and current with the applicable pump curve and nameplate.",
-        "Record the symptom and readings before and after the authorized correction at comparable demand."
+        "Record simultaneous flow, inlet and discharge pressure, actual speed, instrument units/locations and demand; compare differential total head with the correct impeller/speed curve, not discharge PSI alone.",
+        "Compare motor current with the applicable nameplate and operating condition; normal or low amps alone do not prove pump health or identify a fault.",
+        "Record before/after readings at comparable demand, with the original symptom addressed and all protections, guards and normal control ownership restored.",
+        "Confirm the operating point meets documented flow, pressure, NPSH and equipment limits. If readings, curve or allowable limits are unavailable, stop at evidence collection rather than recording a pass."
       ],
       "equipmentOptional": false,
       "start": "a",
       "nodes": {
         "a": {
-          "question": "Is the pump running at full speed, with motor amps near expected for this flow?",
+          "question": "From existing authorized readings, is actual speed known and consistent with the commanded, permitted operating point?",
           "options": [
             {
-              "label": "No: low/zero amps or speed below command",
+              "label": "No: pump is stopped or actual speed does not match the permitted command",
               "next": "e1"
             },
             {
-              "label": "Yes: speed and amps look normal",
+              "label": "Yes: actual speed and operating condition are documented",
               "next": "b"
+            },
+            {
+              "label": "Unknown: readings or the permitted operating point are not established",
+              "next": "evidence"
             }
           ]
         },
         "e1": {
           "result": true,
           "domain": "ELECTRICAL / CONTROL",
-          "assessment": "Pump is not being driven properly. Separate supply, drive and command problems.",
+          "assessment": "A stopped pump or speed mismatch may involve demand, permissives, command ownership, supply, drive or motor issues. A protective stop or intentional speed limit is not proof of a fault; do not override it.",
           "measurements": [
-            "Drive fault/status codes",
-            "Voltage on all three phases at drive input and motor",
-            "Commanded Hz vs actual Hz and Hand/Auto/remote source",
-            "Rotation direction and motor overload state"
+            "Record drive fault/status history, run demand and documented permissive state without clearing faults.",
+            "Compare displayed commanded and actual speed, local/remote source and commissioned limits; do not select HAND/manual to force operation.",
+            "Use existing power-quality records where available. Any new energized measurement requires a qualified electrical worker, an approved procedure and suitable instruments; VFD output is not ordinary line-frequency AC.",
+            "Check documented rotation and motor/overload state; any new rotation or mechanical check requires the applicable guarded or isolated procedure."
           ],
           "search": "VFD pump will not reach commanded speed troubleshooting"
         },
         "b": {
-          "question": "With flow and pressure measured, where does the point sit on the pump curve?",
+          "question": "Using measured flow and differential total head, where is the operating point relative to the correct curve at the actual speed and impeller configuration?",
           "options": [
             {
-              "label": "Flow HIGH, pressure low (running out the curve)",
+              "label": "Flow is high and head is low relative to the documented duty",
               "next": "h1"
             },
             {
-              "label": "Flow LOW, pressure low, noisy or vibrating",
+              "label": "Flow and head are low, with noise or vibration",
               "next": "c1"
             },
             {
-              "label": "Flow and pressure both low, amps normal/high, quiet",
+              "label": "Flow and head are low, without an obvious suction-noise symptom",
               "next": "m1"
+            },
+            {
+              "label": "Unknown, inconsistent readings, no matching curve, or none of these patterns",
+              "next": "evidence"
             }
           ]
         },
         "h1": {
           "result": true,
           "domain": "HYDRAULIC",
-          "assessment": "Demand exceeds what the system restricts: open or broken line, stuck-open valve, failed PRV, too many zones.",
+          "assessment": "High flow with low head can indicate excess demand or reduced system resistance, such as a leak or unexpected valve state. First confirm the readings and curve; this pattern alone does not establish a broken line, failed PRV or pump defect.",
           "measurements": [
-            "Pressure at pump vs far end of system",
-            "Flow vs expected zone demand",
-            "Valve positions, PRV settings, mainline leak indicators",
-            "Duty point vs pump operating window (BEP vicinity, above MCSF, below runout)"
+            "Compare inlet/discharge readings and a remote pressure reading with their locations and elevations recorded.",
+            "Compare measured flow with the documented active-zone demand and valve states.",
+            "Review PRV settings and leak indicators without changing them to fit an assumed diagnosis.",
+            "Compare duty point with the manufacturer's allowable operating range and minimum-flow limits; do not assume a universal BEP/runout margin."
           ],
           "search": "pump running out of curve low pressure high flow irrigation mainline break",
-          "tool": "affinity"
+          "tool": "sys"
         },
         "c1": {
           "result": true,
           "domain": "SUCTION / CAVITATION",
-          "assessment": "Likely air entrainment, restricted suction or insufficient NPSHa.",
+          "assessment": "Air entrainment, suction restriction or insufficient NPSHa are possibilities, not confirmed causes. Noise or vibration can also have mechanical causes.",
           "measurements": [
-            "Suction gauge (vacuum/pressure)",
-            "Strainer/intake condition, water level, suction valve position",
-            "Calculated NPSHa vs NPSHr"
+            "Record suction pressure/vacuum, water level, temperature, flow and actual speed under the same approved operating condition.",
+            "Check recorded intake/strainer and valve condition; isolate and depressurize before opening any component.",
+            "Compare calculated NPSHa with NPSHr at actual flow/speed and the manufacturer's required margin. An NPSHa estimate or noise change alone does not confirm cavitation."
           ],
           "search": "pump low pressure noise cavitation suction air leak troubleshooting",
           "tool": "npsh"
@@ -100,16 +115,49 @@ globalThis.TRACER_TROUBLESHOOTING = {
         "m1": {
           "result": true,
           "domain": "MECHANICAL",
-          "assessment": "Worn or damaged impeller/wear rings, wrong rotation, clogged impeller or slipping coupling.",
+          "assessment": "Wear, blockage, incorrect rotation/speed, coupling problems or instrument error remain possibilities. Quiet operation and apparently normal current do not exclude suction or hydraulic problems.",
           "measurements": [
-            "Compare shutoff head to curve (if safe)",
-            "Rotation, coupling and shaft turning",
-            "Impeller clearance/condition at inspection",
-            "If required head is very high (around/above 150 psi), verify this station uses the correct multistage or high-head pump design"
+            "Recheck the curve, impeller configuration, actual speed and instrument accuracy before proposing teardown.",
+            "Use existing commissioning/rotation records. Coupling, shaft and internal inspections require a qualified maintainer under full isolation and depressurization; do not reach past guards.",
+            "Compare inspected clearances and condition with the exact service manual, not a generic wear limit.",
+            "Check selected pump duty and pressure ratings against the approved design. There is no universal PSI cutoff that determines single-stage versus multistage selection."
           ],
           "search": "centrifugal pump worn impeller wear ring low pressure diagnosis"
+        },
+        "evidence": {
+          "result": true,
+          "domain": "INSUFFICIENT EVIDENCE",
+          "assessment": "The cause is not established. Do not choose an electrical, suction or mechanical diagnosis from missing or inconsistent readings.",
+          "measurements": [
+            "Identify the pump, impeller configuration, actual speed and applicable curve/manual revision.",
+            "Collect existing or separately authorized flow, inlet/discharge pressure and operating-state records with units, instrument locations and timestamps.",
+            "If safe observation points, applicable limits or a qualified test procedure are unavailable, stop and escalate through the site's service process."
+          ],
+          "search": "centrifugal pump manufacturer operating curve troubleshooting measured head flow"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "a",
+          "category": "source-verification",
+          "note": "The linked PPS manual could not be retrieved during readiness checks. The exact installed curve/manual and qualified approval of this complete path are still required."
+        },
+        {
+          "node": "e1",
+          "category": "energized-testing",
+          "note": "This screen is not a live electrical test procedure. A qualified electrical worker must establish isolation, instruments and the authorized measurement method, especially at VFD outputs."
+        },
+        {
+          "node": "b",
+          "category": "model-specific-limit",
+          "note": "Verify the actual speed/impeller curve and differential total-head basis. Do not equate discharge PSI or normal amps with pump performance."
+        },
+        {
+          "node": "m1",
+          "category": "operating-test",
+          "note": "No generic shutoff/deadhead or unguarded shaft test is authorized. Use existing records or a separate manufacturer-approved procedure."
+        }
+      ]
     },
     "hunt": {
       "title": "Pressure hunting",
@@ -117,11 +165,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Pressure-regulated pump systems; establish whether the drive or station controller owns the loop."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -200,7 +248,24 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "VFD booster pump PID tuning hunting acceleration deceleration",
           "tool": "vfdsetup"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "a",
+          "category": "operating-test",
+          "note": "Use prior authorized fixed-speed evidence only. Do not switch to HAND/manual, defeat station logic or command a test from this question; unknown evidence must be collected under a separate approved procedure."
+        },
+        {
+          "node": "s1",
+          "category": "energized-testing",
+          "note": "Sensor-loop measurements inside energized controls need a qualified worker, approved access and the exact signal/input documentation."
+        },
+        {
+          "node": "t1",
+          "category": "parameter-change",
+          "note": "The suggested tuning area is a hypothesis, not authority to change PID. Establish control ownership, preserve a backup/rollback and obtain vendor/qualified review before any change."
+        }
+      ]
     },
     "trip": {
       "title": "VFD / motor trip",
@@ -208,11 +273,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "VFD-driven motors; use the exact drive fault code, motor data and station schematic."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -319,7 +384,34 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "VFD will not accelerate pump parameters current limit reference source",
           "tool": "hz"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "oc",
+          "category": "energized-testing",
+          "note": "Insulation/continuity testing and shaft inspection require full isolation, discharge verification and the exact motor/drive procedure. Never insulation-test through a connected drive or sensitive electronics."
+        },
+        {
+          "node": "gf",
+          "category": "energized-testing",
+          "note": "Confirm isolation and disconnect sensitive equipment per manufacturer instructions before any insulation test; this path supplies no test voltage or acceptance limit."
+        },
+        {
+          "node": "uv",
+          "category": "energized-testing",
+          "note": "DC-bus, capacitor and rectifier checks are specialist work with stored-energy hazards, not an instruction to probe inside a drive."
+        },
+        {
+          "node": "uv",
+          "category": "parameter-change",
+          "note": "Do not alter deceleration, regeneration or reactor configuration without the exact drive/station procedure and an approved baseline."
+        },
+        {
+          "node": "ac",
+          "category": "parameter-change",
+          "note": "Review recorded limits and command sources; do not change permissives, current limits or motor data to force acceleration."
+        }
+      ]
     },
     "rbclp": {
       "title": "Rain Bird CLP/ACLP alarm map",
@@ -327,11 +419,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Rain Bird CLP/ACLP stations; confirm platform, drive family, firmware and programming guide."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -516,7 +608,39 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "Rain Bird Mitsubishi F800 E.OV retries exceeded troubleshooting",
           "tool": "hz"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "m",
+          "category": "model-specific-limit",
+          "note": "Alarm meanings and example parameter numbers are unverified for the installed platform/firmware. Obtain the exact Rain Bird programming guide before applying any mapping."
+        },
+        {
+          "node": "d",
+          "category": "energized-testing",
+          "note": "Separate energized voltage measurements from termination work. Re-torquing requires isolation, zero-energy verification and specified torque; never tighten live terminals."
+        },
+        {
+          "node": "sd",
+          "category": "parameter-change",
+          "note": "Wake/sleep and test-timer values must come from the commissioned station baseline, not a generic fixed setting or raised alarm threshold."
+        },
+        {
+          "node": "sp_pt",
+          "category": "model-specific-limit",
+          "note": "Example parameter 267 and input-switch references need the exact schematic/model/revision; do not change an analog-input mode from this path."
+        },
+        {
+          "node": "sp_pf",
+          "category": "energized-testing",
+          "note": "Surge-module inspection/replacement needs the panel-specific isolation and service procedure; indicator state alone does not establish a safe enclosure."
+        },
+        {
+          "node": "sp_vfd",
+          "category": "parameter-change",
+          "note": "The legacy PU/EXT/reset suggestion is not authorized: changing command source or resetting can permit unexpected restart. Follow the exact vendor-approved recovery procedure after correcting the fault."
+        }
+      ]
     },
     "cav": {
       "title": "Suspected cavitation",
@@ -524,11 +648,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Pump suction systems; use the installed pump curve and current fluid/source conditions."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -607,7 +731,14 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "NPSH available calculation suction lift temperature elevation",
           "tool": "npsh"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "h",
+          "category": "operating-test",
+          "note": "Throttling is not a general diagnostic instruction. A qualified operator must first establish manufacturer-permitted flow, pressure and stop limits; do not deadhead or reduce flow below minimum."
+        }
+      ]
     },
     "flow": {
       "title": "Flow reading disagrees",
@@ -615,11 +746,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Flow meter and controller signal paths; confirm sensor type, output units and installation requirements."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -698,7 +829,14 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "verify flow meter accuracy field check clamp-on",
           "tool": "pipe"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "c",
+          "category": "model-specific-limit",
+          "note": "Pump-curve or current-based flow inference is not an independent calibrated reference. Establish a suitable independent measurement and meter-specific uncertainty."
+        }
+      ]
     },
     "ctrl": {
       "title": "Controller vs hydraulic",
@@ -706,11 +844,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Irrigation controller, field valve and hydraulic system; confirm conventional or decoder wiring."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -788,7 +926,24 @@ globalThis.TRACER_TROUBLESHOOTING = {
           ],
           "search": "WeatherTRAK OptiFlow learned flow flow alerts troubleshooting"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "a",
+          "category": "operating-test",
+          "note": "Use existing authorized manual-valve evidence; this question does not authorize opening a valve or changing demand. Establish pressure, flood and automatic-start hazards first."
+        },
+        {
+          "node": "b",
+          "category": "energized-testing",
+          "note": "Conventional and proprietary decoder signals need different approved instruments/methods. Voltage/response checks require the installed controller/decoder procedure."
+        },
+        {
+          "node": "p",
+          "category": "parameter-change",
+          "note": "Do not relearn flow or alter capacity, sequencing or alarm thresholds until the physical cause and commissioned baseline are established."
+        }
+      ]
     },
     "sfault": {
       "title": "Station safety fault",
@@ -796,11 +951,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Pump stations with active safety faults; use the station-specific protection logic."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -884,7 +1039,19 @@ globalThis.TRACER_TROUBLESHOOTING = {
           ],
           "search": "pump station phase fault phase loss relay troubleshooting"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "ph",
+          "category": "energized-testing",
+          "note": "Service-disconnect/panel measurements are qualified electrical work under an approved procedure; the dashboard is not an access authorization."
+        },
+        {
+          "node": "hp",
+          "category": "parameter-change",
+          "note": "Review the high-pressure cause and commissioned limits; do not change PID or protection settings merely to clear the safety."
+        }
+      ]
     },
     "nostart": {
       "title": "Motor won’t start",
@@ -892,11 +1059,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Pump motor start chains; confirm drive/starter, command source and site permissives."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -999,7 +1166,29 @@ globalThis.TRACER_TROUBLESHOOTING = {
           ],
           "search": "centrifugal pump motor locked rotor shaft seized troubleshooting"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "c1",
+          "category": "operating-test",
+          "note": "HAND/manual operation and reset may bypass normal logic or start equipment unexpectedly. Observe the recorded mode; do not use HAND to defeat an open permissive."
+        },
+        {
+          "node": "c2",
+          "category": "energized-testing",
+          "note": "Run-command/permissive measurements require qualified access and the exact schematic; no jumper or override is authorized."
+        },
+        {
+          "node": "o1",
+          "category": "energized-testing",
+          "note": "VFD output and winding tests need suitable instruments, isolation and separation from drive electronics under the manufacturer procedure."
+        },
+        {
+          "node": "m1",
+          "category": "operating-test",
+          "note": "Shaft checks need full mechanical/electrical isolation, zero-energy verification and a qualified maintainer; keep guards in place during operation."
+        }
+      ]
     },
     "vib": {
       "title": "Seal leak / noise / vibration",
@@ -1007,11 +1196,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Pump seals, bearings and coupled equipment; confirm pump construction and allowable operating range."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -1119,7 +1308,19 @@ globalThis.TRACER_TROUBLESHOOTING = {
           ],
           "search": "centrifugal pump vibration alignment soft foot imbalance pipe strain"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "sl",
+          "category": "operating-test",
+          "note": "Seal, alignment and runout checks require the applicable guarded or isolated service procedure, including hydraulic depressurization."
+        },
+        {
+          "node": "r",
+          "category": "parameter-change",
+          "note": "Changing skip/jump frequencies requires approved vibration evidence, the exact drive procedure and vendor review; do not select a generic exclusion band."
+        }
+      ]
     },
     "fa": {
       "title": "High / low flow alarm",
@@ -1127,11 +1328,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Irrigation systems with flow monitoring; confirm controller, flow zone and alarm definition."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -1193,7 +1394,14 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "irrigation low flow alarm clogged strainer valve not opening troubleshooting",
           "tool": "pipe"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "lw",
+          "category": "energized-testing",
+          "note": "Valve/solenoid voltage checks require a qualified person and the controller-specific safe test method; a no-flow alarm does not prove an electrical fault."
+        }
+      ]
     },
     "rbflow": {
       "title": "Rain Bird flow/pressure alarms",
@@ -1201,11 +1409,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Rain Bird flow/pressure monitoring; confirm platform, sensor and alarm definition."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -1326,7 +1534,19 @@ globalThis.TRACER_TROUBLESHOOTING = {
           ],
           "search": "Rain Bird filter platform troubleshooting rinse cycle pressure differential wye strainer"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "hf",
+          "category": "parameter-change",
+          "note": "Do not clear repeated lockouts or change reset behavior to suppress an unresolved flow condition. Confirm the exact platform alarm/recovery logic."
+        },
+        {
+          "node": "fi",
+          "category": "operating-test",
+          "note": "Strainer and hydraulic control-tubing work require isolation and depressurization; verify the filter/actuator service procedure before opening lines."
+        }
+      ]
     },
     "wtflow": {
       "title": "WeatherTRAK flow alerts",
@@ -1334,11 +1554,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "WeatherTRAK flow monitoring; confirm controller model, firmware and applicable alert definition."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -1443,7 +1663,24 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "WeatherTRAK flow history does not match field readings k factor offset troubleshooting",
           "tool": "flowcal"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "mh",
+          "category": "model-specific-limit",
+          "note": "The displayed delay range is legacy guidance, not a verified limit for every model/firmware. Confirm the installed alert definition and configured values."
+        },
+        {
+          "node": "sn",
+          "category": "energized-testing",
+          "note": "Valve-command voltage measurements need the exact wiring/control procedure and qualified access."
+        },
+        {
+          "node": "lk",
+          "category": "parameter-change",
+          "note": "Extended-leak, normally-open master-valve and reset behavior require model-specific confirmation; do not change protection or force a reset from this guide."
+        }
+      ]
     },
     "lflow": {
       "title": "Learned vs measured flow",
@@ -1451,11 +1688,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Irrigation flow-learning systems; confirm the learning conditions, sensor and hydraulic capacity."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -1522,7 +1759,14 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "irrigation measured flow higher lower than learned flow causes",
           "tool": "pipe"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "st",
+          "category": "parameter-change",
+          "note": "Relearning affects the alarm baseline. Correct the physical cause and confirm controller learning conditions before any authorized relearn."
+        }
+      ]
     },
     "tw": {
       "title": "Two-wire / decoder problem",
@@ -1530,11 +1774,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Two-wire irrigation systems; use the exact compatible controller/decoder family and approved diagnostic method."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -1624,7 +1868,24 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "two wire decoder line short ground fault surge troubleshooting current draw",
           "tool": "twvd"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "one",
+          "category": "energized-testing",
+          "note": "Separate powered waveform/voltage checks from power-off solenoid-resistance checks. Use the exact compatible decoder diagnostic method and suitable instrument."
+        },
+        {
+          "node": "br",
+          "category": "energized-testing",
+          "note": "Insulation/continuity tests require isolation and removal of sensitive decoders/modules as the manufacturer directs; do not apply a generic megger procedure to a connected path."
+        },
+        {
+          "node": "all",
+          "category": "energized-testing",
+          "note": "Powered proprietary signal checks and isolated insulation tests are different procedures. Establish controller-specific test state, compatible instruments and equipment separation first."
+        }
+      ]
     },
     "comm": {
       "title": "Controller offline / comms",
@@ -1632,11 +1893,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Irrigation controller communications; confirm local operation and the installed communication service."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -1714,7 +1975,14 @@ globalThis.TRACER_TROUBLESHOOTING = {
           ],
           "search": "central control controller offline not communicating activation subscription firmware"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "pw",
+          "category": "energized-testing",
+          "note": "Incoming-power/breaker measurements require qualified electrical access; confirm the local power arrangement before opening an enclosure."
+        }
+      ]
     },
     "pstart": {
       "title": "Pump start / master valve not operating",
@@ -1722,11 +1990,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Irrigation pump-start and master-valve chains; confirm output assignment, relay and station interfaces."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -1818,7 +2086,24 @@ globalThis.TRACER_TROUBLESHOOTING = {
           ],
           "search": "pump start relay coil failure irrigation master valve solenoid test"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "cf",
+          "category": "operating-test",
+          "note": "Only an authorized technician may identify/remove a commissioning jumper under the site isolation/recommissioning procedure; this is not permission to install or touch a live bypass."
+        },
+        {
+          "node": "b",
+          "category": "energized-testing",
+          "note": "Relay/solenoid voltage checks are powered tests with possible automatic starts; use the approved schematic, access and instrumentation."
+        },
+        {
+          "node": "rl",
+          "category": "operating-test",
+          "note": "Coil, contact or replacement checks require isolation, zero-energy verification, compatible ratings and an approved retest; do not swap a live component."
+        }
+      ]
     },
     "ptype": {
       "title": "Pump type",
@@ -1885,11 +2170,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Suction-lift pumps; verify priming arrangement, installed lift, curve and source level."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "engineering-guidance",
@@ -2061,7 +2346,24 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "suction lift pump cavitation NPSHa reduce lift larger suction pipe",
           "tool": "sys"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "leak",
+          "category": "operating-test",
+          "note": "Filling, venting or observing a priming port must follow the exact pump procedure with pressure/energy hazards controlled; do not open a running pressurized casing."
+        },
+        {
+          "node": "sh",
+          "category": "model-specific-limit",
+          "note": "Priming times, levels and wear clearances are pump-specific. Do not run dry or change speed to force priming."
+        },
+        {
+          "node": "vi",
+          "category": "operating-test",
+          "note": "The legacy deadhead comparison is not authorization for a shutoff test. Use existing records or a separate manufacturer-approved test with minimum-flow and pressure limits."
+        }
+      ]
     },
     "pt_flood": {
       "title": "Flooded suction pump",
@@ -2069,11 +2371,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Flooded-suction pumps; verify source pressure, intake arrangement and pump curve."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "engineering-guidance",
@@ -2197,7 +2499,19 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "flooded suction pump cavitation NPSHa NPSHr operating point",
           "tool": "sys"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "p1",
+          "category": "model-specific-limit",
+          "note": "The legacy submergence-per-velocity rule is not a verified intake design criterion. Use the installed intake/pump requirements and an appropriate design review."
+        },
+        {
+          "node": "v",
+          "category": "model-specific-limit",
+          "note": "The legacy 0.25D/0.75D wall-clearance examples are not verified for this intake. Do not use them as installation or operating approval."
+        }
+      ]
     },
     "pt_vt": {
       "title": "Vertical turbine pump",
@@ -2205,11 +2519,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Vertical turbine pumps; verify bowl setting, driver, lineshaft and pumping water level."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "engineering-guidance",
@@ -2318,7 +2632,24 @@ globalThis.TRACER_TROUBLESHOOTING = {
           ],
           "search": "vertical turbine pump vibration lineshaft bearing lubrication resonance VFD"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "s1",
+          "category": "model-specific-limit",
+          "note": "Minimum submergence, vortex criteria and NPSH requirements are distinct checks; do not assume that NPSHr plus a generic submergence allowance is an approved design rule."
+        },
+        {
+          "node": "d",
+          "category": "operating-test",
+          "note": "Impeller/lateral adjustment, coupling and column inspection require the exact turbine/driver procedure, isolation and qualified rigging/service personnel."
+        },
+        {
+          "node": "e",
+          "category": "parameter-change",
+          "note": "Skip-frequency changes and lubrication adjustments need the exact turbine/driver requirements and approved evidence, not generic tuning."
+        }
+      ]
     },
     "pt_sub": {
       "title": "Submersible pump",
@@ -2326,11 +2657,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Submersible pumps and motors; verify motor cooling, cable, pump curve and submergence requirements."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "engineering-guidance",
@@ -2456,7 +2787,24 @@ globalThis.TRACER_TROUBLESHOOTING = {
           ],
           "search": "submersible pump low flow low pressure worn impeller intake screen check valve troubleshooting"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "el",
+          "category": "energized-testing",
+          "note": "Motor/cable tests and VFD output evaluation require the exact isolation, disconnected-equipment and test-instrument procedure; no generic insulation-test value is supplied."
+        },
+        {
+          "node": "lv",
+          "category": "model-specific-limit",
+          "note": "Minimum submergence and cooling flow are motor/pump/installation-specific; a level reading alone does not establish safe cooling."
+        },
+        {
+          "node": "vfd",
+          "category": "parameter-change",
+          "note": "Minimum speed and cooling-sleeve decisions require pump/motor vendor limits; do not lower speed restrictions or operate below required flow."
+        }
+      ]
     },
     "pt_boost": {
       "title": "Booster pump",
@@ -2464,11 +2812,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Booster pumps on a pressurized supply; verify available inlet pressure and upstream capacity."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "engineering-guidance",
@@ -2595,7 +2943,14 @@ globalThis.TRACER_TROUBLESHOOTING = {
           "search": "booster pump low pressure differential head curve wear rotation troubleshooting",
           "tool": "affinity"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "low",
+          "category": "parameter-change",
+          "note": "Review tank/precharge and sleep/deadband behavior under the applicable service procedure; changing these can alter pressure and start frequency."
+        }
+      ]
     },
     "pt_jet": {
       "title": "Jet pump",
@@ -2603,11 +2958,11 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "appliesTo": [
         "Jet pumps; verify well depth and the installed nozzle/venturi and one- or two-pipe arrangement."
       ],
-      "revision": 1,
+      "revision": 2,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Migrated from the existing dashboard. The complete decision path has not received a documented technical review."
+        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
       },
       "evidence": {
         "kind": "engineering-guidance",
@@ -2687,7 +3042,19 @@ globalThis.TRACER_TROUBLESHOOTING = {
           ],
           "search": "jet pump low flow low pressure drawdown water level performance curve"
         }
-      }
+      },
+      "reviewFlags": [
+        {
+          "node": "p",
+          "category": "operating-test",
+          "note": "Priming and opening piping require the exact jet-pump procedure and pressure/energy control; do not run dry or open an energized system."
+        },
+        {
+          "node": "ej",
+          "category": "model-specific-limit",
+          "note": "Use the exact depth/ejector table, and isolate/depressurize before nozzle or venturi inspection. Switch/regulator/precharge changes need an approved baseline."
+        }
+      ]
     }
   }
 };

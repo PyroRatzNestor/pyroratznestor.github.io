@@ -860,12 +860,16 @@ try{
 const flows=diagnosticLibrary?diagnosticLibrary.techniques:{};
 const reviewLabels={'draft':'Draft — not available for field use','needs-review':'Needs technical review','reviewed':'Technically reviewed'};
 const evidenceLabels={'field-guidance':'Field guidance — not manufacturer-verified','engineering-guidance':'Engineering guidance — not manufacturer specifications','manufacturer-backed':'Manufacturer-backed references — verify installed applicability'};
+function reviewFlagsMarkup(f,node){
+ const flags=(f.reviewFlags||[]).filter(flag=>node===undefined||flag.node===node);
+ return flags.length?'<div class="safety"><strong>Unresolved review flags — not an approved field procedure</strong><ul>'+flags.map(flag=>'<li>'+esc(flag.node)+' · '+esc(flag.category.replace(/-/g,' '))+': '+esc(flag.note)+'</li>').join('')+'</ul></div>':'';
+}
 function techniqueDetails(f){
  const list=items=>'<ul>'+items.map(item=>'<li>'+esc(item)+'</li>').join('')+'</ul>';
- return '<p class="'+(f.review.status==='reviewed'?'small':'safety')+'"><strong>'+esc(reviewLabels[f.review.status])+'</strong> · Revision '+f.revision+' · '+esc(evidenceLabels[f.evidence.kind])+'</p>'+
+ return '<p class="'+(f.review.status==='reviewed'?'small':'safety')+'"><strong>'+esc(reviewLabels[f.review.status])+'</strong> · Revision '+f.revision+' · '+esc(evidenceLabels[f.evidence.kind])+((f.reviewFlags||[]).length?' · '+f.reviewFlags.length+' unresolved review flags':'')+'</p>'+
  '<details class="vfd-section"><summary>Scope, safety prerequisites, sources &amp; verification</summary><p><strong>Symptom:</strong> '+esc(f.symptom)+'</p><h4>Applies to</h4>'+list(f.appliesTo)+'<h4>Safety prerequisites</h4>'+list(f.safetyPrerequisites)+
  '<h4>Evidence &amp; sources</h4><p>'+esc(f.evidence.note)+'</p>'+(f.evidence.sources.length?'<ul>'+f.evidence.sources.map(source=>'<li>'+esc(source.title)+' · '+esc(source.revision)+' · '+esc(source.locator)+(source.url?' · <a href="'+esc(source.url)+'" target="_blank" rel="noopener">Open source</a>':'')+'</li>').join('')+'</ul>':'<p>No verified path-level citation is recorded. Search results and equipment-library links are not source approval.</p>')+
- '<h4>Review record</h4><p>'+esc(f.review.note)+' Last technical review: '+esc(f.review.reviewedOn||'not recorded')+'.</p><h4>Verification criteria</h4>'+list(f.verification)+'</details>';
+ '<h4>Review record</h4><p>'+esc(f.review.note)+' Last technical review: '+esc(f.review.reviewedOn||'not recorded')+'.</p>'+reviewFlagsMarkup(f)+'<h4>Verification criteria</h4>'+list(f.verification)+'</details>';
 }
 function diagnosticNote(k,f,path,n){
  return '[Diagnostic: '+f.title+']\nTechnique: '+k+' | Revision: '+f.revision+' | '+reviewLabels[f.review.status]+'\n'+
@@ -874,7 +878,8 @@ function diagnosticNote(k,f,path,n){
  '\nAssessment (confirm, not a diagnosis): '+n.assessment+'\nMeasure / check: '+n.measurements.join('; ')+
  '\nVerification: '+f.verification.join('; ')+'\nEvidence: '+f.evidence.note+
  '\nSources: '+(f.evidence.sources.map(source=>source.title+' | '+source.revision+' | '+source.locator+(source.url?' | '+source.url:'')).join('; ')||'No verified path-level citation recorded')+
- '\nReview: '+f.review.note+' | Last technical review: '+(f.review.reviewedOn||'not recorded');
+ '\nReview: '+f.review.note+' | Last technical review: '+(f.review.reviewedOn||'not recorded')+
+ '\nUnresolved review flags: '+((f.reviewFlags||[]).map(flag=>flag.node+' | '+flag.category+' | '+flag.note).join('; ')||'No step-specific flags recorded; this is not technical approval');
 }
 function initTechniquePicker(){
  const select=$('#techniqueSelect'),status=$('#techniqueStatus');
@@ -896,6 +901,7 @@ function openFlow(k,s){
  cur='flow';setTabs();const path=[];
  const draw=id=>{const n=f.nodes[id];let h='<h3>'+esc(f.title)+'</h3><div class="safety">'+esc(diagnosticLibrary.safety)+'</div><div class="safety"><strong>Before proceeding:</strong><ul>'+f.safetyPrerequisites.map(text=>'<li>'+esc(text)+'</li>').join('')+'</ul></div>'+techniqueDetails(f);
   if(path.length)h+='<div class="small">'+path.map(esc).join(' → ')+'</div>';
+  h+=reviewFlagsMarkup(f,id);
   if(n.result){h+=`<div class="res"><b>Area to investigate (not a confirmed diagnosis): ${esc(n.domain)}</b><br>${esc(n.assessment)}<br><br>Measure / check:<ul>${n.measurements.map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Confirm in your manual:<ul>${hints(n.domain).map(m=>'<li>'+esc(m)+'</li>').join('')}</ul><strong>Verify the result:</strong><ul>${f.verification.map(item=>'<li>'+esc(item)+'</li>').join('')}</ul>Make the smallest justified change, then prove it under operating conditions.</div><div class="links" id="lit" style="margin-top:10px"></div><div class="links" style="margin-top:10px"><button type="button" id="fs">SEARCH THIS</button>${n.tool?'<button type="button" id="ft2">'+(n.tool==='vfdsetup'?'OPEN DRIVE SETUP GUIDE':'OPEN CALCULATOR')+'</button>':''}<button type="button" id="fn">LOG TO NOTES</button><button type="button" id="fr">START OVER</button></div>`}
   else h+=`<div class="q">${esc(n.question)}</div><div class="opts">${n.options.map((option,i)=>`<button type="button" data-i="${i}">${esc(option.label)}</button>`).join('')}</div>${path.length?'<div class="links" style="margin-top:10px"><button type="button" id="fr">START OVER</button></div>':''}`;
   $('#bench').innerHTML=h;

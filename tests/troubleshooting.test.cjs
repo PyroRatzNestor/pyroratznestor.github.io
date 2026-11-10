@@ -93,6 +93,7 @@ test('invalid content cannot claim review or manufacturer support without review
   }
   const reviewed = clone();
   reviewed.techniques.hunt.review = {status: 'reviewed', reviewedOn: '2026-11-10', note: 'Test fixture review, not a real approval.'};
+  reviewed.techniques.hunt.reviewFlags = [];
   reviewed.techniques.hunt.evidence = {kind: 'manufacturer-backed', note: 'Test fixture only.', sources: [{title: 'Test manual', revision: 'Rev A', locator: 'p. 10', url: 'https://example.test/manual'}]};
   assert.equal(validate(reviewed, toolKeys), reviewed);
 });
@@ -213,6 +214,7 @@ test('metadata and citations are escaped in views and included in exported notes
   const library = clone(), technique = library.techniques.hunt;
   technique.title = '<img src=x onerror=alert(1)>';
   technique.evidence.note = '<script>not executable</script>';
+  technique.reviewFlags = [{node: 'a', category: 'operating-test', note: '<img src=x onerror=alert(1)> Unreviewed test.'}];
   technique.evidence.sources = [{title: '<b>Manual</b>', revision: 'Rev "A"', locator: 'p. 10', url: 'https://example.test/?a=1&b=2'}];
   const instance = app(library); instance.open('hunt'); instance.choose(0);
   assert.ok(instance.markup().includes('&lt;img'));
@@ -222,4 +224,44 @@ test('metadata and citations are escaped in views and included in exported notes
   instance.click('#fn');
   assert.ok(instance.notes[0].includes('<b>Manual</b> | Rev "A" | p. 10'));
   assert.ok(instance.notes[0].includes('https://example.test/?a=1&b=2'));
+  assert.ok(instance.notes[0].includes('operating-test | <img src=x onerror=alert(1)> Unreviewed test.'));
+});
+
+test('sample pressure path stops at missing evidence instead of forcing a fault classification', () => {
+  const instance = app();
+  instance.open('wont');
+  instance.choose(2);
+  assert.ok(instance.markup().includes('INSUFFICIENT EVIDENCE'));
+  instance.click('#fn');
+  assert.ok(instance.notes.at(-1).includes('cause is not established'));
+  assert.ok(instance.notes.at(-1).includes('differential total head'));
+  instance.open('wont');
+  instance.choose(1);
+  instance.choose(3);
+  assert.ok(instance.markup().includes('INSUFFICIENT EVIDENCE'));
+});
+
+test('step-level flags appear at the affected decision/result and survive logging', () => {
+  const instance = app();
+  instance.open('wont');
+  assert.match(instance.markup(), /Unresolved review flags/);
+  assert.ok(instance.markup().includes(escape(content.techniques.wont.reviewFlags[0].note)));
+  instance.choose(0);
+  const flag = content.techniques.wont.reviewFlags.find(item => item.node === 'e1');
+  assert.ok(instance.markup().includes(escape(flag.note)));
+  instance.click('#fn');
+  assert.ok(instance.notes.at(-1).includes('e1 | energized-testing | ' + flag.note));
+});
+
+test('review flags must target real steps and cannot silently coexist with technical approval', () => {
+  for (const [mutate, expected] of [
+    [lib => { lib.techniques.hunt.reviewFlags = 'not a list'; }, /reviewFlags/],
+    [lib => { lib.techniques.hunt.reviewFlags[0].node = 'missing'; }, /unknown decision/],
+    [lib => { lib.techniques.hunt.reviewFlags[0].category = 'approved'; }, /category/],
+    [lib => { lib.techniques.hunt.reviewFlags[0].note = ''; }, /note/],
+    [lib => { lib.techniques.hunt.review = {status: 'reviewed', reviewedOn: '2026-11-10', note: 'Test fixture only.'}; }, /resolve outstanding flags/]
+  ]) {
+    const library = clone(); mutate(library);
+    assert.throws(() => validate(library, toolKeys), expected);
+  }
 });
