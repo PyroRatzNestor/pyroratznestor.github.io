@@ -16,7 +16,9 @@ additional evidence, but is not an actual-phone result.
 | Case | Action | Expected result |
 | --- | --- | --- |
 | Find a topic | From Home, open Tool Directory, search `pipe friction`, clear, then search an unmatched phrase. | One relevant pipe entry, complete reset, and a visible no-results message. Existing links remain keyboard-accessible. |
-| Open the sample | Open `dashboard.html?technique=wont`; use the equipment gate or Skip without entering real site data. | Revision, Needs Technical Review, evidence limitations and unresolved flags are visible. No claim of manufacturer approval. |
+| Start with a symptom | Open the dashboard with an empty equipment profile. Choose a symptom and an existing-evidence answer. | Step 1 asks about the symptom, Step 2 asks for evidence, and neither requires a manufacturer. Unknown evidence exits explicitly. |
+| Open the sample | Open `dashboard.html?technique=wont` without entering real site data. | Revision, Needs Technical Review, evidence limitations and unresolved flags are visible. No up-front manufacturer prompt or claim of approval. |
+| Later manufacturer detail | Follow a generic drive/flow result and open its collapsed manufacturer references, or use the playbook's separate manufacturer group. | Generic questions do not name a brand; later maps retain exact-model/firmware warnings and no brand is inferred automatically. |
 | Missing evidence | Choose the unknown-speed answer. Restart, choose known speed, then the unmatched/unknown-curve answer. | Both routes end at Insufficient Evidence, not an invented fault or pass. |
 | Follow a decision | Restart and follow the stopped/speed-mismatch option, then a known-speed/high-flow option. | Electrical-work or model-limit flags appear at the affected step; assessments remain provisional. |
 | Use a calculator | In Quick Field Calculator choose the PSI/head converter and enter `65` PSI. | `150.15` feet of water head; the UI still states this is not complete TDH. |
@@ -52,6 +54,9 @@ additional evidence, but is not an actual-phone result.
   this readiness revision; this is not human beta or technical sign-off.
 - [ ] Owner approves the preview and explicitly authorizes publication.
 
+Repeat the walkthrough after the symptom-first reorganization; the historical
+results below apply to the earlier readiness revision, not to later UI changes.
+
 No approval is implied by an automated check, a draft pull request or an
 unchanged live site. Keep previous exports/parameter backups independently.
 
@@ -74,3 +79,28 @@ The 390px run was a narrow browser viewport, not a physical phone. Actual
 handset file handling, touch behavior, browser-storage persistence and human
 beta feedback are still pending. No equipment was operated and no technical
 approval or successful manufacturer-source verification is claimed.
+
+## Symptom-first routing smoke check: 2026-11-11
+
+After the walkthrough feedback, the draft was reorganized so the dashboard
+opens at a general symptom question, not an equipment profile or manufacturer
+alarm menu. Local Chromium at 390px verified:
+
+- The default dashboard enters triage directly; the equipment profile prompt is
+  absent from that path. Equipment Details is later on the page.
+- Each of the six symptom families opens a generic second evidence question
+  with no Rain Bird / WeatherTRAK / Toro / Hunter selection. The "not sure"
+  symptom and each second-step unknown answer end at **Insufficient Evidence**.
+- The general VFD-trip question no longer starts with Rain Bird alarm names.
+  Manufacturer references appear in a separate playbook group and as a
+  collapsed later-detail handoff after generic results. Opening that reference
+  preserves its separate label and exact-model caution.
+- General triage, motor-stop, low-pressure, instability, flow/alarm,
+  communications and mechanical symptom paths retain their existing
+  manufacturer-specific procedures separately rather than merging their codes
+  or limits.
+
+This was a routing smoke check, not a full repeated export/import, physical
+phone test, source verification or technical review. Re-run the remaining
+interface checklist and the full automated test suite against the final
+candidate before publication.

@@ -32,7 +32,7 @@ a:not(.btn),a:not(.btn):visited{color:var(--cyan)}:focus-visible{outline:3px sol
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header"><div class="portal-shell header-inner"><a class="site-brand" href="index.html">TECHNICIAN<span>FIELD PORTAL</span></a><nav class="site-nav" aria-label="Main navigation"><a href="index.html">Home</a><a href="dashboard.html" aria-current="page">Field dashboard</a><a href="tools.html">Tool directory</a><a href="references.html">References</a><a href="help.html">Help &amp; about</a></nav></div></header>
 <main class="wrap" id="main">
-<div class="dashboard-intro"><span class="eyebrow">YOUR FIELD WORKSPACE</span><p>Identify the equipment, follow the evidence, and keep a record of what you prove.</p><nav class="section-nav" aria-label="Dashboard sections"><a href="#prof">Equipment</a><a href="#c1">Troubleshooting</a><a href="#diagnosticPlaybook">Playbook</a><a href="#benchCard">Field bench</a><a href="#quickCalculator">Calculators</a><a href="#training">Training</a><a href="#fieldNotes">Notes</a></nav></div>
+<div class="dashboard-intro"><span class="eyebrow">YOUR FIELD WORKSPACE</span><p>Start with the symptom, establish the evidence, then identify the equipment when its documentation is needed.</p><nav class="section-nav" aria-label="Dashboard sections"><a href="#symptomStart">Start here</a><a href="#c1">Topics &amp; tools</a><a href="#diagnosticPlaybook">Playbook</a><a href="#benchCard">Field bench</a><a href="#prof">Equipment details</a><a href="#quickCalculator">Calculators</a><a href="#training">Training</a><a href="#fieldNotes">Notes</a></nav></div>
 <p id="portalRouteStatus" class="portal-status" role="status" hidden></p>
 
 <section class="top"><h1 class="title">Technician Dashboard</h1><div class="motto">MEASURE → ISOLATE → VERIFY → REPAIR → PROVE</div><p class="sub">Start with evidence. Separate hydraulic, electrical, mechanical and control-system causes before changing parts or parameters.</p>
@@ -42,7 +42,17 @@ a:not(.btn),a:not(.btn):visited{color:var(--cyan)}:focus-visible{outline:3px sol
 </section>
 
 <div class="grid">
-<section class="card full" id="prof"><h2>STEP 0 // WHAT AM I STANDING IN FRONT OF?</h2>
+<section class="card full" id="symptomStart"><h2>START HERE // SYMPTOM → EVIDENCE</h2><p>Choose what is wrong, then use existing observations to narrow the next path. You do not need to choose a manufacturer to begin.</p><div class="links"><button type="button" id="startDiagnostic" disabled>START / RESTART SYMPTOM TRIAGE</button></div><p class="small">This does not authorize equipment tests. Unknown readings stay unknown; exact model/manual requirements still apply before interpreting codes, limits or settings.</p></section>
+
+<section class="card"><h2>PUMPS // HYDRAULICS</h2><div class="items" id="c1"></div></section>
+<section class="card"><h2>VFD // CONTROLS</h2><div class="items" id="c2"></div></section>
+<section class="card"><h2>IRRIGATION CONTROL</h2><div class="items" id="c3"></div></section>
+
+<section class="card full" id="diagnosticPlaybook"><h2>DIAGNOSTIC PLAYBOOK</h2><p class="small">General paths come first. Manufacturer-specific references are a separate group for later use when the exact equipment is known. Review status is not a diagnosis or authorization to work. Draft entries show metadata only.</p><form class="topic-menu" id="techniquePicker"><div class="fld"><label for="techniqueSelect">Choose a diagnostic technique</label><select id="techniqueSelect" required disabled><option value="">Choose a technique…</option></select></div><button id="techniqueOpen" type="submit" disabled>OPEN TECHNIQUE</button></form><p id="techniqueStatus" class="small" role="status"></p></section>
+
+<section class="card full" id="benchCard"><h2>FIELD BENCH</h2><div class="tabs" id="tabs"></div><div id="bench"></div></section>
+
+<section class="card full" id="prof"><h2>EQUIPMENT DETAILS // WHEN THE MANUAL IS NEEDED</h2><p class="small">Optional for symptom triage, required context for model-specific limits and procedures. Use safe nameplate records; do not open or operate equipment merely to identify it.</p>
 <div class="fields">
 <div class="fld"><label for="pf_make">Pump station / pump make</label><select id="pf_make"></select></div>
 <div class="fld"><label for="pf_ctrl">Central control / controller</label><select id="pf_ctrl"></select></div>
@@ -51,15 +61,7 @@ a:not(.btn),a:not(.btn):visited{color:var(--cyan)}:focus-visible{outline:3px sol
 <div class="fld"><label for="pf_model">Station model / serial / manual revision</label><input id="pf_model" type="text" placeholder="from nameplate"></div></div>
 <p class="small">VFD tip: read the brand and model off the drive label. If two brands look alike (for example a rebadged unit), go by the manufacturer name on the label.</p><div class="links" style="margin-top:10px"><button type="button" id="pf_save">SAVE PROFILE</button><button type="button" id="pf_doc">LOG DOCUMENT USED</button><button type="button" id="pf_clear">CLEAR PROFILE</button></div>
 <h3>Official literature for this equipment</h3><div class="links" id="lit_main"></div>
-<p class="small" id="pf_note">Pick your equipment first. Paths stay generic on method and send you to your manufacturer’s manual for fault codes, parameters and specs. Some manufacturer material needs a dealer or service-provider login. Links last checked 2026-11-05.</p></section>
-
-<section class="card"><h2>PUMPS // HYDRAULICS</h2><div class="items" id="c1"></div></section>
-<section class="card"><h2>VFD // CONTROLS</h2><div class="items" id="c2"></div></section>
-<section class="card"><h2>IRRIGATION CONTROL</h2><div class="items" id="c3"></div></section>
-
-<section class="card full" id="diagnosticPlaybook"><h2>DIAGNOSTIC PLAYBOOK</h2><p class="small">Browse every technique in the evolving playbook. Review status is not a diagnosis or authorization to work. Draft entries show metadata only.</p><form class="topic-menu" id="techniquePicker"><div class="fld"><label for="techniqueSelect">Choose a diagnostic technique</label><select id="techniqueSelect" required disabled><option value="">Choose a technique…</option></select></div><button id="techniqueOpen" type="submit" disabled>OPEN TECHNIQUE</button></form><p id="techniqueStatus" class="small" role="status"></p></section>
-
-<section class="card full" id="benchCard"><h2>FIELD BENCH</h2><div class="tabs" id="tabs"></div><div id="bench"></div></section>
+<p class="small" id="pf_note">Use the exact manufacturer’s manual for fault codes, parameters and specs; selecting a brand is not source verification. Some manufacturer material needs a dealer or service-provider login. Links last checked 2026-11-05.</p></section>
 
 <section class="card wide"><h2>GIS // FIELD MAPPING</h2><div class="links"><a class="btn" href="https://app.atlas.co/" target="_blank" rel="noopener">OPEN ATLAS GIS</a><a class="btn" href="https://explore.garmin.com/" target="_blank" rel="noopener">OPEN GARMIN EXPLORE</a><button type="button" data-tool="coords">COORDINATE CONVERTER</button></div><p class="small">Workflow: field pin capture → coordinates → Atlas asset map. Use for equipment, valves, decoders, splices, mainline features and locations without reliable landmarks.</p></section>
 
@@ -101,9 +103,9 @@ if(store.get('tracerHC',false)){document.body.classList.add('hc');$('#hc').setAt
 
 /* ---------- troubleshooting topic menus ---------- */
 const cards={
-c1:[['Duty point, curve & BEP','search','pump duty point operating point best efficiency point BEP pump curve explained'],['TDH / static / friction','tool','tdh'],['NPSHa vs NPSHr','tool','npsh'],['System check: TDH + NPSHa','tool','sys'],['Pump type: lift, flooded, turbine, submersible, booster, jet','flow','ptype'],['Part finder: manufacturer + model + type','tool','pfind'],['Pump won’t build pressure','flow','wont'],['Cavitation & suction conditions','flow','cav'],['Seal leak / noise / vibration','flow','vib'],['Flow reading disagrees','flow','flow'],['Seals, sleeves, bearings & alignment','search','centrifugal pump mechanical seal shaft sleeve bearing alignment service manual'],['Vertical turbine & centrifugal systems','search','vertical turbine pump irrigation troubleshooting service manual']],
-c2:[['Input/output voltage & current','flow','trip'],['Hz, RPM & motor data','tool','hz'],['Pressure transducer scaling','tool','xdcr'],['PID hunting & response','flow','hunt'],['Accel / decel / min speed','flow','trip'],['Drive vs motor vs hydraulic fault','flow','wont'],['Motor won’t start','flow','nostart'],['Station safety fault','flow','sfault'],['Rain Bird CLP/ACLP alarm map','flow','rbclp']],
-c3:[['Platform notes (Toro, Hunter, Rain Bird, Baseline, WeatherTRAK)','tool','plat'],['Learned vs measured flow','flow','lflow'],['Controller vs hydraulic','flow','ctrl'],['High / low flow alarm','flow','fa'],['Rain Bird flow/pressure alarm map','flow','rbflow'],['Rain Bird filter flush issues','flow','rbflow'],['WeatherTRAK flow alerts (LC / OptiFlow)','flow','wtflow'],['Hydraulic tree / capacity','tool','pipe'],['Flow sensor / K-factor check','tool','flowcal'],['Decoder / two-wire diagnostics','flow','tw'],['Two-wire voltage drop','tool','twvd'],['Controller offline / comms','flow','comm'],['Pump start / master valve','flow','pstart'],['Sequence & runtime evidence','search','central control irrigation runtime history flow alarm troubleshooting']]};
+c1:[['Pump won’t build pressure','flow','wont'],['Cavitation & suction conditions','flow','cav'],['Seal leak / noise / vibration','flow','vib'],['Flow reading disagrees','flow','flow'],['Pump type: lift, flooded, turbine, submersible, booster, jet','flow','ptype'],['Duty point, curve & BEP','search','pump duty point operating point best efficiency point BEP pump curve explained'],['TDH / static / friction','tool','tdh'],['NPSHa vs NPSHr','tool','npsh'],['System check: TDH + NPSHa','tool','sys'],['Part finder: manufacturer + model + type','tool','pfind'],['Seals, sleeves, bearings & alignment','search','centrifugal pump mechanical seal shaft sleeve bearing alignment service manual'],['Vertical turbine & centrifugal systems','search','vertical turbine pump irrigation troubleshooting service manual']],
+c2:[['Motor won’t start','flow','nostart'],['Drive / motor trip','flow','trip'],['Pressure hunting / unstable operation','flow','hunt'],['Station safety fault','flow','sfault'],['Hz, RPM & motor data','tool','hz'],['Pressure transducer scaling','tool','xdcr'],['Accel / decel / min speed','flow','trip'],['Drive vs motor vs hydraulic fault','flow','wont']],
+c3:[['Flow reading or alarm needs confirmation','flow','fa'],['Learned vs measured flow','flow','lflow'],['Controller vs hydraulic','flow','ctrl'],['Controller offline / comms','flow','comm'],['Pump start / master valve','flow','pstart'],['Decoder / two-wire diagnostics','flow','tw'],['Platform reference (exact equipment)','tool','plat'],['Hydraulic tree / capacity','tool','pipe'],['Flow sensor / K-factor check','tool','flowcal'],['Two-wire voltage drop','tool','twvd'],['Sequence & runtime evidence','search','central control irrigation runtime history flow alarm troubleshooting']]};
 cards.c1.push(['Manufacturer library (pumps & stations)','view','lib']);cards.c2.push(['3-phase amps / kW','tool','ph3'],['Voltage / current imbalance','tool','imb']);cards.c3.push(['Decoder limits by brand','view','dec'],['Manufacturer library (irrigation)','view','lib'],['Precipitation rate (golf heads)','tool','precip'],['Generic 24 V irrigation wire sizing','tool','wiresize'],['Conventional valve wire distance / voltage','tool','convwire'],['Two-wire decoder path distance / voltage','tool','pathwire'],['Filters & valves (Amiad, Netafim, BERMAD)','view','filters'],['Landscape technical reference','view','landscape'],['Precipitation rate (landscape heads)','tool','landprecip'],['Landscape zone area / runtime','tool','landarea'],['Hunter landscape valve wire distance','tool','landwire'],['Landscape soil / slope intake reference','tool','landslope']);
 cards.c3.push(['Decoder idle current / expected mA','tool','decoderidle']);
 cards.c2.push(['Commissioned drive setup & PID troubleshooting','view','vfdsetup']);
@@ -690,7 +692,7 @@ function golfCoverageHTML(){
 const tabsDef=[['tdh','TDH'],['npsh','NPSHa'],['sys','System check'],['pipe','Pipe / friction'],['affinity','Affinity'],['hz','Hz / RPM'],['xdcr','Transducer'],['flowcal','Flow sensor'],['drip','Drip precip'],['twvd','2-wire drop'],['coords','Coordinates'],['plat','Platforms'],['dec','Decoders'],['ph3','3-phase'],['imb','Imbalance'],['lib','Manufacturers'],['pfind','Part Finder'],['landscape','Landscape technical'],['check','Checklists'],['flow','Diagnostic path']];
 tabsDef.push(['vfdsetup','Drive setup / PID']);
 let cur='';
-function setTabs(){$('#tabs').innerHTML='';tabsDef.forEach(([k,n])=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.classList.toggle('on',k===cur);b.onclick=()=>k==='check'?openCheck():k==='flow'?openFlow('wont',true):k==='plat'?openPlat(true):k==='dec'?openDec(true):k==='lib'?openLib(true):k==='pfind'?openParts(true):openTool(k,true);$('#tabs').appendChild(b)})}
+function setTabs(){$('#tabs').innerHTML='';tabsDef.forEach(([k,n])=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.classList.toggle('on',k===cur);b.onclick=()=>k==='check'?openCheck():k==='flow'?openFlow('triage',true):k==='plat'?openPlat(true):k==='dec'?openDec(true):k==='lib'?openLib(true):k==='pfind'?openParts(true):openTool(k,true);$('#tabs').appendChild(b)})}
 function scrollBench(s){if(s)$('#benchCard').scrollIntoView({behavior:'smooth',block:'start'})}
 function renderToolFields(t,prefix,saved){return t.fields.map(([id,l,d,groups])=>{const value=saved[id]!==undefined?saved[id]:d,control=groups?`<select id="${prefix}${id}">${groups.map(group=>`<optgroup label="${esc(group.label)}">${group.options.map(([v,label])=>`<option value="${esc(v)}" ${String(v)===String(value)?'selected':''}>${esc(label)}</option>`).join('')}</optgroup>`).join('')}</select>`:`<input id="${prefix}${id}" type="number" step="any" inputmode="decimal" value="${value}">`;return`<div class="fld"><label for="${prefix}${id}">${esc(l)}</label>${control}</div>`}).join('')}
 function syncPipePreset(k,prefix){if(k!=='pipe')return;const manual=$$('#'+prefix+'d, #'+prefix+'c'),preset=parseFloat($('#'+prefix+'preset').value)>0;manual.forEach(el=>{el.disabled=preset})}
@@ -840,13 +842,6 @@ const hints=d=>{d=d.toUpperCase();const h=[];
  const p=prof();if(p.vfdb&&VFDDOC[p.vfdb]&&/ELECTRICAL|SUPPLY|CONTROL|PARAMETERS|SENSOR|TUNING|COMMAND/.test(d))h.push('For your '+p.vfdb+' drive, open: '+VFDDOC[p.vfdb]);
  if(p.ctrl&&CTRLDOC[p.ctrl]&&/CONTROL|TWO-WIRE|SIGNAL|CONFIG|SCALING|COMMUNICATION|LEARNED|COMMAND/.test(d))h.push('For your '+p.ctrl+' system, open: '+CTRLDOC[p.ctrl]);
  h.push('Manual revision/date matches your nameplate and serial number');return h};
-let skipProfile=false;
-function gate(k,s){cur='flow';setTabs();const p=prof();
- $('#bench').innerHTML='<h3>Equipment first</h3><p class="small">Choose what you’re working on so each result can point to the right manufacturer literature. You can skip.</p>'+techniqueDetails(flows[k])+'<div class="fields"><div class="fld"><label for="g_make">Pump station / pump make</label><select id="g_make"></select></div><div class="fld"><label for="g_ctrl">Central control</label><select id="g_ctrl"></select></div><div class="fld"><label for="g_vfdb">VFD brand</label><select id="g_vfdb"></select></div></div><div class="links" style="margin-top:10px"><button type="button" id="g_go">START: '+esc(flows[k].title.toUpperCase())+'</button><button type="button" id="g_skip">SKIP</button></div>';
- fillSel('#g_make',MAKES,'— choose —');fillSel('#g_ctrl',CTRLS,'— choose —');fillSel('#g_vfdb',VFDS,'— choose —');$('#g_make').value=p.make||'';$('#g_ctrl').value=p.ctrl||'';$('#g_vfdb').value=p.vfdb||'';
- $('#g_go').onclick=()=>{const q2=prof();store.set('tracerProfile',{make:$('#g_make').value,ctrl:$('#g_ctrl').value,vfdb:$('#g_vfdb').value,vfd:q2.vfd||'',model:q2.model||''});drawProfile();skipProfile=true;openFlow(k,false)};
- $('#g_skip').onclick=()=>{skipProfile=true;openFlow(k,false)};scrollBench(s)}
-
 /* ---------- diagnostic paths ---------- */
 let diagnosticLibrary=null,diagnosticError='';
 try{
@@ -871,8 +866,9 @@ function techniqueDetails(f){
  '<h4>Evidence &amp; sources</h4><p>'+esc(f.evidence.note)+'</p>'+(f.evidence.sources.length?'<ul>'+f.evidence.sources.map(source=>'<li>'+esc(source.title)+' · '+esc(source.revision)+' · '+esc(source.locator)+(source.url?' · <a href="'+esc(source.url)+'" target="_blank" rel="noopener">Open source</a>':'')+'</li>').join('')+'</ul>':'<p>No verified path-level citation is recorded. Search results and equipment-library links are not source approval.</p>')+
  '<h4>Review record</h4><p>'+esc(f.review.note)+' Last technical review: '+esc(f.review.reviewedOn||'not recorded')+'.</p>'+reviewFlagsMarkup(f)+'<h4>Verification criteria</h4>'+list(f.verification)+'</details>';
 }
-function diagnosticNote(k,f,path,n){
+function diagnosticNote(k,f,path,n,trail){
  return '[Diagnostic: '+f.title+']\nTechnique: '+k+' | Revision: '+f.revision+' | '+reviewLabels[f.review.status]+'\n'+
+ (trail.length?'Entry path: '+trail.join(' → ')+'\n':'')+
  evidenceLabels[f.evidence.kind]+'\nSymptom: '+f.symptom+'\nApplies to: '+f.appliesTo.join('; ')+
  '\nSafety: '+diagnosticLibrary.safety+' '+f.safetyPrerequisites.join(' ')+'\nPath: '+path.join(' → ')+' → '+n.domain+
  '\nAssessment (confirm, not a diagnosis): '+n.assessment+'\nMeasure / check: '+n.measurements.join('; ')+
@@ -884,29 +880,40 @@ function diagnosticNote(k,f,path,n){
 function initTechniquePicker(){
  const select=$('#techniqueSelect'),status=$('#techniqueStatus');
  if(diagnosticError){status.textContent=diagnosticError;return}
- Object.entries(flows).sort(([,a],[,b])=>a.title.localeCompare(b.title)).forEach(([key,technique])=>{
-  const option=document.createElement('option');option.value=key;option.textContent=technique.title+' — '+reviewLabels[technique.review.status];select.appendChild(option);
- });
+ for(const [group,label]of [['general','General symptoms & evidence'],['manufacturer','Manufacturer references — later detail']]){
+  const entries=Object.entries(flows).filter(([,technique])=>(technique.entryGroup||'general')===group).sort(([aKey,a],[bKey,b])=>aKey==='triage'?-1:bKey==='triage'?1:a.title.localeCompare(b.title));
+  if(!entries.length)continue;
+  const host=document.createElement('optgroup');host.label=label;
+  entries.forEach(([key,technique])=>{
+   const option=document.createElement('option');option.value=key;option.textContent=technique.title+' — '+reviewLabels[technique.review.status];host.appendChild(option);
+  });select.appendChild(host);
+ }
  select.disabled=false;$('#techniqueOpen').disabled=false;
  status.textContent=Object.keys(flows).length+' techniques available. Check scope, safety and sources before proceeding.';
  $('#techniquePicker').onsubmit=event=>{event.preventDefault();if(select.value)openFlow(select.value,true)};
+ $('#startDiagnostic').onclick=()=>openFlow('triage',true);
+ $('#startDiagnostic').disabled=false;
 }
-function openFlow(k,s){
+function openFlow(k,s,trail=[]){
  if(diagnosticError||!Object.hasOwn(flows,k)){
   cur='flow';setTabs();$('#bench').innerHTML='<h3>Troubleshooting unavailable</h3><p role="alert">'+esc(diagnosticError||'That diagnostic technique does not exist. Choose a dashboard topic or report the broken link.')+'</p>';scrollBench(s);return;
  }
  const f=flows[k];
  if(f.review.status==='draft'){cur='flow';setTabs();$('#bench').innerHTML='<h3>'+esc(f.title)+'</h3>'+techniqueDetails(f)+'<p class="safety">Draft techniques cannot be run as field guidance. Complete technical review before changing the status.</p>';scrollBench(s);return}
- if(!f.equipmentOptional&&!prof().make&&!prof().vfdb&&!skipProfile){gate(k,s);return}
  cur='flow';setTabs();const path=[];
  const draw=id=>{const n=f.nodes[id];let h='<h3>'+esc(f.title)+'</h3><div class="safety">'+esc(diagnosticLibrary.safety)+'</div><div class="safety"><strong>Before proceeding:</strong><ul>'+f.safetyPrerequisites.map(text=>'<li>'+esc(text)+'</li>').join('')+'</ul></div>'+techniqueDetails(f);
-  if(path.length)h+='<div class="small">'+path.map(esc).join(' → ')+'</div>';
+  if(trail.length||path.length)h+='<div class="small">'+[...trail,...path].map(esc).join(' → ')+'</div>';
+  if(f.entryGroup==='manufacturer')h+='<p class="safety">Manufacturer-specific reference: confirm this exact model, platform, firmware and manual before applying any code meaning, limit or procedure. Unknown equipment does not inherit these specifications.</p>';
   h+=reviewFlagsMarkup(f,id);
-  if(n.result){h+=`<div class="res"><b>Area to investigate (not a confirmed diagnosis): ${esc(n.domain)}</b><br>${esc(n.assessment)}<br><br>Measure / check:<ul>${n.measurements.map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Confirm in your manual:<ul>${hints(n.domain).map(m=>'<li>'+esc(m)+'</li>').join('')}</ul><strong>Verify the result:</strong><ul>${f.verification.map(item=>'<li>'+esc(item)+'</li>').join('')}</ul>Make the smallest justified change, then prove it under operating conditions.</div><div class="links" id="lit" style="margin-top:10px"></div><div class="links" style="margin-top:10px"><button type="button" id="fs">SEARCH THIS</button>${n.tool?'<button type="button" id="ft2">'+(n.tool==='vfdsetup'?'OPEN DRIVE SETUP GUIDE':'OPEN CALCULATOR')+'</button>':''}<button type="button" id="fn">LOG TO NOTES</button><button type="button" id="fr">START OVER</button></div>`}
+  if(n.result){h+=`<div class="res"><b>Area to investigate (not a confirmed diagnosis): ${esc(n.domain)}</b><br>${esc(n.assessment)}<br><br>Measure / check:<ul>${n.measurements.map(m=>'<li>'+esc(m)+'</li>').join('')}</ul>Confirm in your manual:<ul>${hints(n.domain).map(m=>'<li>'+esc(m)+'</li>').join('')}</ul><strong>Verify the result:</strong><ul>${f.verification.map(item=>'<li>'+esc(item)+'</li>').join('')}</ul>Make the smallest justified change, then prove it under operating conditions.</div><div class="links" id="lit" style="margin-top:10px"></div><div class="links" style="margin-top:10px"><button type="button" id="fs">SEARCH THIS</button>${n.tool?'<button type="button" id="ft2">'+(n.tool==='vfdsetup'?'OPEN DRIVE SETUP GUIDE':'OPEN CALCULATOR')+'</button>':''}<button type="button" id="fn">LOG TO NOTES</button><button type="button" id="fr">START OVER</button><a class="btn" href="#prof">IDENTIFY EQUIPMENT FOR THE MANUAL</a></div>`;
+   if((f.manufacturerReferences||[]).length)h+='<details class="vfd-section"><summary>Later detail: manufacturer-specific references</summary><p class="small">Use only when the exact equipment is identified. These are optional references, not equivalent alarm definitions or approved procedures.</p><div class="links">'+f.manufacturerReferences.map(key=>'<button type="button" data-manufacturer="'+esc(key)+'">'+esc(flows[key].title)+'</button>').join('')+'</div></details>';
+  }
   else h+=`<div class="q">${esc(n.question)}</div><div class="opts">${n.options.map((option,i)=>`<button type="button" data-i="${i}">${esc(option.label)}</button>`).join('')}</div>${path.length?'<div class="links" style="margin-top:10px"><button type="button" id="fr">START OVER</button></div>':''}`;
   $('#bench').innerHTML=h;
-  if(n.result){litButtons($('#lit'),n.search.split(' ').slice(0,5).join(' '));$('#fs').onclick=()=>go(withBrand(n.search));if(n.tool)$('#ft2').onclick=()=>openTool(n.tool,true);$('#fn').onclick=()=>appendNote(diagnosticNote(k,f,path,n))}
-  $$('#bench .opts button').forEach(b=>b.onclick=()=>{const option=n.options[b.dataset.i];if(option.next.startsWith('flow:')){openFlow(option.next.slice(5),true);return}path.push(option.label);draw(option.next)});
+  const context=choice=>[...trail,k+' rev '+f.revision+' ['+reviewLabels[f.review.status]+']: '+[...path,choice].join(' → ')];
+  if(n.result){litButtons($('#lit'),n.search.split(' ').slice(0,5).join(' '));$('#fs').onclick=()=>go(withBrand(n.search));if(n.tool)$('#ft2').onclick=()=>openTool(n.tool,true);$('#fn').onclick=()=>appendNote(diagnosticNote(k,f,path,n,trail))}
+  $$('#bench .opts button').forEach(b=>b.onclick=()=>{const option=n.options[b.dataset.i];if(option.next.startsWith('flow:')){openFlow(option.next.slice(5),true,context(option.label));return}path.push(option.label);draw(option.next)});
+  $$('#bench [data-manufacturer]').forEach(button=>button.onclick=()=>openFlow(button.dataset.manufacturer,true,context('Reference: '+flows[button.dataset.manufacturer].title)));
   const r=$('#fr');if(r)r.onclick=()=>{path.length=0;draw(f.start)}};draw(f.start);scrollBench(s)}
 
 /* ---------- commissioned drive setup ---------- */
@@ -1372,7 +1379,7 @@ function initPortalRoute(){
  const params=new URLSearchParams(window.location.search),technique=params.get('technique');
  if(technique){openFlow(technique,true);return}
  const key=params.get('tool');
- if(!key)return;
+ if(!key){openFlow('triage',false);return}
  if(key==='check'){openCheck();scrollBench(true);return}
  if(Object.hasOwn(tools,key)||['vfdsetup','plat','dec','lib','landscape','filters','pfind'].includes(key)){openTool(key,true);return}
  const status=$('#portalRouteStatus');status.hidden=false;status.textContent='That tool link is not available. Choose a tool from the directory or the dashboard menus.';

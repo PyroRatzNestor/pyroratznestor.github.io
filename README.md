@@ -34,6 +34,19 @@ Step-specific review flags identify unresolved electrical/operating tests,
 parameter changes and model-dependent limits; flags appear in the affected
 step and Notes. A technique with outstanding flags cannot be marked reviewed.
 
+The dashboard now starts with `triage`: symptom first, then a general evidence
+question about existing readings, command state or affected scope. Missing
+evidence exits explicitly rather than forcing a cause. No up-front manufacturer
+profile is required. Equipment Details follows the Field Bench and remains
+necessary context before applying exact model limits or procedures.
+
+The playbook groups general paths before manufacturer-specific references.
+`trip` and `fa` no longer start with named alarm mappings; optional brand
+references appear only after their generic results. Old direct technique links
+remain valid and brand-specific definitions stay separate. Notes preserve the
+symptom/evidence trail across cross-technique handoffs. More detailed
+manufacturer selection/workflows are deferred to a later stage.
+
 See [Maintaining troubleshooting techniques](docs/troubleshooting.md) for the
 content format, authoring example and draft → review → preview → publish cycle.
 Schema/graph validation is not technical approval. Invalid/missing content

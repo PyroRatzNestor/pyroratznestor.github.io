@@ -2,6 +2,114 @@ globalThis.TRACER_TROUBLESHOOTING = {
   "schemaVersion": 1,
   "safety": "De-energize, lock out and verify zero energy before touching conductors or doing insulation tests. Follow your employer’s procedures.",
   "techniques": {
+    "triage": {
+      "title": "Start with the symptom",
+      "symptom": "An observed equipment or irrigation problem needs evidence-led triage before a manufacturer-specific interpretation.",
+      "appliesTo": [
+        "Pump, motor/control and irrigation observations. This is a routing and evidence-collection guide, not an equipment test procedure.",
+        "Use existing authorized observations. No manufacturer identification is required to describe a symptom; exact equipment documentation is still required before applying limits or procedures."
+      ],
+      "revision": 1,
+      "review": {
+        "status": "needs-review",
+        "reviewedOn": null,
+        "note": "New symptom-first routing for draft preview. Qualified technical review remains pending; selecting a branch is not a diagnosis."
+      },
+      "evidence": {
+        "kind": "field-guidance",
+        "note": "General evidence collection and navigation only. No manufacturer limits, fault-code meanings or parameter equivalence are inferred.",
+        "sources": []
+      },
+      "safetyPrerequisites": [
+        "Use existing readings, logs and safe observations only. Do not operate equipment or perform a test merely to answer these questions.",
+        "If an unsafe condition is observed, stop this walkthrough and follow the site's safety/escalation procedure. Do not bypass protections or restart into a fault."
+      ],
+      "verification": [
+        "Record the observed symptom, affected scope, operating state, timestamp and available readings with units.",
+        "Keep unknown evidence unknown. Confirm the exact model/manual and approved procedure before any later measurement, setting change or repair."
+      ],
+      "equipmentOptional": true,
+      "start": "a",
+      "nodes": {
+        "a": {
+          "question": "STEP 1 — What symptom are you observing?",
+          "options": [
+            {"label": "Pump or motor will not start / stops unexpectedly", "next": "start"},
+            {"label": "Pressure or delivered water is lower than expected", "next": "pressure"},
+            {"label": "Pressure swings, cycling or unstable operation", "next": "unstable"},
+            {"label": "Flow reading, flow alarm or valve response does not match expectations", "next": "flow"},
+            {"label": "Controller is offline or communication is missing", "next": "comms"},
+            {"label": "Leak, noise or vibration at the pump", "next": "mechanical"},
+            {"label": "Not sure yet / insufficient observations", "next": "evidence"}
+          ]
+        },
+        "start": {
+          "question": "STEP 2 — From existing displays or records, what is known about the stop or failed start?",
+          "options": [
+            {"label": "A safety or station protection is active", "next": "flow:sfault"},
+            {"label": "A drive/motor trip is recorded", "next": "flow:trip"},
+            {"label": "There is a start demand but no confirmed start response", "next": "flow:nostart"},
+            {"label": "The pump-start or master-valve output is not responding", "next": "flow:pstart"},
+            {"label": "Demand, command or protection state is unknown", "next": "evidence"}
+          ]
+        },
+        "pressure": {
+          "question": "STEP 2 — Which pressure or supply evidence is already available?",
+          "options": [
+            {"label": "Running state and pressure/flow observations are available", "next": "flow:wont"},
+            {"label": "Loss of prime, low source level or suction trouble is recorded", "next": "flow:sfault"},
+            {"label": "Pump or water-supply arrangement is not identified", "next": "flow:ptype"},
+            {"label": "The pressure readings or operating condition are uncertain", "next": "evidence"}
+          ]
+        },
+        "unstable": {
+          "question": "STEP 2 — What evidence accompanies the unstable operation?",
+          "options": [
+            {"label": "Pressure swings are recorded with the operating state", "next": "flow:hunt"},
+            {"label": "Noise or suction symptoms accompany changing demand", "next": "flow:cav"},
+            {"label": "A drive/motor fault or protective stop is recorded", "next": "flow:trip"},
+            {"label": "Timing, readings or operating state are not established", "next": "evidence"}
+          ]
+        },
+        "flow": {
+          "question": "STEP 2 — What is the mismatch, and how much of the system is affected?",
+          "options": [
+            {"label": "The displayed flow disagrees with a suitable independent observation", "next": "flow:flow"},
+            {"label": "A high/low-flow alarm needs confirmation", "next": "flow:fa"},
+            {"label": "A commanded valve or zone is not delivering as expected", "next": "flow:ctrl"},
+            {"label": "A known two-wire path has affected stations or a branch", "next": "flow:tw"},
+            {"label": "Current flow differs from the recorded learned baseline", "next": "flow:lflow"},
+            {"label": "Affected scope, readings or command state are unknown", "next": "evidence"}
+          ]
+        },
+        "comms": {
+          "question": "STEP 2 — What is known locally, independently of the remote report?",
+          "options": [
+            {"label": "Local controller power/status observations are available", "next": "flow:comm"},
+            {"label": "Local power, operation or last-report state is unknown", "next": "evidence"}
+          ]
+        },
+        "mechanical": {
+          "question": "STEP 2 — What was observed without intrusive inspection?",
+          "options": [
+            {"label": "The leak/noise/vibration location and operating state are recorded", "next": "flow:vib"},
+            {"label": "Noise accompanies suction or water-source symptoms", "next": "flow:cav"},
+            {"label": "Location or operating condition is not established", "next": "evidence"}
+          ]
+        },
+        "evidence": {
+          "result": true,
+          "domain": "INSUFFICIENT EVIDENCE",
+          "assessment": "No cause is established. Collect the observation context before selecting a fault family or manufacturer-specific interpretation.",
+          "measurements": [
+            "Record the symptom, affected equipment/zone/branch, time and whether the equipment was operating, stopped or calling to run.",
+            "Record available display/log readings and alarm text verbatim, including units; do not infer a fault meaning from another manufacturer's code.",
+            "Use existing evidence or a separately authorized observation procedure. If access, safety or applicable limits are unknown, stop and escalate."
+          ],
+          "search": "pump irrigation equipment manufacturer documentation symptom evidence troubleshooting"
+        }
+      }
+    },
     "wont": {
       "title": "Pump won't build pressure",
       "symptom": "A centrifugal water-pump system is delivering less pressure or head than expected under a documented demand.",
@@ -269,15 +377,16 @@ globalThis.TRACER_TROUBLESHOOTING = {
     },
     "trip": {
       "title": "VFD / motor trip",
+      "manufacturerReferences": ["rbclp"],
       "symptom": "VFD / motor trip",
       "appliesTo": [
         "VFD-driven motors; use the exact drive fault code, motor data and station schematic."
       ],
-      "revision": 2,
+      "revision": 3,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
+        "note": "Symptom-first reorganization removed the manufacturer-specific opening option and added an unknown-code evidence exit. Existing review flags remain unresolved; exact sources, safe procedures and qualified approval are still pending."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -296,12 +405,8 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "start": "a",
       "nodes": {
         "a": {
-          "question": "What did the drive report?",
+          "question": "From the recorded display text or exact applicable manual, is the fault family established? Do not borrow another drive's code meaning.",
           "options": [
-            {
-              "label": "Rain Bird CLP/ACLP named alarm (E16/E17/E18/PCH/AIE or Delta alarm)",
-              "next": "flow:rbclp"
-            },
             {
               "label": "Overcurrent / short circuit",
               "next": "oc"
@@ -321,8 +426,23 @@ globalThis.TRACER_TROUBLESHOOTING = {
             {
               "label": "No fault, but won’t accelerate",
               "next": "ac"
+            },
+            {
+              "label": "Only a code is known / no confirmed fault family",
+              "next": "unknown"
             }
           ]
+        },
+        "unknown": {
+          "result": true,
+          "domain": "INSUFFICIENT EVIDENCE",
+          "assessment": "A code alone does not establish a fault family. Record it verbatim and identify the exact drive and station before interpreting it.",
+          "measurements": [
+            "Record the full alarm text/code, timestamp, run state and any existing fault history without resetting.",
+            "Identify the drive model, firmware and station controller using safe existing labels or records.",
+            "Use that equipment's manual or qualified service support; do not infer code meanings from another manufacturer."
+          ],
+          "search": "VFD exact model firmware fault code manual"
         },
         "oc": {
           "result": true,
@@ -415,6 +535,7 @@ globalThis.TRACER_TROUBLESHOOTING = {
     },
     "rbclp": {
       "title": "Rain Bird CLP/ACLP alarm map",
+      "entryGroup": "manufacturer",
       "symptom": "Rain Bird CLP/ACLP alarm map",
       "appliesTo": [
         "Rain Bird CLP/ACLP stations; confirm platform, drive family, firmware and programming guide."
@@ -1324,15 +1445,16 @@ globalThis.TRACER_TROUBLESHOOTING = {
     },
     "fa": {
       "title": "High / low flow alarm",
+      "manufacturerReferences": ["rbflow", "wtflow"],
       "symptom": "High / low flow alarm",
       "appliesTo": [
         "Irrigation systems with flow monitoring; confirm controller, flow zone and alarm definition."
       ],
-      "revision": 2,
+      "revision": 3,
       "review": {
         "status": "needs-review",
         "reviewedOn": null,
-        "note": "Readiness wording scan identified unresolved step-specific review flags. Exact sources, safe test procedures and qualified technical approval remain pending; this is not a completed technical review."
+        "note": "Symptom-first reorganization moved manufacturer alarm maps to optional later references and clarified independent flow evidence. Existing review flags remain unresolved; exact sources, safe procedures and qualified approval are still pending."
       },
       "evidence": {
         "kind": "field-guidance",
@@ -1351,7 +1473,7 @@ globalThis.TRACER_TROUBLESHOOTING = {
       "start": "a",
       "nodes": {
         "a": {
-          "question": "Is the alarm confirmed by an independent source (second meter, pump curve, visual)?",
+          "question": "Does a suitable independent observation confirm high or low flow under the recorded command/demand condition? A pump-curve estimate alone is not a calibrated flow reference.",
           "options": [
             {
               "label": "No / not sure",
@@ -1364,10 +1486,6 @@ globalThis.TRACER_TROUBLESHOOTING = {
             {
               "label": "Yes, flow really is low",
               "next": "lw"
-            },
-            {
-              "label": "Rain Bird wording: Flow Meter Fault / Pipe Break / Starts Per Hour",
-              "next": "flow:rbflow"
             }
           ]
         },
@@ -1405,6 +1523,7 @@ globalThis.TRACER_TROUBLESHOOTING = {
     },
     "rbflow": {
       "title": "Rain Bird flow/pressure alarms",
+      "entryGroup": "manufacturer",
       "symptom": "Rain Bird flow/pressure alarms",
       "appliesTo": [
         "Rain Bird flow/pressure monitoring; confirm platform, sensor and alarm definition."
@@ -1550,6 +1669,7 @@ globalThis.TRACER_TROUBLESHOOTING = {
     },
     "wtflow": {
       "title": "WeatherTRAK flow alerts",
+      "entryGroup": "manufacturer",
       "symptom": "WeatherTRAK flow alerts",
       "appliesTo": [
         "WeatherTRAK flow monitoring; confirm controller model, firmware and applicable alert definition."

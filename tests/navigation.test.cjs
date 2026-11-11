@@ -57,5 +57,15 @@ test('empty menu does not navigate and every topic preserves its original action
         : [kind === 'flow' ? 'flow' : 'tool', target, true];
       assert.deepEqual(calls.at(-1), expected);
     });
+
+    test('contextual diagnostic menus start from generic symptoms rather than named alarm maps', () => {
+      for (const topics of Object.values(cards)) {
+        for (const [label, kind, key] of topics) {
+          if (kind !== 'flow') continue;
+          assert.ok(!['rbclp', 'rbflow', 'wtflow'].includes(key), label);
+          assert.doesNotMatch(label, /Rain Bird|WeatherTRAK|Hunter|Toro/);
+        }
+      }
+    });
   }
 });

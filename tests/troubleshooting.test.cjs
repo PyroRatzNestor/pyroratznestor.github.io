@@ -24,9 +24,10 @@ const renderer = html.slice(
 );
 const escape = value => String(value).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-function app(library = clone(), api = {validate}) {
+function app(library = clone(), api = {validate}, profile = {make: 'Test equipment'}) {
   const nodes = {}, notes = [], calls = [], errors = [];
   let buttons = [];
+  let referenceButtons = [];
   const bench = {
     markup: '',
     set innerHTML(markup) {
@@ -34,34 +35,40 @@ function app(library = clone(), api = {validate}) {
       for (const key of Object.keys(nodes)) delete nodes[key];
       for (const [, id] of markup.matchAll(/\bid="([^"]+)"/g)) nodes['#' + id] = {};
       buttons = [...markup.matchAll(/data-i="(\d+)"/g)].map(([, i]) => ({dataset: {i}}));
+      referenceButtons = [...markup.matchAll(/data-manufacturer="([^"]+)"/g)].map(([, manufacturer]) => ({dataset: {manufacturer}}));
     }
   };
   const status = {hidden: true, textContent: ''};
   const picker = {
-    '#techniqueSelect': {value: '', disabled: true, options: [], appendChild(option) { this.options.push(option); }},
+    '#techniqueSelect': {value: '', disabled: true, options: [], groups: [], appendChild(group) { this.groups.push(group); this.options.push(...group.options); }},
     '#techniqueOpen': {disabled: true},
     '#techniqueStatus': {textContent: ''},
-    '#techniquePicker': {}
+    '#techniquePicker': {},
+    '#startDiagnostic': {disabled: true}
   };
   const context = {
     TRACER_TROUBLESHOOTING: library, TRACER_TECHNIQUES_API: api,
     tools, URL, esc: escape,
     $: selector => selector === '#bench' ? bench : selector === '#portalRouteStatus' ? status : picker[selector] || nodes[selector],
-    $$: () => buttons,
+    $$: selector => selector === '#bench [data-manufacturer]' ? referenceButtons : buttons,
     console: {error: message => errors.push(message)},
-    prof: () => ({make: 'Test equipment'}), skipProfile: false,
-    setTabs() {}, scrollBench() {}, gate: () => calls.push(['gate']),
+    prof: () => profile,
+    setTabs() {}, scrollBench() {},
     hints: () => ['Use the installed manual.'], litButtons() {},
     go: query => calls.push(['search', query]), withBrand: query => query,
     openTool: (...args) => calls.push(['tool', ...args]),
     appendNote: text => notes.push(text)
   };
-  context.document = {createElement: tag => { assert.equal(tag, 'option'); return {}; }};
+  context.document = {createElement: tag => {
+    assert.ok(['option', 'optgroup'].includes(tag));
+    return tag === 'option' ? {} : {options: [], appendChild(option) { this.options.push(option); }};
+  }};
   const {openFlow, initTechniquePicker} = vm.runInNewContext(renderer + '\n({openFlow,initTechniquePicker})', context);
   return {
     open: key => openFlow(key, false),
     choose: index => { assert.ok(buttons[index], 'decision option exists'); buttons[index].onclick(); },
     click: selector => { assert.ok(nodes[selector]?.onclick, selector); nodes[selector].onclick(); },
+    reference: key => { const button = referenceButtons.find(item => item.dataset.manufacturer === key); assert.ok(button, key); button.onclick(); },
     markup: () => bench.markup, notes, calls, status, errors,
     initPicker: initTechniquePicker, picker
   };
@@ -239,6 +246,77 @@ test('sample pressure path stops at missing evidence instead of forcing a fault 
   instance.choose(1);
   instance.choose(3);
   assert.ok(instance.markup().includes('INSUFFICIENT EVIDENCE'));
+});
+
+test('empty equipment profiles start with symptoms and retain both evidence selections across handoffs', () => {
+  const instance = app(clone(), {validate}, {});
+  instance.open('triage');
+  assert.match(instance.markup(), /STEP 1/);
+  assert.doesNotMatch(instance.markup(), /id="g_make"|Equipment first/);
+  instance.choose(0);
+  assert.match(instance.markup(), /STEP 2/);
+  instance.choose(2);
+  assert.ok(instance.markup().includes(content.techniques.nostart.title));
+  assert.ok(instance.markup().includes(escape(content.techniques.nostart.nodes.a.question)));
+  instance.choose(0);
+  instance.click('#fn');
+  assert.ok(instance.notes.at(-1).includes('Entry path: triage rev 1 [Needs technical review]'));
+  assert.ok(instance.notes.at(-1).includes(content.techniques.triage.nodes.a.options[0].label));
+  assert.ok(instance.notes.at(-1).includes(content.techniques.triage.nodes.start.options[2].label));
+  assert.deepEqual(instance.calls.filter(call => call[0] === 'gate'), []);
+});
+
+test('each symptom has a generic evidence question and an explicit unknown-evidence exit', () => {
+  const instance = app(clone(), {validate}, {});
+  const manufacturerNames = /Rain Bird|Hunter|Toro|WeatherTRAK|ABB|Mitsubishi/;
+  const root = content.techniques.triage;
+  assert.doesNotMatch(root.nodes.a.question, manufacturerNames);
+  for (let index = 0; index < root.nodes.a.options.length - 1; index++) {
+    instance.open('triage'); instance.choose(index);
+    assert.match(instance.markup(), /STEP 2/);
+    const node = root.nodes[root.nodes.a.options[index].next];
+    assert.doesNotMatch(node.question, manufacturerNames);
+    for (const option of node.options) {
+      assert.doesNotMatch(option.label, manufacturerNames);
+      if (option.next.startsWith('flow:')) assert.notEqual(content.techniques[option.next.slice(5)].entryGroup, 'manufacturer');
+    }
+    instance.choose(node.options.length - 1);
+    assert.ok(instance.markup().includes('INSUFFICIENT EVIDENCE'));
+  }
+});
+
+test('manufacturer references are grouped separately and offered only after generic result evidence', () => {
+  const instance = app(clone(), {validate}, {});
+  instance.initPicker();
+  const select = instance.picker['#techniqueSelect'];
+  assert.equal(select.options[0].value, 'triage');
+  assert.equal(select.groups.length, 2);
+  assert.ok(select.groups[1].label.includes('later detail'));
+  assert.ok(select.groups[1].options.every(option => content.techniques[option.value].entryGroup === 'manufacturer'));
+  instance.open('trip');
+  assert.doesNotMatch(instance.markup(), /data-manufacturer=/);
+  assert.doesNotMatch(content.techniques.trip.nodes.a.question, /Rain Bird/);
+  instance.choose(content.techniques.trip.nodes.a.options.length - 1);
+  assert.ok(instance.markup().includes('INSUFFICIENT EVIDENCE'));
+  assert.match(instance.markup(), /Later detail: manufacturer-specific references/);
+  instance.reference('rbclp');
+  assert.ok(instance.markup().includes(content.techniques.rbclp.title));
+  assert.match(instance.markup(), /Unknown equipment does not inherit these specifications/);
+  instance.choose(0); instance.click('#fn');
+  assert.ok(instance.notes.at(-1).includes('Entry path: trip rev 3'));
+  assert.ok(instance.notes.at(-1).includes('Reference: ' + content.techniques.rbclp.title));
+});
+
+test('invalid manufacturer reference links or discovery groups are rejected', () => {
+  for (const [mutate, expected] of [
+    [lib => { lib.techniques.hunt.entryGroup = 'everything'; }, /entryGroup/],
+    [lib => { lib.techniques.trip.manufacturerReferences = ['missing']; }, /manufacturer-specific/],
+    [lib => { lib.techniques.trip.manufacturerReferences = ['wont']; }, /manufacturer-specific/],
+    [lib => { lib.techniques.trip.manufacturerReferences = 'rbclp'; }, /list required/]
+  ]) {
+    const library = clone(); mutate(library);
+    assert.throws(() => validate(library, toolKeys), expected);
+  }
 });
 
 test('step-level flags appear at the affected decision/result and survive logging', () => {

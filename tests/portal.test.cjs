@@ -66,8 +66,8 @@ test('all portal tool entry links resolve to real tools or special views', () =>
   assert.deepEqual(route('?tool=check').calls, [['check'], ['scroll', true]]);
 });
 
-test('missing tool links keep the default dashboard; unknown and prototype keys show a message', () => {
-  assert.deepEqual(route('').calls, []);
+test('default dashboard opens symptom triage; unknown and prototype tool keys show a message', () => {
+  assert.deepEqual(route('').calls, [['technique', 'triage', false]]);
   for (const key of ['missing', '__proto__', 'constructor', '<script>']) {
     const {calls, status} = route('?tool=' + encodeURIComponent(key));
     assert.deepEqual(calls, []);

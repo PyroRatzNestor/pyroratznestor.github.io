@@ -11,6 +11,20 @@ so adding a technique does not require adding a new page or editing calculator
 logic. Use `dashboard.html?technique=<id>` to open a specific entry (including
 draft metadata) for review. Existing symptom menus remain contextual shortcuts.
 
+The default dashboard and Home's primary action open `triage`: first an
+observed symptom, then a general evidence question. These steps require no
+manufacturer profile and do not authorize new measurements or operating tests.
+Missing evidence has an explicit collection/escalation exit. Cross-technique
+handoffs retain the selected symptom/evidence in the on-screen trail and Notes.
+
+Manufacturer-specific maps remain distinct later references. The playbook
+lists general paths first and puts manufacturer maps in a separate group;
+generic result screens can offer relevant maps inside a collapsed later-detail
+section. Direct specialist links are preserved, with explicit model/firmware
+applicability warnings. No manufacturer is inferred or selected automatically.
+The next stage can refine manufacturer selection without merging codes,
+limits, proprietary wiring or tuning definitions.
+
 ## Publishing cycle
 
 1. Make content changes on a draft branch, not the live publishing branch.
@@ -55,7 +69,9 @@ Each technique has:
 | `evidence` | `kind`, an honest provenance `note`, and a `sources` list. |
 | `safetyPrerequisites` | Site authorization, test/isolation prerequisites and equipment-specific hazards. |
 | `verification` | What must be measured and compared after the correction; use documented limits, not invented pass/fail tolerances. |
-| `equipmentOptional` | Whether the identification/profile gate can be skipped automatically. This does not waive equipment identification or safety requirements. |
+| `equipmentOptional` | Retained legacy identification metadata; it no longer gates entry to a path. Exact-model and safety requirements are still stated in scope/prerequisites. |
+| `entryGroup` | Optional `general` (default) or `manufacturer`, used to keep specialized maps separate in the playbook. |
+| `manufacturerReferences` | Optional list of existing `manufacturer` technique IDs, shown as later references after a generic result, never as inferred code equivalents. |
 | `start`, `nodes` | A start-node key and a bounded decision tree containing questions, options and results. |
 
 `evidence.kind` distinguishes `field-guidance`, `engineering-guidance` and

@@ -22,6 +22,15 @@
       for(const field of ['appliesTo','safetyPrerequisites','verification'])strings(technique[field],at+'.'+field);
       if(!Number.isInteger(technique.revision)||technique.revision<1)fail(at+'.revision','positive integer required');
       if(typeof technique.equipmentOptional!=='boolean')fail(at+'.equipmentOptional','boolean required');
+      if(technique.entryGroup!==undefined&&!['general','manufacturer'].includes(technique.entryGroup))fail(at+'.entryGroup','unknown entry group');
+      if(technique.manufacturerReferences!==undefined){
+        if(!Array.isArray(technique.manufacturerReferences))fail(at+'.manufacturerReferences','list required');
+        technique.manufacturerReferences.forEach((target,index)=>{
+          const location=at+'.manufacturerReferences['+index+']';
+          text(target,location);
+          if(!own(techniques,target)||techniques[target].entryGroup!=='manufacturer')fail(location,'must reference an existing manufacturer-specific technique');
+        });
+      }
       const review=technique.review,evidence=technique.evidence;
       if(!object(review)||!['draft','needs-review','reviewed'].includes(review.status))fail(at+'.review','unknown review status');
       text(review.note,at+'.review.note');
