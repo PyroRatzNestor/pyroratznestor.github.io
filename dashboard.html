@@ -25,9 +25,10 @@ a:not(.btn),a:not(.btn):visited{color:var(--cyan)}:focus-visible{outline:3px sol
 .tbl{border-collapse:collapse;margin:10px 0;font-weight:400}.tbl th,.tbl td{border:1px solid var(--line);padding:4px 10px;text-align:right;color:var(--text)}.tbl th{color:var(--muted)}
 .safety{border-left:3px solid var(--amber);padding:6px 10px;margin:10px 0;color:var(--amber);font-size:13px}
 .vfd-section{border:1px solid var(--line);border-radius:8px;padding:12px;margin:12px 0;min-width:0}.vfd-section summary{cursor:pointer;color:var(--amber);font-weight:700}.vfd-section .fld{min-width:0}.vfd-section p{overflow-wrap:anywhere}.vfd-guide-status{min-height:1.5em}
+.pps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:10px 0}.pps-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(130px,190px);gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}.pps-row label{display:block}.pps-row select,.pps-row input,.pps-grid input,.pps-pump-card input,.pps-note{width:100%;min-width:0;padding:9px;background:var(--inp);color:#fff;border:1px solid var(--control-line);border-radius:6px;font:inherit}.pps-pump-card{border:1px solid var(--line);border-radius:8px;padding:12px;margin:10px 0}.pps-pump-card legend{color:var(--amber);font-weight:700}.pps-status{min-height:1.5em}.pps-repeat{display:inline-block;color:var(--amber);font-size:12px;margin-top:3px}
 .pfgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr 1fr;gap:8px}
 @media(max-width:1080px){.pfgrid{grid-template-columns:1fr 1fr 1fr}.pfgrid .span2{grid-column:span 3}}
-@media(max-width:850px){.card,.wide{grid-column:1/-1}.calc{grid-template-columns:1fr}.search{flex-direction:column}.pfgrid{grid-template-columns:1fr}.pfgrid .span2{grid-column:auto}}
+@media(max-width:850px){.card,.wide{grid-column:1/-1}.calc{grid-template-columns:1fr}.search{flex-direction:column}.pfgrid{grid-template-columns:1fr}.pfgrid .span2{grid-column:auto}.pps-row{grid-template-columns:1fr}}
 </style></head><body>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header"><div class="portal-shell header-inner"><a class="site-brand" href="index.html">TECHNICIAN<span>FIELD PORTAL</span></a><nav class="site-nav" aria-label="Main navigation"><a href="index.html">Home</a><a href="dashboard.html" aria-current="page">Field dashboard</a><a href="tools.html">Tool directory</a><a href="references.html">References</a><a href="help.html">Help &amp; about</a></nav></div></header>
@@ -81,6 +82,7 @@ a:not(.btn),a:not(.btn):visited{color:var(--cyan)}:focus-visible{outline:3px sol
 <script src="data/golf-rainbird.js"></script>
 <script src="data/golf-toro.js"></script>
 <script src="data/troubleshooting.js"></script>
+<script src="data/pps-home-commissioning.js"></script>
 <script src="assets/troubleshooting.js"></script>
 <script>
 (()=>{
@@ -691,8 +693,9 @@ function golfCoverageHTML(){
 
 const tabsDef=[['tdh','TDH'],['npsh','NPSHa'],['sys','System check'],['pipe','Pipe / friction'],['affinity','Affinity'],['hz','Hz / RPM'],['xdcr','Transducer'],['flowcal','Flow sensor'],['drip','Drip precip'],['twvd','2-wire drop'],['coords','Coordinates'],['plat','Platforms'],['dec','Decoders'],['ph3','3-phase'],['imb','Imbalance'],['lib','Manufacturers'],['pfind','Part Finder'],['landscape','Landscape technical'],['check','Checklists'],['flow','Diagnostic path']];
 tabsDef.push(['vfdsetup','Drive setup / PID']);
-let cur='';
-function setTabs(){$('#tabs').innerHTML='';tabsDef.forEach(([k,n])=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.classList.toggle('on',k===cur);b.onclick=()=>k==='check'?openCheck():k==='flow'?openFlow('triage',true):k==='plat'?openPlat(true):k==='dec'?openDec(true):k==='lib'?openLib(true):k==='pfind'?openParts(true):openTool(k,true);$('#tabs').appendChild(b)})}
+let cur='',ppsDirty=false;
+function confirmPpsNavigation(){return !ppsDirty||confirm('The latest PPS record changes could not be saved. Leave this record and discard those unsaved changes? Export a backup first if needed.')}
+function setTabs(){$('#tabs').innerHTML='';tabsDef.forEach(([k,n])=>{const b=document.createElement('button');b.type='button';b.textContent=n;b.classList.toggle('on',k===cur);b.onclick=()=>{if(!confirmPpsNavigation())return;k==='check'?openCheck():k==='flow'?openFlow('triage',true):k==='plat'?openPlat(true):k==='dec'?openDec(true):k==='lib'?openLib(true):k==='pfind'?openParts(true):openTool(k,true)};$('#tabs').appendChild(b)})}
 function scrollBench(s){if(s)$('#benchCard').scrollIntoView({behavior:'smooth',block:'start'})}
 function renderToolFields(t,prefix,saved){return t.fields.map(([id,l,d,groups])=>{const value=saved[id]!==undefined?saved[id]:d,control=groups?`<select id="${prefix}${id}">${groups.map(group=>`<optgroup label="${esc(group.label)}">${group.options.map(([v,label])=>`<option value="${esc(v)}" ${String(v)===String(value)?'selected':''}>${esc(label)}</option>`).join('')}</optgroup>`).join('')}</select>`:`<input id="${prefix}${id}" type="number" step="any" inputmode="decimal" value="${value}">`;return`<div class="fld"><label for="${prefix}${id}">${esc(l)}</label>${control}</div>`}).join('')}
 function syncPipePreset(k,prefix){if(k!=='pipe')return;const manual=$$('#'+prefix+'d, #'+prefix+'c'),preset=parseFloat($('#'+prefix+'preset').value)>0;manual.forEach(el=>{el.disabled=preset})}
@@ -771,9 +774,72 @@ lists['Filtration / backwash service']=[
  'After service, return controls to the documented automatic mode and prove leakage-free operation, recovered differential pressure and successful cleaning under load',
  'Record before/after readings, controller settings, replaced parts, source edition/page and any unresolved limits in field notes'
 ];
-function openCheck(){cur='check';setTabs();const st=store.get('tracerChecks',{});$('#bench').innerHTML=Object.entries(lists).map(([n,items],i)=>`<h3>${esc(n)}</h3><div class="chk">${items.map((t,j)=>`<label><input type="checkbox" data-k="${i}_${j}" ${st[i+'_'+j]?'checked':''}><span>${esc(t)}</span></label>`).join('')}</div><button type="button" data-reset="${i}" style="margin-top:6px">RESET THIS LIST</button>`).join('')+'<p class="small">Checklists are reminders; follow your employer’s procedures and the manufacturer’s manual.</p>';
+function openCheck(){cur='check';setTabs();const st=store.get('tracerChecks',{});$('#bench').innerHTML='<section class="vfd-section"><h3>PPS Home Station Start-Up &amp; Commissioning</h3><p class="small">Structured local record based on owner-supplied screenshots of PPS QF-16.5 Rev B. Choose scope, record Done/N/A and capture the supplied pump/settings fields.</p><button type="button" id="openPpsCommissioning">OPEN PPS HOME COMMISSIONING RECORD</button></section>'+Object.entries(lists).map(([n,items],i)=>`<h3>${esc(n)}</h3><div class="chk">${items.map((t,j)=>`<label><input type="checkbox" data-k="${i}_${j}" ${st[i+'_'+j]?'checked':''}><span>${esc(t)}</span></label>`).join('')}</div><button type="button" data-reset="${i}" style="margin-top:6px">RESET THIS LIST</button>`).join('')+'<p class="small">Checklists are reminders; follow your employer’s procedures and the manufacturer’s manual.</p>';
+ $('#openPpsCommissioning').onclick=()=>openPpsCommissioning(true);
  $$('#bench .chk input').forEach(c=>c.onchange=()=>{st[c.dataset.k]=c.checked;store.set('tracerChecks',st)});
  $$('[data-reset]').forEach(b=>b.onclick=()=>{if(!confirm('Reset this checklist?'))return;Object.keys(st).filter(k=>k.startsWith(b.dataset.reset+'_')).forEach(k=>delete st[k]);store.set('tracerChecks',st);openCheck()});scrollBench(true)}
+
+function openPpsCommissioning(s=true,stateOverride){
+ const form=globalThis.TRACER_PPS_HOME_COMMISSIONING,key='tracerPpsHomeCommissioning';
+ if(!form){$('#bench').innerHTML='<p role="alert">PPS commissioning form content is unavailable.</p>';return}
+ cur='check';setTabs();
+ const fieldIds=new Set(['scope_panel','scope_skid','sitePin','notes']);
+ form.headerFields.forEach(field=>fieldIds.add(field.id));
+ for(let i=0;i<3;i++)form.attendeeFields.forEach(field=>fieldIds.add('attendee_'+i+'_'+field.id));
+ form.completionFields.forEach(field=>fieldIds.add('completion_'+field.id));
+ ['panel','skid'].forEach(section=>{
+  form.sectionFields.forEach(field=>fieldIds.add(section+'_'+field.id));
+  form.pumpCounts.forEach(field=>fieldIds.add(section+'_pumpCount_'+field.id));
+  ['prePower','powerOn'].forEach(group=>form[section][group].forEach(item=>fieldIds.add('check_'+section+'_'+group+'_'+item.id)));
+ });
+ for(let i=1;i<=8;i++)form.pumpFields.forEach(field=>fieldIds.add('pump_'+i+'_'+field.id));
+ form.readings.forEach(field=>fieldIds.add('reading_'+field.id));
+ Object.entries(form.photos).forEach(([group,items])=>items.forEach((_,i)=>{fieldIds.add('photo_'+group+'_'+i);fieldIds.add('photoRef_'+group+'_'+i)}));
+ let record=stateOverride||{},loadMessage='';
+ if(!stateOverride)try{
+  const saved=localStorage.getItem(key);
+  if(saved){
+   const parsed=JSON.parse(saved);
+   if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw new Error('Stored record is not an object.');
+   Object.entries(parsed).forEach(([id,value])=>{if(fieldIds.has(id)&&typeof value==='string')record[id]=value});
+  }
+ }catch(error){loadMessage='Could not read the previous local record ('+error.message+'). A blank record is open; export or import a valid backup before replacing anything.'}
+ const value=id=>typeof record[id]==='string'?record[id]:'';
+ const input=(field,id=field.id)=>'<div class="fld"><label for="pps_'+esc(id)+'">'+esc(field.label)+'</label><input id="pps_'+esc(id)+'" data-pps-field="'+esc(id)+'" type="'+esc(field.type||'text')+'" value="'+esc(value(id))+'"></div>';
+ const status=id=>'<label class="small" for="pps_'+esc(id)+'">Status</label><select id="pps_'+esc(id)+'" data-pps-field="'+esc(id)+'"><option value=""'+(value(id)===''?' selected':'')+'>Not recorded</option><option value="Done"'+(value(id)==='Done'?' selected':'')+'>Done</option><option value="N/A"'+(value(id)==='N/A'?' selected':'')+'>N/A</option></select>';
+ const scopeField=(id,label)=>'<div class="fld"><label for="pps_'+id+'">'+esc(label)+'</label><select id="pps_'+id+'" data-pps-field="'+id+'"><option value=""'+(value(id)===''?' selected':'')+'>Choose Yes or No</option><option value="Yes"'+(value(id)==='Yes'?' selected':'')+'>Yes</option><option value="No"'+(value(id)==='No'?' selected':'')+'>No</option></select></div>';
+ const metaFields=section=>form.sectionFields.map(field=>input({label:field.label,type:field.type},section+'_'+field.id)).join('');
+ const pumpCounts=section=>'<div class="pps-grid">'+form.pumpCounts.map(field=>input({label:field.label,type:'text'},section+'_pumpCount_'+field.id)).join('')+'</div>';
+ const checklist=(section,group,items)=>'<h4>'+esc(group==='prePower'?'Pre-power checks':'Power-on checks')+'</h4>'+items.map(item=>{const id='check_'+section+'_'+group+'_'+item.id;return'<div class="pps-row"><div><label for="pps_'+id+'">'+esc(item.label)+'</label>'+(item.duplicate?'<span class="pps-repeat">* Repeated in another section of the form</span>':'')+'</div><div>'+status(id)+'</div></div>'}).join('');
+ const photos=Object.entries(form.photos).map(([group,items])=>'<section class="vfd-section"><h4>'+esc(({controlPanel:'Control panel photos',pumpSkid:'Pump skid photos',overallSite:'Overall site photos'})[group]||group)+'</h4>'+items.map((label,i)=>{const id='photo_'+group+'_'+i,ref='photoRef_'+group+'_'+i;return'<div class="pps-row"><div><label for="pps_'+id+'">'+esc(label)+'</label></div><div>'+status(id)+'<label class="small" for="pps_'+ref+'">Photo filename / reference (optional)</label><input id="pps_'+ref+'" data-pps-field="'+ref+'" type="text" value="'+esc(value(ref))+'"></div></div>'}).join('')+'</section>').join('');
+ const applicablePanel=value('scope_panel'),applicableSkid=value('scope_skid');
+ const panelBody=applicablePanel==='Yes'?'<div class="pps-grid">'+metaFields('panel')+'</div><h4>Pump count</h4>'+pumpCounts('panel')+checklist('panel','prePower',form.panel.prePower)+checklist('panel','powerOn',form.panel.powerOn):applicablePanel==='No'?'<p class="small">Per the form, skip this control-panel section when PPS/PAS did not provide the panel; PPS responsibility does not extend to equipment supplied by others.</p>':'<p class="small">Select Yes or No before entering this section.</p>';
+ const skidBody=applicableSkid==='Yes'?'<div class="pps-grid">'+metaFields('skid')+'</div><h4>Pump count</h4>'+pumpCounts('skid')+checklist('skid','prePower',form.skid.prePower)+checklist('skid','powerOn',form.skid.powerOn):applicableSkid==='No'?'<p class="small">Per the form, skip the pump-skid checklist for a skid not provided by PPS. The Pump/Motor and Settings Table below remains available.</p>':'<p class="small">Select Yes or No before entering this section.</p>';
+ const attendeeFields=Array.from({length:3},(_,i)=>'<fieldset class="pps-pump-card"><legend>Training representative '+(i+1)+'</legend><div class="pps-grid">'+form.attendeeFields.map(field=>input(field,'attendee_'+i+'_'+field.id)).join('')+'</div></fieldset>').join('');
+ const pumpTable=Array.from({length:8},(_,i)=>'<fieldset class="pps-pump-card"><legend>Pump slot '+(i+1)+'</legend><div class="pps-grid">'+form.pumpFields.map(field=>input(field,'pump_'+(i+1)+'_'+field.id)).join('')+'</div></fieldset>').join('');
+ const readingTable='<div class="pps-grid">'+form.readings.map(field=>input(field,'reading_'+field.id)).join('')+'</div>';
+ $('#bench').innerHTML='<div class="links"><button type="button" id="ppsBack">BACK TO CHECKLISTS</button><button type="button" id="ppsExport">EXPORT PPS RECORD JSON</button><button type="button" id="ppsImport">IMPORT PPS RECORD JSON</button><button type="button" id="ppsReset">RESET PPS RECORD</button><input id="ppsFile" type="file" accept=".json,application/json" hidden></div>'+
+  '<p class="small">Source: '+esc(form.source)+' This local record is a paraphrased companion, not the PPS form, an official report, a work procedure or technical approval. It does not upload photos or sync to a server.</p>'+
+  '<div class="safety">Use the current PPS form, exact equipment manuals and approved site procedures. Electrical, energized, pressure-up, motor-operation and parameter work require the appropriate qualified personnel and authorization. A phase-reversal correction belongs to the contracted electrician per the form. Typed signatures here are record text only; complete formal sign-off on the official form. Do not store PPS/PAS activation or lockout codes here.</div>'+
+  '<section class="vfd-section"><h3>Start-up and technician details</h3><div class="pps-grid">'+form.headerFields.map(field=>input(field)).join('')+input({label:'Google Earth pin / site-location reference (optional)'},'sitePin')+'</div><h4>Operator training attendees</h4>'+attendeeFields+'<h4>Start-up completion acceptance</h4><div class="pps-grid">'+form.completionFields.map(field=>input(field,'completion_'+field.id)).join('')+'</div><div class="safety">The form describes vendor-controlled software activation and payment-dependent service terms. Confirm status directly with PPS/PAS; never enter a code in this record.</div></section>'+
+  '<section class="vfd-section"><h3>Control panel commissioning</h3>'+scopeField('scope_panel','Did PPS/PAS provide the control panel?')+panelBody+'</section>'+
+  '<section class="vfd-section"><h3>Pump skid commissioning</h3>'+scopeField('scope_skid','Did PPS provide the pump skid?')+skidBody+'</section>'+
+  '<section class="vfd-section"><h3>Pump/Motor and Settings Table</h3><p class="small">Eight pump slots match the supplied form. Keep this table even when the pump-skid answer is No.</p>'+pumpTable+'<h4>Voltage, pressure and alarm readings</h4>'+readingTable+'</section>'+
+  '<section class="vfd-section"><h3>Site photo checklist</h3><p class="small">Mark Done/N/A and optionally record a filename/reference. Images are not stored or uploaded by this portal; use the approved archive and PPS handoff process.</p>'+photos+'</section>'+
+  '<section class="vfd-section"><h3>Start-up and commissioning notes</h3><label class="fld" for="pps_notes">Record notes and unresolved items (the source form provides 14 lines).</label><textarea class="pps-note" id="pps_notes" data-pps-field="notes" rows="'+form.noteLines+'">'+esc(value('notes'))+'</textarea></section>'+
+  '<p id="ppsStatus" class="pps-status" role="status" aria-live="polite">'+esc(loadMessage||(ppsDirty?'The last change could not be saved; export a backup before leaving.':'Changes save locally in this browser.'))+'</p>'+
+  '<p class="small">'+esc(form.applicabilityNote)+' '+esc(form.duplicateNote)+'</p>';
+ const host=$('#bench'),message=$('#ppsStatus');
+ const saveField=(id,next)=>{if(!fieldIds.has(id)||value(id)===next)return;record[id]=next;try{localStorage.setItem(key,JSON.stringify(record));ppsDirty=false;message.textContent='Saved locally on this device.'}catch(error){ppsDirty=true;message.textContent='Could not save this PPS record in browser storage: '+error.message+'. Export a backup before leaving.'}};
+ host.oninput=event=>{const field=event.target.closest('[data-pps-field]');if(field)saveField(field.dataset.ppsField,field.value)};
+ host.onchange=event=>{const field=event.target.closest('[data-pps-field]');if(!field)return;saveField(field.dataset.ppsField,field.value);if(['scope_panel','scope_skid'].includes(field.dataset.ppsField))openPpsCommissioning(false,record)};
+ $('#ppsBack').onclick=()=>{if(confirmPpsNavigation())openCheck()};
+ $('#ppsExport').onclick=()=>{const payload={formId:form.formId,version:form.version,source:form.source,exportedAt:new Date().toISOString(),record};const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));const link=document.createElement('a');link.href=url;link.download='pps-home-commissioning-'+new Date().toISOString().slice(0,10)+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);message.textContent='PPS record exported. Store the file securely; it may contain personal and site information.'};
+ $('#ppsImport').onclick=()=>$('#ppsFile').click();
+ $('#ppsFile').onchange=event=>{const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onerror=()=>{message.textContent='Could not read the selected PPS backup file.'};reader.onload=()=>{try{const payload=JSON.parse(reader.result);if(!payload||payload.formId!==form.formId||payload.version!==form.version||!payload.record||typeof payload.record!=='object'||Array.isArray(payload.record))throw new Error('This is not a compatible PPS commissioning backup.');const imported={};for(const [id,item]of Object.entries(payload.record)){if(!fieldIds.has(id)||typeof item!=='string')throw new Error('Backup contains an unsupported field.');imported[id]=item}if(!confirm('Replace the current local PPS record with this backup?'))return;localStorage.setItem(key,JSON.stringify(imported));record=imported;ppsDirty=false;openPpsCommissioning(false)}catch(error){message.textContent='PPS backup was not imported: '+error.message}};reader.readAsText(file);event.target.value=''};
+ $('#ppsReset').onclick=()=>{if(!confirm('Clear this PPS commissioning record? Export a backup first if you need one.'))return;try{localStorage.removeItem(key);record={};ppsDirty=false;openPpsCommissioning(false)}catch(error){message.textContent='Could not clear this PPS record from browser storage: '+error.message}};
+ scrollBench(s);
+}
 
 /* ---------- equipment profile + manufacturer literature ---------- */
 const gs=t=>({t,q:t});
@@ -1370,7 +1436,7 @@ $('#file').onchange=e=>{const fl=e.target.files[0];if(!fl)return;const r=new Fil
 $('#erase').onclick=()=>{if(!notes.value||!confirm('Clear all notes? Export first if you want a backup.'))return;notes.value='';try{localStorage.removeItem('tracerFieldNotes');savedNotesValue=''}catch(e){say('Notes cleared from the editor, but browser storage could not be cleared.');return}say('Notes cleared.')};
 
 window.addEventListener('beforeunload',event=>{
- if(notes.value===savedNotesValue&&!vfdDirty)return;
+ if(notes.value===savedNotesValue&&!vfdDirty&&!ppsDirty)return;
  event.preventDefault();event.returnValue='';
 });
 
@@ -1380,6 +1446,7 @@ function initPortalRoute(){
  if(technique){openFlow(technique,true);return}
  const key=params.get('tool');
  if(!key){openFlow('triage',false);return}
+ if(key==='ppscommissioning'){openPpsCommissioning(true);return}
  if(key==='check'){openCheck();scrollBench(true);return}
  if(Object.hasOwn(tools,key)||['vfdsetup','plat','dec','lib','landscape','filters','pfind'].includes(key)){openTool(key,true);return}
  const status=$('#portalRouteStatus');status.hidden=false;status.textContent='That tool link is not available. Choose a tool from the directory or the dashboard menus.';

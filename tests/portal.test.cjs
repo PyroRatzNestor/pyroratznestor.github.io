@@ -49,6 +49,7 @@ function route(search) {
     openTool: (...args) => calls.push(['tool', ...args]),
     openFlow: (...args) => calls.push(['technique', ...args]),
     openCheck: () => calls.push(['check']),
+    openPpsCommissioning: (...args) => calls.push(['ppscommissioning', ...args]),
     scrollBench: value => calls.push(['scroll', value])
   });
   return {calls, status};
@@ -59,11 +60,12 @@ test('all portal tool entry links resolve to real tools or special views', () =>
     for (const [, key] of html.matchAll(/dashboard\.html\?tool=([^"#]+)"/g)) {
       const {calls, status} = route('?tool=' + key);
       assert.equal(status.hidden, true, key);
-      assert.equal(calls[0][0], key === 'check' ? 'check' : 'tool', key);
+      assert.equal(calls[0][0], key === 'check' ? 'check' : key === 'ppscommissioning' ? 'ppscommissioning' : 'tool', key);
     }
   }
   for (const key of Object.keys(tools)) assert.deepEqual(route('?tool=' + key).calls, [['tool', key, true]]);
   assert.deepEqual(route('?tool=check').calls, [['check'], ['scroll', true]]);
+  assert.deepEqual(route('?tool=ppscommissioning').calls, [['ppscommissioning', true]]);
 });
 
 test('default dashboard opens symptom triage; unknown and prototype tool keys show a message', () => {
@@ -130,19 +132,38 @@ test('cross-page navigation guard warns for unsaved notes or worksheets, not unc
     dashboard.indexOf("window.addEventListener('beforeunload'"),
     dashboard.indexOf('/* ---------- portal entry links ---------- */')
   );
-  for (const [value, savedNotesValue, vfdDirty, expected] of [
-    ['', '', false, false], ['saved', 'saved', false, false],
-    ['new text', 'saved', false, true], ['', 'saved', false, true],
-    ['saved', 'saved', true, true]
+  for (const [value, savedNotesValue, vfdDirty, ppsDirty, expected] of [
+    ['', '', false, false, false], ['saved', 'saved', false, false, false],
+    ['new text', 'saved', false, false, true], ['', 'saved', false, false, true],
+    ['saved', 'saved', true, false, true], ['saved', 'saved', false, true, true]
   ]) {
     let callback;
     vm.runInNewContext(source, {
-      notes: {value}, savedNotesValue, vfdDirty,
+      notes: {value}, savedNotesValue, vfdDirty, ppsDirty,
       window: {addEventListener: (name, fn) => { assert.equal(name, 'beforeunload'); callback = fn; }}
     });
     const event = {prevented: false, preventDefault() { this.prevented = true; }};
     callback(event);
     assert.equal(event.prevented, expected);
     assert.equal(event.returnValue, expected ? '' : undefined);
+  }
+});
+
+test('PPS navigation asks before discarding changes that failed to autosave', () => {
+  const guard = dashboard.slice(
+    dashboard.indexOf('function confirmPpsNavigation()'),
+    dashboard.indexOf('function setTabs()')
+  );
+  assert.match(dashboard, /b\.onclick=\(\)=>\{if\(!confirmPpsNavigation\(\)\)return;/);
+  for (const [dirty, answer, expected, promptCount] of [
+    [false, false, true, 0], [true, false, false, 1], [true, true, true, 1]
+  ]) {
+    let count = 0;
+    const result = vm.runInNewContext(`${guard}\nconfirmPpsNavigation()`, {
+      ppsDirty: dirty,
+      confirm: () => { count++; return answer; }
+    });
+    assert.equal(result, expected);
+    assert.equal(count, promptCount);
   }
 });

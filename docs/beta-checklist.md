@@ -19,6 +19,8 @@ additional evidence, but is not an actual-phone result.
 | Start with a symptom | Open the dashboard with an empty equipment profile. Choose a symptom and an existing-evidence answer. | Step 1 asks about the symptom, Step 2 asks for evidence, and neither requires a manufacturer. Unknown evidence exits explicitly. |
 | Open the sample | Open `dashboard.html?technique=wont` without entering real site data. | Revision, Needs Technical Review, evidence limitations and unresolved flags are visible. No up-front manufacturer prompt or claim of approval. |
 | Step 3 manufacturer detail | Follow a generic drive/flow result and review the optional Step 3 maps and their applicability, or use the playbook's separate manufacturer group. | Generic questions do not name a brand; each later map shows its exact platform scope and no brand is inferred automatically. |
+| PPS Home commissioning | Open `dashboard.html?tool=ppscommissioning` with synthetic data. Select each panel/skid applicability value; try No for each and review the form's exception. Mark several statuses and fill a pump slot and reading. | Panel/skid checklists are gated independently; No skid still leaves the settings table. The 8 pump slots, measurement labels, duplicate `*` rows, photo groups, signature fields and notes are present. |
+| PPS record backup | Export the PPS JSON record, reload, import it, then use a synthetic record to test Reset. | Values persist locally and round-trip through JSON. The export is separate from Notes; no photos or activation codes are stored. |
 | Missing evidence | Choose the unknown-speed answer. Restart, choose known speed, then the unmatched/unknown-curve answer. | Both routes end at Insufficient Evidence, not an invented fault or pass. |
 | Follow a decision | Restart and follow the stopped/speed-mismatch option, then a known-speed/high-flow option. | Electrical-work or model-limit flags appear at the affected step; assessments remain provisional. |
 | Use a calculator | In Quick Field Calculator choose the PSI/head converter and enter `65` PSI. | `150.15` feet of water head; the UI still states this is not complete TDH. |
@@ -95,6 +97,9 @@ alarm menu. Local Chromium at 390px verified:
   Manufacturer references appear in a separate playbook group and in an
   optional Step 3 handoff after generic results. Each choice shows its exact
   platform scope and preserves the map's label and model caution.
+- The PPS Home form companion is based on the owner-provided four-page QF-16.5
+  Rev B screenshots. Validate with synthetic data only. It is not a physical
+  commissioning test or official-form substitute.
 - General triage, motor-stop, low-pressure, instability, flow/alarm,
   communications and mechanical symptom paths retain their existing
   manufacturer-specific procedures separately rather than merging their codes

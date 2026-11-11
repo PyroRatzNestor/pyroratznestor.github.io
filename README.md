@@ -47,6 +47,13 @@ platform applicability shown before selection. Old direct technique links
 remain valid and brand-specific definitions stay separate. Notes preserve the
 symptom/evidence trail across cross-technique handoffs.
 
+The dashboard's Checklists includes a dedicated PPS Home commissioning record,
+transcribed from owner-supplied screenshots of QF-16.5 Rev B. It keeps panel
+and skid applicability separate, preserves the no-skid settings-table exception,
+and records the form's pump data, readings, photos and sign-off fields. The
+record is a local paraphrased companion, not a PPS-approved form or work
+procedure; use the current official form and approved site procedures.
+
 See [Maintaining troubleshooting techniques](docs/troubleshooting.md) for the
 content format, authoring example and draft → review → preview → publish cycle.
 Schema/graph validation is not technical approval. Invalid/missing content
