@@ -4,7 +4,7 @@ const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
 
-const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', 'dashboard.html'), 'utf8');
 const original = JSON.parse(html.split('\n').find(line => line.startsWith('const PARTS=')).slice(12, -1));
 const catalog = html.slice(
   html.indexOf('/* ---------- filtration catalog references ---------- */'),

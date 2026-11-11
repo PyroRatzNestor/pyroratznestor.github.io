@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Find field calculators, diagnostic workspaces and technical lookups for pumps, controls and irrigation.">
+  <title>Tool Directory | Technician Field Portal</title>
+  <link rel="stylesheet" href="assets/portal.css">
+  <script src="assets/directory.js" defer></script>
+</head>
+<body class="portal-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><div class="portal-shell header-inner"><a class="site-brand" href="index.html">TECHNICIAN<span>FIELD PORTAL</span></a><nav class="site-nav" aria-label="Main navigation"><a href="index.html">Home</a><a href="dashboard.html">Field dashboard</a><a href="tools.html" aria-current="page">Tool directory</a><a href="references.html">References</a><a href="help.html">Help &amp; about</a></nav></div></header>
+  <main class="portal-shell" id="main">
+    <span class="eyebrow">FIND YOUR NEXT STEP</span>
+    <h1>Tool directory</h1>
+    <p class="lead">Start with an observed symptom, or search these common starting points for a known tool. Manufacturer-specific references are later detail, not the first diagnostic question.</p>
+    <div class="actions"><a class="action primary" href="dashboard.html?technique=triage">Start symptom triage</a></div>
+    <p>Pipe, velocity and friction tools are shared across pump, filtration, golf and landscape systems. Golf and landscape precipitation tools remain separate.</p>
+    <p><a href="dashboard.html#diagnosticPlaybook">Browse every diagnostic technique</a>, including scope, sources, revision and technical-review status.</p>
+    <form class="portal-search" id="directorySearch" role="search">
+      <label for="directoryQuery">Find a tool or topic</label>
+      <input id="directoryQuery" name="q" type="search" placeholder="Try friction, decoder, PID or golf">
+      <button class="action" type="submit">Search tools</button>
+      <button class="action" type="button" id="directoryClear">Clear</button>
+    </form>
+    <p id="directoryCount" class="search-summary" role="status" aria-live="polite"></p>
+    <noscript><p class="notice">Search requires JavaScript. All links below still work; the dashboard also requires JavaScript to run its tools.</p></noscript>
+    <div class="portal-grid" id="directoryEntries">
+      <article class="portal-card"><span class="eyebrow">TROUBLESHOOTING</span><h2><a href="dashboard.html#c1">Pumps &amp; hydraulics</a></h2><p>Pressure, cavitation, suction, vibration and pump operating conditions.</p></article>
+      <article class="portal-card"><span class="eyebrow">TROUBLESHOOTING</span><h2><a href="dashboard.html#c2">VFDs &amp; controls</a></h2><p>Motor starting, faults, pressure hunting and control-system isolation.</p></article>
+      <article class="portal-card"><span class="eyebrow">TROUBLESHOOTING</span><h2><a href="dashboard.html#c3">Irrigation control</a></h2><p>Central control, flow alarms, communications and two-wire diagnostics.</p></article>
+      <article class="portal-card"><span class="eyebrow">SHARED HYDRAULICS</span><h2><a href="dashboard.html?tool=tdh">Total dynamic head</a></h2><p>TDH from static head, friction and required endpoint pressure.</p></article>
+      <article class="portal-card"><span class="eyebrow">SHARED HYDRAULICS</span><h2><a href="dashboard.html?tool=npsh">Available suction head</a></h2><p>NPSHa estimate and comparison with the pump curve's NPSHr.</p></article>
+      <article class="portal-card"><span class="eyebrow">SHARED HYDRAULICS</span><h2><a href="dashboard.html?tool=pipe">Pipe velocity &amp; friction</a></h2><p>Material presets, actual inside diameter and Hazen-Williams water loss.</p></article>
+      <article class="portal-card"><span class="eyebrow">SHARED HYDRAULICS</span><h2><a href="dashboard.html?tool=sys">System check</a></h2><p>Combined TDH and NPSHa with suction and discharge losses.</p></article>
+      <article class="portal-card"><span class="eyebrow">DRIVE WORKSHEET</span><h2><a href="dashboard.html?tool=vfdsetup">Commissioned drive setup / PID</a></h2><p>Model-specific references, baseline records and symptom-led checks. No automatic tuning.</p></article>
+      <article class="portal-card"><span class="eyebrow">CONTROL SIGNAL</span><h2><a href="dashboard.html?tool=xdcr">Pressure transducer</a></h2><p>4-20 mA pressure scaling and comparison with a reference gauge.</p></article>
+      <article class="portal-card"><span class="eyebrow">ELECTRICAL</span><h2><a href="dashboard.html?tool=imb">Voltage / current imbalance</a></h2><p>Compare three-phase readings using maximum deviation from average.</p></article>
+      <article class="portal-card"><span class="eyebrow">IRRIGATION WIRING</span><h2><a href="dashboard.html?tool=convwire">Conventional valve wiring</a></h2><p>Copper control and common conductor voltage / distance screening.</p></article>
+      <article class="portal-card"><span class="eyebrow">TWO-WIRE</span><h2><a href="dashboard.html?tool=pathwire">Decoder path voltage</a></h2><p>Resistance-only voltage and distance screening, not manufacturer approval.</p></article>
+      <article class="portal-card"><span class="eyebrow">TWO-WIRE</span><h2><a href="dashboard.html?tool=decoderidle">Decoder idle current</a></h2><p>Documented physical-device counts and nominal mA estimates, with source limits.</p></article>
+      <article class="portal-card"><span class="eyebrow">GOLF IRRIGATION</span><h2><a href="dashboard.html?tool=precip">Precipitation rate: golf heads</a></h2><p>Use actual golf nozzle flow, arc and spacing. Separate from landscape heads.</p></article>
+      <article class="portal-card"><span class="eyebrow">LANDSCAPE IRRIGATION</span><h2><a href="dashboard.html?tool=landprecip">Precipitation rate: landscape heads</a></h2><p>Landscape application rate with the selected nozzle's flow and spacing.</p></article>
+      <article class="portal-card"><span class="eyebrow">CATALOG LOOKUP</span><h2><a href="dashboard.html?tool=pfind">Part Finder</a></h2><p>Golf, landscape, pumps and filtration models with factual notes and citations.</p></article>
+      <article class="portal-card"><span class="eyebrow">FILTRATION</span><h2><a href="dashboard.html?tool=filters">Filters &amp; valves</a></h2><p>Amiad, Netafim and existing valve records; unverified specifications stay labeled.</p></article>
+      <article class="portal-card"><span class="eyebrow">FIELD MAPPING</span><h2><a href="dashboard.html?tool=coords">Coordinate converter</a></h2><p>Convert field locations for asset mapping and copy decimal coordinates.</p></article>
+      <article class="portal-card"><span class="eyebrow">SERVICE ROUTINE</span><h2><a href="dashboard.html?tool=check">Field checklists</a></h2><p>Service reminders for equipment inspections and field evidence.</p></article>
+      <article class="portal-card"><span class="eyebrow">COMPLETE TOOLSET</span><h2><a href="dashboard.html#quickCalculator">All field calculators</a></h2><p>Also find affinity laws, Hz / RPM, flow sensors, three-phase power, drip and source-specific lookups.</p></article>
+    </div>
+    <p id="directoryEmpty" class="notice" hidden>No matching starting points. Try a broader term or use the dashboard's complete menus.</p>
+    <div class="actions"><a class="action" href="dashboard.html">Open complete dashboard</a></div>
+  </main>
+  <footer class="site-footer portal-shell"><p>Search filters this directory only. Dashboard web search opens an external search engine.</p><a href="help.html#storage">Local storage &amp; backups</a><a href="references.html#source-policy">Sources &amp; limitations</a></footer>
+</body>
+</html>

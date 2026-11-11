@@ -4,7 +4,7 @@ const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
 
-const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', 'dashboard.html'), 'utf8');
 const source = html.slice(
   html.indexOf('/* ---------- troubleshooting topic menus ---------- */'),
   html.indexOf('/* ---------- quick psi/ft (original) ---------- */')
@@ -56,6 +56,16 @@ test('empty menu does not navigate and every topic preserves its original action
       const expected = kind === 'search' ? ['search', 'Hunter ' + target]
         : [kind === 'flow' ? 'flow' : 'tool', target, true];
       assert.deepEqual(calls.at(-1), expected);
+    });
+
+    test('contextual diagnostic menus start from generic symptoms rather than named alarm maps', () => {
+      for (const topics of Object.values(cards)) {
+        for (const [label, kind, key] of topics) {
+          if (kind !== 'flow') continue;
+          assert.ok(!['rbclp', 'rbflow', 'wtflow'].includes(key), label);
+          assert.doesNotMatch(label, /Rain Bird|WeatherTRAK|Hunter|Toro/);
+        }
+      }
     });
   }
 });

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Manufacturer libraries, technical catalog references and source limitations for the Technician Field Portal.">
+  <title>References | Technician Field Portal</title>
+  <link rel="stylesheet" href="assets/portal.css">
+</head>
+<body class="portal-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><div class="portal-shell header-inner"><a class="site-brand" href="index.html">TECHNICIAN<span>FIELD PORTAL</span></a><nav class="site-nav" aria-label="Main navigation"><a href="index.html">Home</a><a href="dashboard.html">Field dashboard</a><a href="tools.html">Tool directory</a><a href="references.html" aria-current="page">References</a><a href="help.html">Help &amp; about</a></nav></div></header>
+  <main class="portal-shell" id="main">
+    <span class="eyebrow">USE THE RIGHT SOURCE</span>
+    <h1>References &amp; training</h1>
+    <p class="lead">Start with the exact installed model and revision. Catalog facts, service procedures and commissioned settings answer different questions.</p>
+    <div class="portal-grid portal-section">
+      <article class="portal-card"><h2>Manufacturer library</h2><p>Official support and literature starting points for pumps, drives, control systems, filters and valves.</p><a href="dashboard.html?tool=lib">Open manufacturer library</a></article>
+      <article class="portal-card"><h2>Catalog Part Finder</h2><p>Search model families, listed variants and factual specifications with source editions and page citations.</p><a href="dashboard.html?tool=pfind">Search catalog references</a></article>
+      <article class="portal-card"><h2>Drive references</h2><p>Model-specific functional cross-references alongside separate commissioned and observed settings.</p><a href="dashboard.html?tool=vfdsetup">Open drive setup guide</a></article>
+      <article class="portal-card"><h2>Landscape technical</h2><p>Source-specific precipitation, soil / slope, dripline and valve-wiring references.</p><a href="dashboard.html?tool=landscape">Open landscape references</a></article>
+      <article class="portal-card"><h2>Decoder limits</h2><p>Brand-specific families and published constraints. Decoder systems are not interchangeable.</p><a href="dashboard.html?tool=dec">Open decoder references</a></article>
+      <article class="portal-card"><h2>Manufacturer training</h2><p>Training portal links in the dashboard. Some providers require an account or service-provider access.</p><a href="dashboard.html#training">Open training bench</a></article>
+    </div>
+    <section class="portal-section article-content" id="source-policy">
+      <h2>Source policy &amp; limitations</h2>
+      <p>The dashboard labels source editions, pages, assumptions and unresolved conflicts where available. A filename or upload year is not proof of a document's edition. Verify the current manufacturer's documentation before relying on a limit.</p>
+      <ul>
+        <li><strong>Model and configuration matter.</strong> Check the full model, nozzle, voltage, pressure rating, firmware and active control path. Do not copy limits or PID values across families.</li>
+        <li><strong>Unknown stays unknown.</strong> Pending and provisional references are labeled. Conflicting nominal values do not become an invented tolerance range.</li>
+        <li><strong>Review status is explicit.</strong> Diagnostic paths show their content revision, evidence type and technical-review status. Migrated paths need review and have no verified path-level citations recorded; a manufacturer search link does not establish approval. Draft techniques cannot run as field guidance.</li>
+        <li><strong>Calculators are estimates or bounded lookups.</strong> Read each tool's units, inputs and limitations. A voltage-drop screen is not electrical-code compliance or decoder-path approval.</li>
+        <li><strong>Catalog indexes are not service manuals.</strong> Model-family coverage does not reproduce every performance-table cell or identify every spare part. Original catalog PDFs are not redistributed here.</li>
+        <li><strong>Access is not guaranteed.</strong> Manufacturer links can move or require login. A prior check date does not guarantee current availability.</li>
+      </ul>
+      <p>Golf and landscape precipitation remain distinct. Shared hydraulic tools apply across systems; catalog placement identifies a source, not a usage restriction.</p>
+    </section>
+    <aside class="notice portal-section"><p><strong>Before a change:</strong> obtain the applicable service procedure, preserve the commissioned baseline and parameter backup, and follow site authorization and safety requirements. Do not bypass protections or substitute factory defaults for the commissioned setup.</p></aside>
+  </main>
+  <footer class="site-footer portal-shell"><p>Use evidence and the installed equipment's documentation together.</p><a href="help.html#storage">Local storage &amp; backups</a><a href="help.html#feedback">Report a reference problem</a></footer>
+</body>
+</html>

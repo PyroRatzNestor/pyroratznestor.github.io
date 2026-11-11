@@ -4,7 +4,7 @@ const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
 
-const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', 'dashboard.html'), 'utf8');
 const source = html.slice(html.indexOf('const f1='), html.indexOf('const PARTS='));
 const { tools, profiles } = vm.runInNewContext(`${source}\n({tools, profiles:DECODER_IDLE_PROFILES})`);
 const defaults = Object.fromEntries(tools.decoderidle.fields.map(([id, , value]) => [id, value === '' ? NaN : value]));
@@ -109,9 +109,12 @@ test('preset sources and limitations remain visible in every calculated preset r
 });
 
 test('idle calculator is reachable from menus, decoder references and diagnostic path', () => {
+  const {techniques} = vm.runInNewContext(
+    fs.readFileSync(path.join(__dirname, '..', 'data', 'troubleshooting.js'), 'utf8') + '\nTRACER_TROUBLESHOOTING'
+  );
   assert.match(html, /Decoder idle current \/ expected mA','tool','decoderidle/);
-  assert.match(html, /'Check expected idle current from decoder count','idle'/);
-  assert.match(html, /idle:R\('IDLE CURRENT \/ INVENTORY'.*'decoderidle'\)/);
+  assert.ok(techniques.tw.nodes.a.options.some(({label, next}) => label === 'Check expected idle current from decoder count' && next === 'idle'));
+  assert.equal(techniques.tw.nodes.idle.tool, 'decoderidle');
   assert.match(html, /id="dcidle"/);
   assert.match(html, /\$\('#dcidle'\)\.onclick=\(\)=>openTool\('decoderidle',false\)/);
 });
