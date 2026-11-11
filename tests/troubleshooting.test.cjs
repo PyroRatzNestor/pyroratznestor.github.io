@@ -69,6 +69,7 @@ function app(library = clone(), api = {validate}, profile = {make: 'Test equipme
     choose: index => { assert.ok(buttons[index], 'decision option exists'); buttons[index].onclick(); },
     click: selector => { assert.ok(nodes[selector]?.onclick, selector); nodes[selector].onclick(); },
     reference: key => { const button = referenceButtons.find(item => item.dataset.manufacturer === key); assert.ok(button, key); button.onclick(); },
+    referenceKeys: () => referenceButtons.map(item => item.dataset.manufacturer),
     markup: () => bench.markup, notes, calls, status, errors,
     initPicker: initTechniquePicker, picker
   };
@@ -298,13 +299,22 @@ test('manufacturer references are grouped separately and offered only after gene
   assert.doesNotMatch(content.techniques.trip.nodes.a.question, /Rain Bird/);
   instance.choose(content.techniques.trip.nodes.a.options.length - 1);
   assert.ok(instance.markup().includes('INSUFFICIENT EVIDENCE'));
-  assert.match(instance.markup(), /Later detail: manufacturer-specific references/);
+  assert.match(instance.markup(), /STEP 3 — OPTIONAL MANUFACTURER-SPECIFIC FOLLOW-UP/);
+  assert.match(instance.markup(), /Rain Bird CLP\/ACLP stations; confirm platform, drive family, firmware and programming guide/);
+  assert.deepEqual(instance.referenceKeys(), ['rbclp']);
   instance.reference('rbclp');
   assert.ok(instance.markup().includes(content.techniques.rbclp.title));
   assert.match(instance.markup(), /Unknown equipment does not inherit these specifications/);
   instance.choose(0); instance.click('#fn');
   assert.ok(instance.notes.at(-1).includes('Entry path: trip rev 3'));
   assert.ok(instance.notes.at(-1).includes('Reference: ' + content.techniques.rbclp.title));
+
+  instance.open('fa');
+  instance.choose(1);
+  assert.match(instance.markup(), /STEP 3 — OPTIONAL MANUFACTURER-SPECIFIC FOLLOW-UP/);
+  assert.match(instance.markup(), /Rain Bird flow\/pressure monitoring; confirm platform, sensor and alarm definition/);
+  assert.match(instance.markup(), /WeatherTRAK flow monitoring; confirm controller model, firmware and applicable alert definition/);
+  assert.deepEqual(instance.referenceKeys(), ['rbflow', 'wtflow']);
 });
 
 test('invalid manufacturer reference links or discovery groups are rejected', () => {

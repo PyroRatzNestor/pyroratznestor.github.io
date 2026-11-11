@@ -42,10 +42,10 @@ necessary context before applying exact model limits or procedures.
 
 The playbook groups general paths before manufacturer-specific references.
 `trip` and `fa` no longer start with named alarm mappings; optional brand
-references appear only after their generic results. Old direct technique links
+references appear as an explicit Step 3 only after their generic results, with
+platform applicability shown before selection. Old direct technique links
 remain valid and brand-specific definitions stay separate. Notes preserve the
-symptom/evidence trail across cross-technique handoffs. More detailed
-manufacturer selection/workflows are deferred to a later stage.
+symptom/evidence trail across cross-technique handoffs.
 
 See [Maintaining troubleshooting techniques](docs/troubleshooting.md) for the
 content format, authoring example and draft → review → preview → publish cycle.

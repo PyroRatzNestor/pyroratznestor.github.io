@@ -19,11 +19,11 @@ handoffs retain the selected symptom/evidence in the on-screen trail and Notes.
 
 Manufacturer-specific maps remain distinct later references. The playbook
 lists general paths first and puts manufacturer maps in a separate group;
-generic result screens can offer relevant maps inside a collapsed later-detail
-section. Direct specialist links are preserved, with explicit model/firmware
-applicability warnings. No manufacturer is inferred or selected automatically.
-The next stage can refine manufacturer selection without merging codes,
-limits, proprietary wiring or tuning definitions.
+generic result screens can offer a visible, optional Step 3 with relevant maps
+and their applicability shown before selection. Direct specialist links are
+preserved, with explicit model/firmware applicability warnings. No manufacturer
+is inferred or selected automatically. Do not merge codes, limits, proprietary
+wiring or tuning definitions.
 
 ## Publishing cycle
 

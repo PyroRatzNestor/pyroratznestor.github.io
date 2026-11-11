@@ -18,7 +18,7 @@ additional evidence, but is not an actual-phone result.
 | Find a topic | From Home, open Tool Directory, search `pipe friction`, clear, then search an unmatched phrase. | One relevant pipe entry, complete reset, and a visible no-results message. Existing links remain keyboard-accessible. |
 | Start with a symptom | Open the dashboard with an empty equipment profile. Choose a symptom and an existing-evidence answer. | Step 1 asks about the symptom, Step 2 asks for evidence, and neither requires a manufacturer. Unknown evidence exits explicitly. |
 | Open the sample | Open `dashboard.html?technique=wont` without entering real site data. | Revision, Needs Technical Review, evidence limitations and unresolved flags are visible. No up-front manufacturer prompt or claim of approval. |
-| Later manufacturer detail | Follow a generic drive/flow result and open its collapsed manufacturer references, or use the playbook's separate manufacturer group. | Generic questions do not name a brand; later maps retain exact-model/firmware warnings and no brand is inferred automatically. |
+| Step 3 manufacturer detail | Follow a generic drive/flow result and review the optional Step 3 maps and their applicability, or use the playbook's separate manufacturer group. | Generic questions do not name a brand; each later map shows its exact platform scope and no brand is inferred automatically. |
 | Missing evidence | Choose the unknown-speed answer. Restart, choose known speed, then the unmatched/unknown-curve answer. | Both routes end at Insufficient Evidence, not an invented fault or pass. |
 | Follow a decision | Restart and follow the stopped/speed-mismatch option, then a known-speed/high-flow option. | Electrical-work or model-limit flags appear at the affected step; assessments remain provisional. |
 | Use a calculator | In Quick Field Calculator choose the PSI/head converter and enter `65` PSI. | `150.15` feet of water head; the UI still states this is not complete TDH. |
@@ -92,9 +92,9 @@ alarm menu. Local Chromium at 390px verified:
   with no Rain Bird / WeatherTRAK / Toro / Hunter selection. The "not sure"
   symptom and each second-step unknown answer end at **Insufficient Evidence**.
 - The general VFD-trip question no longer starts with Rain Bird alarm names.
-  Manufacturer references appear in a separate playbook group and as a
-  collapsed later-detail handoff after generic results. Opening that reference
-  preserves its separate label and exact-model caution.
+  Manufacturer references appear in a separate playbook group and in an
+  optional Step 3 handoff after generic results. Each choice shows its exact
+  platform scope and preserves the map's label and model caution.
 - General triage, motor-stop, low-pressure, instability, flow/alarm,
   communications and mechanical symptom paths retain their existing
   manufacturer-specific procedures separately rather than merging their codes
